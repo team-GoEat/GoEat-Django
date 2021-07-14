@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  django:
+    build: ./django_docker
+    container_name: django
+    restart: always
+    command: gunicorn -w 1 -b 0.0.0.0:8000 goeat.wsgi:application
+    links:
+      - "mysql:mysql"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports: 
+      - "80:80"
+    depends_on:
+      - django
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    restart: always
+  
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    volumes:
+      - /goeat/mysql_data:/var/lib/mysql
+    env_file:
+      - mysql_accounts.env
