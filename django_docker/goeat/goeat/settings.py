@@ -49,10 +49,77 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
+    'restaurant',
+    'notice',
+    'accounts',
+
+    #django-hosts
+    # 'django_hosts',
+    #django-rest-framework
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    # dj-rest-auth
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    # django-allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.naver',
 ]
 
+AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ),
+}
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailSerializer',
+}
+
+#Registeration
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
+}
+
+ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
+
+#JWT
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
 MIDDLEWARE = [
+    # 'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,9 +127,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
+#django-hosts
+# ROOT_HOSTCONF = 'goeat.hosts'
 ROOT_URLCONF = 'goeat.urls'
+# DEFAULT_HOST = 'www'
 
 SITE_ID = 1
 
@@ -83,18 +154,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'goeat.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -120,13 +179,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -134,6 +193,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
