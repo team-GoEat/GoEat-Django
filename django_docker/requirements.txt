@@ -1,4 +1,8 @@
 django
 gunicorn
+cryptography==2.8
 djangorestframework
-pymysql
+djangorestframework-simplejwt
+dj-rest-auth
+django-allauth
+django-hosts
