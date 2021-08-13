@@ -1,0 +1,354 @@
+.reserve_detail {
+    height: 100%;
+}
+
+.reserve_inner {
+    display: flex;
+    height: 100%;
+}
+
+.detail_btn_wrap {
+    width: 124px;
+}
+
+.reserve_content {
+    width: 90%;
+}
+
+.detail_btn{
+    height: 50%;
+    box-shadow: 3px 0 4px 0 rgba(0, 0, 0, 0.25);    
+}
+
+.detail_btn a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+}
+
+.detail_btn.active {
+    background: #ff3140;
+}
+
+.detail_btn.active a {
+    color: #fff;
+}
+
+.reserve_title {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.title_left_area, .title_right_area {
+    display: flex;
+    align-items: center;
+}
+
+.title_left_area {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+}
+
+.select_area {
+    position: relative;
+}
+
+.select_area select{
+    width: 104px;
+    height: 29px;
+    border: 1px solid #ff3140;
+    border-radius: 4px;
+    background: url(/static/app_owner/coupon/images/down_btn_ico.png) no-repeat 95% 50%;
+    appearance: none;
+    padding-left: 30px;
+    box-sizing: border-box;
+    margin-left: 50px;
+}
+
+.select_area select:focus {
+    outline: none;
+}
+
+.arrow::after {
+    content: "";
+    display: inline-block;
+    background: url(/static/app_owner_dotnet/reserve_detail/images/arrow_ico.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    
+    position: absolute;
+    right: -29px;
+    top: 7px;
+}
+
+.arrow::before {
+    content: "";
+    display: inline-block;
+    background: url(/static/app_owner_dotnet/reserve_detail/images/arrow_ico.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    
+    position: absolute;
+    left: 22px;
+    top: 7px;
+    transform: rotate(180deg);
+}
+
+
+.title_img {
+    width: 25px;
+}
+
+.title_img img {
+    width: 100%;
+}
+
+.title_right_area p::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin: 0 8px;
+    background: #ff3140;
+}
+.title_right_area p{
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.reserv_list ul {
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.reserv_list li {
+    width: 100%;
+    height: 91px;
+    background: rgba(255, 49, 64, 0.1);
+    border-radius: 13px;
+    padding: 13px 12px;
+    box-sizing: border-box;
+    margin-bottom: 6px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.reserv_list li:last-child {
+    margin-bottom: 0;
+}
+
+.complete {
+    opacity: .6;
+}
+
+.complete .time p,
+.complete .length p,
+.complete .situation p {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.cansel {
+    opacity: .5;
+}
+
+.cansel .time p, .cansel .length p {
+    text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.list_left_area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    max-width: 465px;
+}
+
+.number {
+    width: 63px;
+    height: 65px;
+    border: 3px solid #ff3140;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    color: #ff3140;
+    text-align: center;
+    line-height: 58px;
+}
+
+.time, .length {
+    font-size: 36px;
+    font-weight: bold;
+    color: #000;
+}
+
+.time p::before {
+    content: "";
+    display: inline-block;
+    background: url(/static/app_owner_dotnet/reserve_detail/images/bx_bx-time.png) no-repeat;
+    width: 23px;
+    height: 22px;
+    margin-right: 14px;
+}
+
+.length p::before {
+    content: "";
+    display: inline-block;
+    background: url(/static/app_owner_dotnet/reserve_detail/images/bi_people.png) no-repeat;
+    width: 27px;
+    height: 22px;
+    margin-right: 14px;
+}
+
+.situation {
+    font-size: 24px;
+    color: #000;
+}
+
+.list_right_area {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tel {
+    font-size: 18px;
+    color: #000;
+}
+
+.list_btn_wrap {
+    display: flex;
+    margin-top: 10px;
+}
+
+.check_btn {
+    margin-right: 7px;
+}
+
+.check_btn a {
+    display: inline-block;
+    width: 108px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background: #ff3140;
+    border-radius: 107px;
+    font-size: 12px;
+}
+
+.cancel_btn a {
+    display: inline-block;
+    width: 108px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    color: #ff3140;
+    background: #fff;
+    border-radius: 107px;
+    font-size: 12px;
+}
+
+
+.bottom_logo img {
+    display: none;
+}
+
+/* modal */
+.reserve_modal {
+    display: none;
+}
+
+.dark_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.5);
+}
+
+.reserve_modal_content {
+    width: 203px;
+    height: 215px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 11px 0;
+    box-sizing: border-box;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.request_btn a {
+    display: block;
+    width: 186px;
+    height: 43.6px;
+    line-height: 39.6px;
+    text-align: center;
+    border: 3px solid rgba(255, 49, 64, 0.5);;
+    border-radius: 10px;
+    box-sizing: border-box;
+    color: #ff3140;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.request_btn a.active {
+    border: none;
+    background: #ff3140;
+    color: #fff;
+}
+
+.save_btn a {
+    display: inline-block;
+    width: 53px;
+    height: 33px;
+    background: #ff3140;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 33px;
+    text-align: center;
+}
+
+@media screen and (max-width: 949px) {
+    .list_left_area {
+        max-width: 357px;
+    }
+
+    .number {
+        width: 60px;
+        height: 62px;
+    }
+
+    .time, .length {
+        font-size: 28px;
+    }
+
+    .time p::before,
+    .length p::before {
+        margin-right: 7px;
+    }
+
+    .situation {
+        font-size: 19px;
+    }
+}

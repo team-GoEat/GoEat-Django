@@ -1,0 +1,48 @@
+.stamp_title {
+    padding: 64px 20px 25px;
+}
+
+.stamp_title h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.stamp_title p {
+    font-size: 14px;
+}
+
+.stamp_title span {
+    font-weight: bold;
+}
+
+.stamp_list ul {
+    padding-bottom: 11px;
+    height: 100%;
+    max-height: 649px;
+    overflow-y: auto;
+}
+
+.stamp_list li {
+    height: 49px;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 15px 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.stamp_list li:last-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.days p, .phon p{
+    font-size: 14px;
+}
+
+.bottom_logo img {
+    display: none;
+}
+

@@ -1,0 +1,59 @@
+{% extends 'app_owner/base/index.html' %}
+
+{% load hosts %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app_owner/main/css/main.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="logout">
+    <a href="javascript:;">로그아웃</a>
+</div>
+
+<div class="main_content">
+    <div class="main_title">
+        <h2>순이네 김밥</h2>
+    </div>
+
+    <div class="use_wrap">
+        <div class="stamp_area check_area">
+            <a href="">
+                스탬프 <br>
+                적립 내역<br>
+                확인
+            </a>
+        </div>
+        <div class="coupon_area check_area">
+            <a href="">
+                쿠폰 <br>
+                사용 내역<br>
+                확인
+            </a>
+        </div>
+    </div>
+
+    <div class="notice_wrap">
+        <div class="notice_title">
+            <h2>공지사항</h2>
+        </div>
+
+        <div class="notice_list">
+            <ul>
+                <li>
+                    <a href="javascript:;">고잇 공지사항 1</a>
+                </li>
+                <li>
+                    <a href="javascript:;">고잇 공지사항 1</a>
+                </li>
+                <li>
+                    <a href="javascript:;">고잇 공지사항 1</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

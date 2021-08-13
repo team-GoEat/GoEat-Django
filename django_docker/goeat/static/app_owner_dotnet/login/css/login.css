@@ -1,0 +1,164 @@
+.login {
+    width: 100%;
+    max-width: 464px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    height: 85%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login_title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #000;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+}
+
+.form_inner {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.id {
+    margin-bottom: 15px;
+}
+
+.user_info {
+    margin-right: 18px;
+}
+
+.user_info label {
+    display: inline-block;
+    width: 105px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 17px;
+}
+
+.user_info input {
+    width: 228px;
+    height: 39px;
+    border: 2px solid #ff3140;
+    border-radius: 19.5px;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.submit {
+    position: relative;
+}
+
+.submit button {
+    width: 90px;
+    height: 96px;
+	background: #fff;
+	border: 3px solid #ff3140;
+    border-radius: 18px;
+    box-sizing: border-box;
+  
+    cursor: pointer;
+}
+
+.btn_img {
+    width: 59px;
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.btn_img img {
+    width: 100%;
+}
+.submit span {
+    position: absolute;
+    bottom: 5px;
+    left: 22px;
+    font-size: 18px;
+    color: #000;
+    letter-spacing: -0.24px;
+    display: block;
+    margin-left: 2px;
+}
+
+.auto_login {
+    margin-top: 23px;
+    width: 450px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.auto_btn_wrap {
+    position: relative;
+}
+
+.auto_login label {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+}
+
+.auto_login input[type="checkbox"] {
+    display: none;
+}
+
+.auto_login input[type="checkbox"] + label::before {
+    content: "";
+    display: inline-block;
+    width: 21px;
+    height: 22px;
+    border: 2px solid #ff3140;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.auto_login input[type="checkbox"] + label em {
+    position: absolute;
+    left: 0;
+    display: inline-block;
+    width: 23px;
+    height: 25px;
+    margin-right: 5px;
+    background: url(/static/app_owner/login/images/check_icon.png) no-repeat;
+    background-size: contain;
+    margin: 1px;
+}
+
+.auto_login input[type="checkbox"]:checked + label em {
+    background-position: -38px 0;
+}
+
+
+/* fail */
+
+.fail {
+    display: flex;
+    justify-content: flex-end;
+    text-align: left;
+    margin-top: 23px;
+}
+
+.fail p {
+    font-size: 14px;
+    color: #000;
+    line-height: 1.4;
+     letter-spacing: -0.24px;
+}
+
+.fail a {
+    color: #ff3140;
+}

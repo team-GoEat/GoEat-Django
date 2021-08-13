@@ -1,0 +1,26 @@
+{% extends 'app_owner/base/index.html' %}
+
+{% load hosts %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app_owner/notice/css/notice.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+
+<div class="notice">
+    <div class="notice_title">
+        <h2>공지사항 제목</h2>
+        <p>2021.07.28 AM 10:00</p>
+    </div>
+
+    <div class="notice_content">
+        <p>공지사항 본문</p>
+        <span>(html)</span>
+    </div>
+</div>
+
+
+{% endblock content %}

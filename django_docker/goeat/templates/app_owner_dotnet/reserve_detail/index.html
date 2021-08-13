@@ -1,0 +1,188 @@
+{% extends 'app_owner_dotnet/base/index.html' %}
+
+{% load hosts %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app_owner_dotnet/reserve_detail/css/reserve_detail.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="reserve_detail">
+    <div class="reserve_inner">
+        <div class="detail_btn_wrap">
+            <div class="reserve_btn detail_btn active">
+                <a href="javascript:;">예약 관리</a>
+            </div>
+            <div class="setting_btn detail_btn">
+                <a href="javascript:;">설정</a>
+            </div>
+        </div>
+
+        <div class="reserve_content">
+            <div class="reserve_title">
+                <div class="title_left_area">
+                    <h2>예약내역</h2>
+                    <div class="select_area">
+                        <div class="arrow"></div>
+                        <select name="" id="">
+                            <option value="">오늘</option>
+                            <option value="">내일</option>
+                            <option value="">어제</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="title_right_area">
+                    <div class="title_img">
+                        <img src="{% static 'app_owner_dotnet/reserve_detail/images/refresh.png' %}" alt="">
+                    </div>
+                    <p>예약 취소 시 손님과 유선상으로 통화 부탁드립니다.</p>
+                </div>
+            </div>
+            <div class="reserv_list">
+                <ul>
+                    <li>
+                        <div class="list_left_area">
+                            <div class="number">
+                                <p>1</p>
+                            </div>
+                            <div class="time">
+                                <p>11:25</p>
+                            </div>
+                            <div class="length">
+                                <p>3명</p>
+                            </div>
+                            <div class="situation">
+                                <p>도착 예정</p>
+                            </div>
+                        </div>
+                        <div class="list_right_area">
+                            <div class="tel">
+                                <p>050-2932-1111</p>
+                            </div>
+                            <div class="list_btn_wrap">
+                                <div class="check_btn">
+                                    <a href="javascript:;">손님 도착</a>
+                                </div>
+                                <div class="cancel_btn">
+                                    <a href="javascript:;">예약 취소</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_left_area">
+                            <div class="number">
+                                <p>2</p>
+                            </div>
+                            <div class="time">
+                                <p>11:50</p>
+                            </div>
+                            <div class="length">
+                                <p>2명</p>
+                            </div>
+                            <div class="situation">
+                                <p>도착 예정</p>
+                            </div>
+                        </div>
+                        <div class="list_right_area">
+                            <div class="tel">
+                                <p>050-2932-1111</p>
+                            </div>
+                            <div class="list_btn_wrap">
+                                <div class="check_btn">
+                                    <a href="javascript:;">손님 도착</a>
+                                </div>
+                                <div class="cancel_btn">
+                                    <a href="javascript:;">예약 취소</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="complete">
+                        <div class="list_left_area">
+                            <div class="number">
+                                <p>O</p>
+                            </div>
+                            <div class="time">
+                                <p>12:00</p>
+                            </div>
+                            <div class="length">
+                                <p>4명</p>
+                            </div>
+                            <div class="situation">
+                                <p>손님 도착</p>
+                            </div>
+                        </div>
+                        <div class="list_right_area">
+                            <div class="tel">
+                                <p>050-2932-1111</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cansel">
+                        <div class="list_left_area">
+                            <div class="number">
+                                <p>X</p>
+                            </div>
+                            <div class="time">
+                                <p>11:25</p>
+                            </div>
+                            <div class="length">
+                                <p>3명</p>
+                            </div>
+                            <div class="situation">
+                                <p>도착 예정</p>
+                            </div>
+                        </div>
+                        <div class="list_right_area">
+                            <div class="tel">
+                                <p>050-2932-1111</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cansel">
+                        <div class="list_left_area">
+                            <div class="number">
+                                <p>X</p>
+                            </div>
+                            <div class="time">
+                                <p>11:25</p>
+                            </div>
+                            <div class="length">
+                                <p>3명</p>
+                            </div>
+                            <div class="situation">
+                                <p>도착 예정</p>
+                            </div>
+                        </div>
+                        <div class="list_right_area">
+                            <div class="tel">
+                                <p>050-2932-1111</p>
+                            </div>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'app_owner_dotnet/reserve_detail/modal/reserve_modal.html' %}
+{% endblock content %}
+
+{% block bottom_js %}
+<script>
+    $('.cancel_btn a').click(function () {
+        $('.reserve_modal, .dark_bg').fadeIn(300);
+    })
+
+    $('.dark_bg').click(function () {
+        $('.reserve_modal, .dark_bg').fadeOut(300);
+    })
+</script>
+{% endblock bottom_js %}

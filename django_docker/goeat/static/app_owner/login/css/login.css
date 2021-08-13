@@ -1,0 +1,156 @@
+
+.login_logo_wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 116px;
+    margin-bottom: -20px;
+}
+
+.login_logo_img {
+    width: 124px;
+}
+
+.login_logo_img img {
+    width: 100%;
+}
+
+.login_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.form_inner {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.id {
+    margin-bottom: 15px;
+}
+
+.user_info {
+    margin-right: 13px;
+}
+
+.user_info label {
+    display: inline-block;
+    width: 53px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 12px;
+}
+
+.user_info input {
+    width: 160px;
+    height: 27px;
+    border: 2px solid #ff3140;
+    border-radius: 19.5px;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+
+.submit button {
+    width: 63px;
+    height: 68px;
+	background: #fff;
+	border: 3px solid #ff3140;
+    border-radius: 18px;
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #000;
+    letter-spacing: -0.24px;
+}
+
+.submit span {
+    background: url(/static//app_owner/login/images/login_btn_ico.png) no-repeat;
+    width: 41px;
+    height: 39px;
+    display: block;
+    margin-left: 2px;
+}
+
+.auto_login {
+    margin-top: 23px;
+    width: 300px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.auto_btn_wrap {
+    position: relative;
+}
+
+.auto_login label {
+    display: flex;
+    align-items: center;
+}
+
+.auto_login input[type="checkbox"] {
+    display: none;
+}
+
+.auto_login input[type="checkbox"] + label::before {
+    content: "";
+    display: inline-block;
+    width: 21px;
+    height: 22px;
+    border: 2px solid #ff3140;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.auto_login input[type="checkbox"] + label em {
+    position: absolute;
+    left: 0;
+    display: inline-block;
+    width: 21px;
+    height: 22px;
+    margin-right: 5px;
+    background: url(/static/app_owner/login/images/check_icon.png) no-repeat;
+    background-size: contain;
+    margin: 2px;
+}
+
+.auto_login input[type="checkbox"]:checked + label em {
+    background-position: -38px 0;
+}
+
+
+/* fail */
+
+.fail {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 23px;
+}
+
+.fail p {
+    font-size: 12px;
+    color: #000;
+    line-height: 1.4;
+     letter-spacing: -0.24px;
+}
+
+.fail a {
+    color: #ff3140;
+}
+
+
+.bottom_logo img {
+    display: none;
+}

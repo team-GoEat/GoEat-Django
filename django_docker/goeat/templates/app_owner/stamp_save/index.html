@@ -1,0 +1,32 @@
+{% extends 'app_owner/base/index.html' %}
+
+{% load hosts %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app_owner/stamp_save/css/stamp_save.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+
+<div class="stamp_save">
+    <div class="save_title">
+        <h2>스탬프 적립하기</h2>
+    </div>
+
+    <div class="save_content">
+        <div class="save_txt">
+            <p>010-****-1234 님의 <br>
+                <span>스탬프</span>를 적립하시겠습니까?
+            </p>
+        </div>
+
+        <div class="submit">
+            <a href="javascript:;">적립하기</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'app_owner/base/index.html' %}
+{% load hosts %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app_owner/login/css/login.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="login">
+    <div class="login_logo_wrap">
+        <div class="login_logo_img">
+            <img src="{% static 'app_owner/base/images/logo.png' %}" alt="">
+        </div>
+    </div>
+    <div class="login_title">
+        <h2>사장님 로그인</h2>
+    </div>
+
+    <form action="" method="POST">
+        <div class="form_inner">
+            <div class="user_info">
+                <div class="id">
+                    <label for="">아이디</label>
+                    <input type="text">
+                </div>
+                <div class="pw">
+                    <label for="">비밀번호</label>
+                    <input type="text">
+                </div>
+            </div>
+            <div class="submit">
+                <button type="button"><span></span> 로그인</button>
+            </div>
+        </div>
+        <div class="auto_login">
+            <div class="auto_btn_wrap">
+                <input type="checkbox" id="auto_login" checked>
+                <label for="auto_login"><em></em>자동 로그인</label>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

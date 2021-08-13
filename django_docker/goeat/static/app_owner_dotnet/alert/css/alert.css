@@ -1,0 +1,28 @@
+
+.bottom_logo img {
+    display: none;
+}
+
+.alert_wrap {
+    display: flex;
+    justify-content: center;
+    background: #fff;
+}
+
+.alert_inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 345px;
+    height: 139px;
+    border: 4px solid #ff3140;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+
+.alert_txt {
+    margin-left: 7px;
+    font-size: 18px;
+    font-weight: bold;
+}
