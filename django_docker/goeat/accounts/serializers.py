@@ -25,7 +25,21 @@ class RegisterSerializer(RegisterSerializer):
         return data_dict
 
 class UserDetailSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ("id", "username", "goeat_id", "name", "date_joined")
+
+class MenuLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('goeat_id', 'menu_like')
+
+class MenuHateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('goeat_id', 'menu_hate')
+
+class FaveResSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('goeat_id', 'fav_Res')

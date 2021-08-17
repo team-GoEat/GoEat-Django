@@ -23,6 +23,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')), #Social Login
     path('accounts/', include('accounts.urls')),
     path('notice/', include('notice.urls')),
+    path('restaurant/', include('restaurant.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
-from restaurant.models import Restaurant
+from restaurant.models import Restaurant, Menu
 
 class Team(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
@@ -84,18 +84,28 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(username, password, **extra_fields)
 
+
 class User(AbstractUser):
     # Username = 핸드폰번호
     username = models.CharField(max_length=30, unique=True)
+    # 이름
     name = models.CharField(max_length=30, unique=False)
+    # 고잇 아이디
     goeat_id = models.CharField(max_length=30, blank=True, unique=True, editable=False, default=id_generator)
+    # 성별
     gender = models.CharField(max_length=30, default='')
+    # 나이
     age = models.IntegerField(default=0)
-    # rank = models.CharField(max_length=30, default='')
-    # favorite_res = models.ManyToManyField(Restaurant, related_name='user')
+    
+    # 식당 찜
+    fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user')
+    # 좋아하는 메뉴
+    menu_like = models.ManyToManyField(Menu, related_name='menu_like_user')
+    # 싫어하는 메뉴
+    menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user')
     
     # 스탬프, 쿠폰?
-
+    # rank = models.CharField(max_length=30, default='')
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
@@ -106,3 +116,5 @@ class User(AbstractUser):
 
     def __str__(self):
         return '{} {}'.format(self.goeat_id, self.username)
+
+
