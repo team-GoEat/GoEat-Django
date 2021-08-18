@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import IntegrityError
 from accounts.models import User, Team, TeamRequest
 from accounts.serializers import UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, FaveResSerializer, SimpleUserProfileSerializer
-from restaurant.models import Restaurant, Menu
+from restaurant.models import Restaurant, Menu, MenuCannotEat
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.google import views as google_view
@@ -257,3 +257,47 @@ def res_like(request, *args, **kwargs):
     elif request.method == 'PUT':
         user.fav_res.remove(res)
         return JsonResponse({'msg': '찜한 음식점에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+"""
+못 먹는 재료
+"""
+@api_view(['POST', 'PUT'])
+def cannot_eat(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    cannoteat_string = request.POST.get('cannoteat_str')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if request.method == 'POST':
+        for c in cannoteat_string:
+            if c == '0':
+                continue
+            else:
+                mce_id = int(c)
+                try:
+                    mce = MenuCannotEat.objects.get(pk = mce_id)
+                except MenuCannotEat.DoesNotExist:
+                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+                
+                user.menu_cannoteat.add(mce)
+        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+    elif request.method == 'PUT':
+        # 되나?
+        user.menu_cannoteat.clear()
+
+        for c in cannoteat_string:
+            if c == '0':
+                continue
+            else:
+                mce_id = int(c)
+                try:
+                    mce = MenuCannotEat.objects.get(pk = mce_id)
+                except MenuCannotEat.DoesNotExist:
+                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+                
+                user.menu_cannoteat.add(mce)
+        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})

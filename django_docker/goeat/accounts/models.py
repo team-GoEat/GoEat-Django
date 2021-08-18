@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
-from restaurant.models import Restaurant, Menu
+from restaurant.models import Restaurant, Menu, MenuCannotEat
 
 class Team(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
@@ -103,6 +103,8 @@ class User(AbstractUser):
     menu_like = models.ManyToManyField(Menu, related_name='menu_like_user', blank=True)
     # 싫어하는 메뉴
     menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user', blank=True)
+    # 못먹는 음식
+    menu_cannoteat = models.ManyToManyField(MenuCannotEat, related_name='menu_cannoteat_user', blank=True)
     
     # 스탬프, 쿠폰?
     # rank = models.CharField(max_length=30, default='')

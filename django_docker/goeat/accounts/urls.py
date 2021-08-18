@@ -40,4 +40,7 @@ urlpatterns = [
     path('menuhate/<user_id>/', views.menu_hate, name='menu_hate'),
     # 음식점 찜 등록
     path('reslike/<user_id>/', views.res_like, name='res_like'),
+    
+    # 못먹는재료
+    path('cannoteat/<str:user_id>', views.cannot_eat, name='cannot_eat'),
 ]

@@ -61,6 +61,7 @@ class Menu(models.Model):
     def __str__(self):
         return self.food_name
 
+#음식점
 class Restaurant(models.Model):
     # 네이버 식당 ID
     res_id = models.CharField(max_length=30)
