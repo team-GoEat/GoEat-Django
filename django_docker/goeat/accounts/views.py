@@ -19,9 +19,7 @@ from json.decoder import JSONDecodeError
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 
-class UserProfileView(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('id')
-    serializer_class = UserProfileSerializer
+
 
 """
 팀 요청
@@ -162,10 +160,10 @@ def menu_like(request, *args, **kwargs):
 
     if request.method == 'POST':
         user.menu_like.add(menu)
-        return JsonResponse({'msg': '좋아하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '좋아하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     elif request.method == 'PUT':
         user.menu_like.remove(menu)
-        return JsonResponse({'msg': '좋아하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '좋아하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
 
 @api_view(['GET', 'POST', 'PUT'])
@@ -190,10 +188,10 @@ def menu_hate(request, *args, **kwargs):
 
     if request.method == 'POST':
         user.menu_hate.add(menu)
-        return JsonResponse({'msg': '싫어하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '싫어하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     elif request.method == 'PUT':
         user.menu_hate.remove(menu)
-        return JsonResponse({'msg': '싫어하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '싫어하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
    
 @api_view(['GET', 'POST', 'PUT'])
 def res_like(request, *args, **kwargs):
@@ -217,7 +215,7 @@ def res_like(request, *args, **kwargs):
 
     if request.method == 'POST':
         user.fav_res.add(res)
-        return JsonResponse({'msg': '찜한 음식점에 추가되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '찜한 음식점에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     elif request.method == 'PUT':
         user.fav_res.remove(res)
-        return JsonResponse({'msg': '찜한 음식점에서 삭제되었습니다.'}, status=status.HTTP_200_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': '찜한 음식점에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})

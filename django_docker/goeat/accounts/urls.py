@@ -2,10 +2,6 @@ from django.urls import path, include
 from accounts import views
 from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LoginView, LogoutView
-from rest_framework.routers import DefaultRouter
-
-router = DefaultRouter()
-router.register('', views.UserProfileView)
 
 urlpatterns = [
     # path('google/login/', views.google_login, name='google_login'),
@@ -25,7 +21,8 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
 
-    path('', include(router.urls)),
+    # 개인 정보 수정
+    path('<str:user_id>/', views.change_user_profile, name='change_user_profile'),
 
     # 팀 요청 알림
     path('team/<user_id>/', views.get_team_request, name='get_team_request'),
