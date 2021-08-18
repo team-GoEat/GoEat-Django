@@ -98,11 +98,11 @@ class User(AbstractUser):
     age = models.IntegerField(default=0)
     
     # 식당 찜
-    fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user')
+    fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)
     # 좋아하는 메뉴
-    menu_like = models.ManyToManyField(Menu, related_name='menu_like_user')
+    menu_like = models.ManyToManyField(Menu, related_name='menu_like_user', blank=True)
     # 싫어하는 메뉴
-    menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user')
+    menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user', blank=True)
     
     # 스탬프, 쿠폰?
     # rank = models.CharField(max_length=30, default='')
