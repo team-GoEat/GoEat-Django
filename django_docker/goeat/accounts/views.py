@@ -23,7 +23,7 @@ from django.views.decorators.csrf import csrf_exempt
 개인 정보, UserProfile
 """
 @api_view(['PUT'])
-def change_user_profile(request, *args, **kwargs):
+def edit_user_profile(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     user_phone = request.POST.get('user_phone')
     user_name = request.POST.get('user_name')

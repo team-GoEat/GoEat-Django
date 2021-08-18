@@ -22,7 +22,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
 
     # 개인 정보 수정
-    path('<str:user_id>/', views.change_user_profile, name='change_user_profile'),
+    path('<str:user_id>/', views.edit_user_profile, name='edit_user_profile'),
 
     # 팀 요청 알림
     path('team/<user_id>/', views.get_team_request, name='get_team_request'),
