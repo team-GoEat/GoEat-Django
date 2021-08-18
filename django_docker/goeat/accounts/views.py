@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import IntegrityError
 from accounts.models import User, Team, TeamRequest
-from accounts.serializers import UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, FaveResSerializer
+from accounts.serializers import UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, FaveResSerializer, SimpleUserProfileSerializer
 from restaurant.models import Restaurant, Menu
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
@@ -19,7 +19,45 @@ from json.decoder import JSONDecodeError
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 
+"""
+개인 정보, UserProfile
+"""
+@api_view(['PUT'])
+def change_user_profile(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    user_phone = request.POST.get('user_phone')
+    user_name = request.POST.get('user_name')
+    is_alarm = request.POST.get('is_alarm')
 
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if request.method == 'PUT':
+        if user.username == user_phone:
+            try:
+                user.username = user_phone
+                user.name = user_name
+                user.is_alarm = is_alarm
+                user.save()
+                serializer = SimpleUserProfileSerializer(user)
+                return Response(serializer.data, status=200)
+            except:
+                return JsonResponse({'msg': '변경 실패!'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        
+        else:
+            if User.objects.filter(username=user_phone).exists():
+                return JsonResponse({'msg': '이미 등록된 번호입니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            try:
+                user.username = user_phone
+                user.name = user_name
+                user.is_alarm = is_alarm
+                user.save()
+                serializer = SimpleUserProfileSerializer(user)
+                return Response(serializer.data, status=200)
+            except:
+                return JsonResponse({'msg': '변경 실패!'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
 """
 팀 요청

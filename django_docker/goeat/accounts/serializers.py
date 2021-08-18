@@ -2,12 +2,11 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import User
 from allauth.account.adapter import get_adapter
-from allauth.account.utils import setup_user_email
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class SimpleUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('goeat_id','username', 'name', 'is_alarm')
 
 class RegisterSerializer(RegisterSerializer):
     username = serializers.CharField(max_length=30)

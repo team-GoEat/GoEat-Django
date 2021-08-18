@@ -23,8 +23,13 @@ class TeamRequestAdmin(admin.ModelAdmin):
     class Meta:
         model = TeamRequest
 
+class UserAdmin(admin.ModelAdmin):
+    list_filter = ['gender', 'age']
+    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm']
+    search_fields = ['username']
+
 admin.site.unregister(OutstandingToken)
 admin.site.register(OutstandingToken, OutstandingTokenAdmin)
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamRequest, TeamRequestAdmin)
