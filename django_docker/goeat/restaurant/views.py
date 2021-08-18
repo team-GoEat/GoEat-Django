@@ -45,7 +45,3 @@ def search_menu(request, *args, **kwargs):
         return Response(serializer.data, status=200)
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-class ResView(viewsets.ModelViewSet):
-    queryset = Restaurant.objects.all().order_by('id')
-    serializer_class = RestaurantSerializer
