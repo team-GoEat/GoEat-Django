@@ -13,10 +13,10 @@
     <div class="reserve_inner">
         <div class="detail_btn_wrap">
             <div class="reserve_btn detail_btn active">
-                <a href="javascript:;">예약 관리</a>
+                <a href="{% host_url 'setting_dotnet' host 'owner' %}">예약 관리</a>
             </div>
             <div class="setting_btn detail_btn">
-                <a href="javascript:;">설정</a>
+                <a href="{% host_url 'reserve_dotnet' host 'owner' %}">설정</a>
             </div>
         </div>
 
@@ -24,13 +24,11 @@
             <div class="reserve_title">
                 <div class="title_left_area">
                     <h2>예약내역</h2>
-                    <div class="select_area">
+                    <div class="open_area">
                         <div class="arrow"></div>
-                        <select name="" id="">
-                            <option value="">오늘</option>
-                            <option value="">내일</option>
-                            <option value="">어제</option>
-                        </select>
+                        <div class="open_btn" onclick="changeModal()">
+                            <p class="open_val">오늘</p>
+                        </div>
                     </div>
                 </div>
 
@@ -41,6 +39,8 @@
                     <p>예약 취소 시 손님과 유선상으로 통화 부탁드립니다.</p>
                 </div>
             </div>
+
+
             <div class="reserv_list">
                 <ul>
                     <li>
@@ -164,8 +164,6 @@
                             </div>
                         </div>
                     </li>
-
-
                 </ul>
             </div>
         </div>
@@ -173,16 +171,97 @@
 </div>
 
 {% include 'app_owner_dotnet/reserve_detail/modal/reserve_modal.html' %}
+{% include 'app_owner_dotnet/reserve_detail/modal/day_modal.html' %}
+{% include 'app_owner_dotnet/reserve_detail/modal/arrival_modal.html' %}
 {% endblock content %}
 
 {% block bottom_js %}
 <script>
-    $('.cancel_btn a').click(function () {
-        $('.reserve_modal, .dark_bg').fadeIn(300);
+
+    // 손님 도착
+    $('.check_btn a').click(function () {
+        $('.arrival_modal, .dark_bg').fadeIn(300);
     })
 
-    $('.dark_bg').click(function () {
-        $('.reserve_modal, .dark_bg').fadeOut(300);
+    $('.dark_bg, .header_close_img ').click(function () {
+        $('.arrival_modal, .dark_bg').fadeOut(300);
     })
+
+    // 예약거절
+    $('.modal_cancel_btn a').click(function () {
+        $('.reserve_modal, .reserve_dark_bg').fadeIn(300);
+    })
+
+    $('.dark_bg, .reserve_close_img').click(function () {
+        $('.reserve_modal, .reserve_dark_bg').fadeOut(300);
+    })
+
+    function changeModal() {
+        $('.change_modal, .dark_bg').fadeIn(300);
+        $('body').css('overflow', 'hidden');
+        $('#days').val('');
+        modalClose();
+    }
+
+    function modalClose() {
+        $('.dark_bg, .header_close_img').click(function () {
+            $('.change_modal, .dark_bg').fadeOut(300);
+        })
+    }
+
+
+
+
+    var focus_type = 'd';
+
+    $('#days').focus(function () {
+        $(this).val('');
+        focus_type = 'd';
+    })
+
+    var count = 1;
+    $('.key').click(function () {
+        var numVal = $('.key').text();
+
+        if (focus_type === 'd') {
+            if (count === 1) {
+                var num;
+                num = $('#days').val() + $(this).text();
+
+                $('#days').val(num);
+            }
+        }
+    })
+
+    $('.del').click(function () {
+        var timeInput = $('.times_input_box input');
+
+        if (timeInput.focus()) {
+            $(timeInput).val('');
+            $('#hour').focus();
+            count = 1;
+
+            return count;
+        }
+    })
+
+    $('.day_save_btn').click(function () {
+        var hourVal = $('#days').val();
+
+
+        if ($('#days').val().length > 10 || $('#days').val().length < 10) {
+            alert('날짜를 예시와 같이 작성해주세요.');
+        } else {
+            $('.open_val').text(hourVal);
+            btn_close();
+        }
+    })
+
+
+    function btn_close() {
+        $('.day_save_btn a').click(function () {
+            $('.change_modal, .dark_bg').fadeOut(300);
+        })
+    }
 </script>
 {% endblock bottom_js %}

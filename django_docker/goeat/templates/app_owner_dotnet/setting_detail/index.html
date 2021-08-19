@@ -12,10 +12,10 @@
 <div class="setting_wrap">
     <div class="btn_wrap">
         <div class="reserve_btn menu_btn">
-            <a href="javascript:;">예약 관리</a>
+            <a href="{% host_url 'setting_dotnet' host 'owner' %}">예약 관리</a>
         </div>
         <div class="setting_btn menu_btn active">
-            <a href="javascript:;">설정</a>
+            <a href="{% host_url 'reserve_dotnet' host 'owner' %}">설정</a>
         </div>
     </div>
 
@@ -251,7 +251,6 @@
 
         $('.week_area p').text(listText);
         $('.week_list').removeClass('active');
-
     })
 
     // modal 
@@ -267,7 +266,7 @@
     }
 
     function modalClose() {
-        $('.dark_bg').click(function () {
+        $('.dark_bg, .header_close_img').click(function () {
             $('.change_modal, .dark_bg').fadeOut(300);
         })
     }
@@ -276,7 +275,7 @@
         $('.notice_modal, .dark_bg').fadeIn(300);
     })
 
-    $('.dark_bg').click(function () {
+    $('.dark_bg, .header_close_img').click(function () {
         $('.notice_modal, .dark_bg').fadeOut(300);
     })
 
@@ -302,7 +301,7 @@
 
                 var num1 = $('#hour').val() > 2;
                 if (num1) {
-                    alert('2이상은 ㅈㅅㅈㅅ');
+                    alert('24시간 이상은 입력이 불가능합니다.');
                     $('#hour').val('');
                     return;
                 }
@@ -311,11 +310,9 @@
             } else if (count === 2) {
                 var num;
 
-
                 var num2 = (/[5-9]/);
                 if (num2.test($(this).text())) {
-                    alert('앞자리 2면 뒷자리 4이상안됨 ㅅㄱ');
-
+                    alert('24시간 이상은 입력이 불가능합니다.');
                     return;
                 }
 
@@ -329,8 +326,6 @@
                 }
                 return count++;
             }
-
-
         }
 
         if (focus_type === 'm') {
@@ -370,13 +365,13 @@
     $('.save_btn').click(function () {
         var hourVal = $('#hour').val();
         var minute = $('#minute').val();
-        var timeInputVal = hourVal + minute;
-
+        var border = $('.times_input_box span').text();
+        var timeInputVal = hourVal + border + minute;
 
         if (timeInputVal == "") {
-            alert('시간입력좀;');
+            alert('시간을 입력해주세요');
         } else if (minute == "") {
-            alert('뒤에시간은 안쓰니?');
+            alert('분 단위를 작성해주세요');
         }
 
         if (modal_type === 'open') {

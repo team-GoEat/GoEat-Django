@@ -25,6 +25,9 @@
 }
 
 .menu_btn a {
+    display: flex;
+    align-items: center;
+    height: 100%;
     font-size: 24px;
     color: #000;
 }
@@ -413,7 +416,6 @@
 /* modal */
 .change_modal {
     display: none;
-
 }
 
 .change_modal_01 {
@@ -426,7 +428,6 @@
     flex-direction: column;
     align-items: center;
     margin-right: 30px;
-
 }
 
 .dark_bg {
@@ -456,6 +457,25 @@
     height: 29px;
     width: 203px;
     background: #ff3140;
+    padding: 8px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.change_header p {
+    font-size: 14px;
+    color: #fff;
+}
+
+.header_close_img {
+    width: 21px;
+}
+
+.header_close_img img {
+    width: 100%;
 }
 
 .times_input_box {
@@ -503,6 +523,7 @@
     width: 203px;
     height: 260px;
     background: #fff;
+    position: relative;
 }
 
 .number_list {
@@ -552,12 +573,32 @@
 
 .notice_modal_content {
     width: 623px;
-    height: 514px;
+    height: 543px;
     background: #fff;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    overflow-y: auto;
+}
+
+.notice_modal_header {
+    width: 100%;
+    height: 29px;
+    background: #ff3140;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+.notice_modal_header p {
+    font-size: 14px;
+    color: #fff;
+}
+
+.notice_txt_box {
+    height: 514px;
     overflow-y: auto;
 }
 
@@ -569,7 +610,7 @@
     text-align: center;
 }
 
-.notice_modal_content::-webkit-scrollbar {
+.notice_txt_box::-webkit-scrollbar {
     width: 19px;
     height: 578px;
     background: #fff;
@@ -578,7 +619,7 @@
     box-sizing: border-box;
 }
 
-.notice_modal_content::-webkit-scrollbar-thumb {
+.notice_txt_box::-webkit-scrollbar-thumb {
     height: 336px;
     background: #ff3140;
     border-radius: 16px;

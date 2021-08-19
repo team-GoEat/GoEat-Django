@@ -1,7 +1,5 @@
 .coupon_title {
-    padding: 64px 20px 25px;
-    display: flex;
-    justify-content: space-between;
+    padding: 64px 20px 0;
 }
 
 .coupon_title h2 {
@@ -9,6 +7,14 @@
     font-weight: bold;
     color: #000;
     margin-bottom: 15px;
+}
+
+.coupon_title_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 20px;
+    box-sizing: border-box;
 }
 
 .coupon_title p {
@@ -19,19 +25,87 @@
     font-weight: bold;
 }
 
-.select_area {
-    display: flex;
-    align-items: flex-end;
+.times_content {
+    position: relative;
 }
 
-.select_area select{
+
+/* week_area */
+.week_area{
     width: 104px;
     height: 29px;
     border: 1px solid #ff3140;
     border-radius: 4px;
     background: url(/static/app_owner/coupon/images/down_btn_ico.png) no-repeat 95% 50%;
     appearance: none;
-    padding-left: 5px;
+    padding-left: 9px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+}
+
+.week_area p {
+    font-size: 13px;
+    height: 100%;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.week_list {
+    position: absolute;
+    left: 0;
+    bottom: -173px;
+    display: none;
+}
+
+.week_list.active {
+    display: block; 
+}
+
+.week_list ul {
+    width: 114px;
+    height: 206px;
+    border: 1px solid #ff3140;
+    border-radius: 4px;
+    background: #fff;
+    padding: 6px 0;
+    box-sizing: border-box;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.week_list li {
+    height: 100%;       
+    max-height: 25px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+
+.week_list li p {
+    font-size: 15px;
+    color: #000;
+}
+
+.week_list li:hover {
+    background: #f0f0f0;
+}
+
+.week_list ul::-webkit-scrollbar {
+    width: 5px;
+    height: 30px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: -1px 0 4px 0 rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+}
+
+.week_list ul::-webkit-scrollbar-thumb {
+    width: 12px;
+    height: 30px;
+    background: #ff3140;
+    border-radius: 16px;
     box-sizing: border-box;
 }
 
