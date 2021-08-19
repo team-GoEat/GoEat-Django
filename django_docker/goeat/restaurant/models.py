@@ -48,7 +48,7 @@ class Menu(models.Model):
     # 요리 특징
     menu_feature = models.ForeignKey(MenuFeature, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 메인 재료
-    menu_ingredients = models.ManyToManyField(MenuIngredient, related_name='menu')
+    menu_ingredients = models.ManyToManyField(MenuIngredient, related_name='menu', blank=True)
     # 못먹는 재료
     menu_cannoteat = models.ForeignKey(MenuCannotEat, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 맵기 정도
@@ -76,9 +76,9 @@ class Restaurant(models.Model):
     # 식당 주소
     res_address = models.CharField(max_length=50)
     # 식당 메뉴
-    res_menu = models.ManyToManyField(Menu, related_name='restaurant')
+    res_menu = models.ManyToManyField(Menu, related_name='restaurant', blank=True)
     # 2차 군집
-    res_menu_type = models.ManyToManyField(MenuSecondClass, related_name='restaurant')
+    res_menu_type = models.ManyToManyField(MenuSecondClass, related_name='restaurant', blank=True)
     # 식당 영업시간
     res_time = models.CharField(max_length=50)
     # 식당 이미지
