@@ -5,7 +5,7 @@ services:
     build: ./django_docker
     container_name: django
     restart: always
-    command: gunicorn -w 1 -b 0.0.0.0:8000 goeat.wsgi:application
+    command: gunicorn -w 3 -b 0.0.0.0:8000 goeat.wsgi:application
     links:
       - "mysql:mysql"
 
@@ -17,6 +17,8 @@ services:
     depends_on:
       - django
     volumes:
+      - "./django_docker/goeat/static/:/static"
+      - "./django_docker/goeat/media/:/media"
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
     restart: always
   
