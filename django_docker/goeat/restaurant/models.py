@@ -37,10 +37,10 @@ class MenuSecondClass(models.Model):
 
 #메뉴
 class Menu(models.Model):
-    # 음식 이름 (1차 군집)
+    # 음식 이름 (2차 군집)
     menu_name = models.CharField(max_length=30)
-    # 2차 군집
-    menu_second_name = models.ForeignKey(MenuSecondClass, on_delete=models.SET_NULL, null=True, related_name='menu')
+    # 1차 군집
+    menu_first_name = models.ForeignKey(MenuSecondClass, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 음식 온도
     menu_temp = models.CharField(max_length=10)
     # 요리 종류
