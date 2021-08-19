@@ -132,9 +132,6 @@ def team_accept(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
-    print(receiver)
-    print(sender)
-
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         print("TeamRequest: ", teamrequest)

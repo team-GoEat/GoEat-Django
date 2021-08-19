@@ -29,7 +29,7 @@ class MenuFeature(models.Model):
         return self.feature_name
 
 # 2차군집
-class MenuSecondClass(models.Model):
+class MenuFirstClass(models.Model):
     class_name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -40,7 +40,7 @@ class Menu(models.Model):
     # 음식 이름 (2차 군집)
     menu_name = models.CharField(max_length=30)
     # 1차 군집
-    menu_first_name = models.ForeignKey(MenuSecondClass, on_delete=models.SET_NULL, null=True, related_name='menu')
+    menu_first_name = models.ForeignKey(MenuFirstClass, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 음식 온도
     menu_temp = models.CharField(max_length=10)
     # 요리 종류
@@ -78,7 +78,7 @@ class Restaurant(models.Model):
     # 식당 메뉴
     res_menu = models.ManyToManyField(Menu, related_name='restaurant', blank=True)
     # 2차 군집
-    res_menu_type = models.ManyToManyField(MenuSecondClass, related_name='restaurant', blank=True)
+    res_menu_type = models.ManyToManyField(MenuFirstClass, related_name='restaurant', blank=True)
     # 식당 영업시간
     res_time = models.CharField(max_length=50)
     # 식당 이미지
