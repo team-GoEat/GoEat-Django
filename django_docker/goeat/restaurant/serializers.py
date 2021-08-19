@@ -1,4 +1,4 @@
-from restaurant.models import Restaurant, Menu
+from restaurant.models import Restaurant, Menu, ResService
 from rest_framework import serializers
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -20,3 +20,8 @@ class SimpleMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
         fields = ('id', 'menu_name', 'menu_image')
+
+class ResServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResService
+        fields = ('services', 'service_exp')

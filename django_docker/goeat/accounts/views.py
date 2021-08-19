@@ -173,6 +173,7 @@ def team_reject(request, *args, **kwargs):
 찜한 음식점
 """
 
+# 좋아한 메뉴
 @api_view(['GET', 'POST', 'PUT'])
 def menu_like(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
