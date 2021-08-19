@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from restaurant.models import Restaurant, Menu, ResService
 from restaurant.serializers import (
-    MenuSerializer, SimpleRestaurantSerializer, SimpleMenuSerializer, RestaurantSerializer, 
-    ResServiceSerializer,
+    MenuSerializer, SimpleRestaurantSerializer, SimpleMenuSerializer, 
+    RestaurantSerializer, ResServiceSerializer,
 )
 
 # 음식점 정보
@@ -33,7 +33,7 @@ def get_restaurant_by_menu(request, *args, **kwargs):
 # 식당 검색
 @api_view(['GET'])
 def search_res(request, *args, **kwargs):
-    keyword = kwargs.GET('keyword')
+    keyword = kwargs.get('keyword')
 
     try:
         restaurants = Restaurant.objects.get(res_name = keyword)
@@ -45,7 +45,7 @@ def search_res(request, *args, **kwargs):
 # 메뉴 검색
 @api_view(['GET'])
 def search_menu(request, *args, **kwargs):
-    keyword = kwargs.GET('keyword')
+    keyword = kwargs.get('keyword')
 
     try:
         menu = Menu.objects.get(menu_name = keyword)
@@ -57,7 +57,7 @@ def search_menu(request, *args, **kwargs):
 # 식당별 서비스
 @api_view(['GET'])
 def get_service_by_res(request, *args, **kwargs):
-    res_id = kwargs.GET('res_id')
+    res_id = kwargs.get('res_id')
 
     try:
         res = Restaurant.objects.get(pk=res_id)
