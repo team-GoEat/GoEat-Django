@@ -65,7 +65,7 @@ class MenuHateSerializer(serializers.ModelSerializer):
         fields = ('goeat_id', 'menu_hate')
 
 # 찜한 음식점 Serializer
-class FaveResSerializer(serializers.ModelSerializer):
+class FavResSerializer(serializers.ModelSerializer):
     fav_res = SimpleRestaurantSerializer(read_only=True, many=True)
 
     class Meta:

@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import IntegrityError
 from accounts.models import User, Team, TeamRequest
-from accounts.serializers import UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, FaveResSerializer, SimpleUserProfileSerializer
 from restaurant.models import Restaurant, Menu, MenuCannotEat
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
@@ -18,12 +17,19 @@ from rest_framework.response import Response
 from json.decoder import JSONDecodeError
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from accounts.serializers import (
+    UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
+    FavResSerializer, SimpleUserProfileSerializer
+)
 """
-개인 정보, UserProfile
+#############################################################################################
+
+                                사용자 개인 정보, User Profile
+
+#############################################################################################
 """
 @api_view(['PUT'])
-def edit_user_profile(request, *args, **kwargs):
+def change_user_profile(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     user_phone = request.POST.get('user_phone')
     user_name = request.POST.get('user_name')
@@ -60,8 +66,13 @@ def edit_user_profile(request, *args, **kwargs):
                 return JsonResponse({'msg': '변경 실패!'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
 """
-팀 요청
+#############################################################################################
+
+                                        팀 요청
+
+#############################################################################################
 """
+# 팀 요청
 def get_team_request(request, *args, **kwargs):
     user_id = kwargs.get("user_id")
 
@@ -132,6 +143,9 @@ def team_accept(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
+    print(receiver)
+    print(sender)
+
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         print("TeamRequest: ", teamrequest)
@@ -168,97 +182,168 @@ def team_reject(request, *args, **kwargs):
 
 
 """
-좋아한 메뉴, 
-싫어한 메뉴,
-찜한 음식점
-"""
+#############################################################################################
 
+                        좋아한 메뉴, 싫어한 메뉴, 찜한 음식점
+
+#############################################################################################
+"""
 # 좋아한 메뉴
 @api_view(['GET', 'POST', 'PUT'])
 def menu_like(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
 
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
+    # GET - 사용자가 좋아한 메뉴 리스트 요청
     if request.method == 'GET':
+        try:
+            user = User.objects.filter(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         serializer = MenuLikeSerializer(user, many=True)
         return Response(serializer.data, status=200)
 
-    menu_id = request.POST.get('menu_id')
+    # POST - 사용자의 좋아한 메뉴 추가
+    elif request.method == 'POST':
+        menu_id = request.POST.get('menu_id')
 
-    try:
-        menu = Menu.objects.get(pk=menu_id)
-    except Menu.DoesNotExist:
-        return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    if request.method == 'POST':
+        try:
+            menu = Menu.objects.get(pk=menu_id)
+        except Menu.DoesNotExist:
+            return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.menu_like.add(menu)
         return JsonResponse({'msg': '좋아하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    
+    # PUT - 사용자의 좋아한 메뉴 삭제
     elif request.method == 'PUT':
+        menu_id = request.POST.get('menu_id')
+
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+        try:
+            menu = Menu.objects.get(pk=menu_id)
+        except Menu.DoesNotExist:
+            return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.menu_like.remove(menu)
         return JsonResponse({'msg': '좋아하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
-
+# 싫어한 메뉴
 @api_view(['GET', 'POST', 'PUT'])
 def menu_hate(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
 
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-    
+    # GET - 사용자가 싫어한 메뉴 리스트 요청
     if request.method == 'GET':
+        try:
+            user = User.objects.filter(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         serializer = MenuHateSerializer(user, many=True)
         return Response(serializer.data, status=200)
-    
-    menu_id = request.POST.get('menu_id')
 
-    try:
-        menu = Menu.objects.get(pk=menu_id)
-    except Menu.DoesNotExist:
-        return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    # POST - 사용자의 싫어한 메뉴 추가
+    elif request.method == 'POST':
+        menu_id = request.POST.get('menu_id')
 
-    if request.method == 'POST':
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+        try:
+            menu = Menu.objects.get(pk=menu_id)
+        except Menu.DoesNotExist:
+            return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.menu_hate.add(menu)
         return JsonResponse({'msg': '싫어하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    
+    # PUT - 사용자의 좋아한 메뉴 삭제
     elif request.method == 'PUT':
+        menu_id = request.POST.get('menu_id')
+
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+        try:
+            menu = Menu.objects.get(pk=menu_id)
+        except Menu.DoesNotExist:
+            return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.menu_hate.remove(menu)
         return JsonResponse({'msg': '싫어하는 메뉴에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-   
+
+# 찜한 음식점
 @api_view(['GET', 'POST', 'PUT'])
-def res_like(request, *args, **kwargs):
+def fav_res(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
 
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
+    # GET - 사용자가 찜한 음식점 리스트 요청
     if request.method == 'GET':
-        serializer = FaveResSerializer(user, many=True)
+        try:
+            user = User.objects.filter(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+        serializer = FavResSerializer(user, many=True)
         return Response(serializer.data, status=200)
 
-    res_id = request.POST.get('res_id') #고유 pk
+    # POST - 사용자의 찜한 음식점 추가
+    elif request.method == 'POST':
+        res_id = request.POST.get('res_id') #고유 pk
 
-    try:
-        res = Restaurant.objects.get(pk=res_id)
-    except Restaurant.DoesNotExist:
-        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    if request.method == 'POST':
+        try:
+            res = Restaurant.objects.get(pk=res_id)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.fav_res.add(res)
         return JsonResponse({'msg': '찜한 음식점에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    
+    # PUT - 사용자의 찜한 음식점 삭제
     elif request.method == 'PUT':
+        res_id = request.POST.get('res_id') #고유 pk
+
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+        try:
+            res = Restaurant.objects.get(pk=res_id)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
         user.fav_res.remove(res)
         return JsonResponse({'msg': '찜한 음식점에서 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
+
 """
-못 먹는 재료
+#############################################################################################
+
+                                    못먹는 재료
+
+#############################################################################################
 """
+# 못먹는 재료
 @api_view(['POST', 'PUT'])
 def cannot_eat(request, *args, **kwargs):
     user_id = kwargs.get('user_id')

@@ -39,7 +39,7 @@ urlpatterns = [
     # 메뉴 싫어요 등록
     path('menuhate/<user_id>/', views.menu_hate, name='menu_hate'),
     # 음식점 찜 등록
-    path('reslike/<user_id>/', views.res_like, name='res_like'),
+    path('favres/<user_id>/', views.fav_res, name='fav_res'),
     
     # 못먹는재료
     path('cannoteat/<str:user_id>', views.cannot_eat, name='cannot_eat'),
