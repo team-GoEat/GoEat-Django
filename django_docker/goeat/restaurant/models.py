@@ -23,10 +23,17 @@ class MenuType(models.Model):
 
 # 1차 군집
 class MenuFirstClass(models.Model):
-    class_name = models.CharField(max_length=30)
+    first_class_name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.class_name
+        return self.first_class_name
+
+# 2차 군집
+class MenuSecondClass(models.Model):
+    second_class_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.second_class_name
 
 # 메인 재료
 class MenuIngredient(models.Model):
@@ -60,29 +67,34 @@ class MenuCannotEat(models.Model):
 
 #메뉴
 class Menu(models.Model):
-    # 음식 이름 (2차 군집)
+    # 메뉴 이름
     menu_name = models.CharField(max_length=30)
-    # 1차 군집
-    menu_first_name = models.ForeignKey(MenuFirstClass, on_delete=models.SET_NULL, null=True, related_name='menu')
-    # 음식 온도
-    menu_temp = models.CharField(max_length=10)
-    # 요리 종류
+    # 요리 특징 (밥, 면, 샐러드, 빵, ...)
+    menu_feature = models.ManyToManyField(MenuFeature, related_name='menu', blank=True)
+    # 음식 종류 (0차 군집) (한식, 양식, 중식, 일식, ...)
     menu_type = models.ForeignKey(MenuType, on_delete=models.SET_NULL, null=True, related_name='menu')
-    # 요리 특징
-    menu_feature = models.ForeignKey(MenuFeature, on_delete=models.SET_NULL, null=True, related_name='menu')
+    # 1차 군집 (갈비, ...)
+    menu_first_name = models.ForeignKey(MenuFirstClass, on_delete=models.SET_NULL, null=True, related_name='menu')
+    # 2차 군집 (등갈비, 갈비찜, ...)
+    menu_second_name = models.ForeignKey(MenuSecondClass, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 메인 재료
     menu_ingredients = models.ManyToManyField(MenuIngredient, related_name='menu', blank=True)
     # 못먹는 재료
     menu_cannoteat = models.ForeignKey(MenuCannotEat, on_delete=models.SET_NULL, null=True, related_name='menu')
+    # 음식 국물 유무
+    # 0 = 국물 없음
+    # 1 = 국물 조금 있음
+    # 2 = 국물 많음
+    menu_soup = models.IntegerField(default=0)
     # 맵기 정도
     is_spicy = models.BooleanField(default=False)
-    # 음식 국물 유무
-    is_soup = models.BooleanField(default=False)
+    # 음식 온도
+    is_cold = models.BooleanField(default=False)
     # 음식 이미지
     menu_image = models.ImageField(null=True, blank=True, upload_to="menu_images")
 
     def __str__(self):
-        return self.food_name
+        return self.menu_name
 
 
 """

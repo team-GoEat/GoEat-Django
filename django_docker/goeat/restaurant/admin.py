@@ -2,7 +2,7 @@ from django.contrib import admin
 from restaurant.models import (
     Restaurant, Menu, MenuIngredient, MenuType, 
     MenuCannotEat, ResService, Service,
-    MenuFirstClass, MenuFeature
+    MenuFirstClass, MenuSecondClass, MenuFeature
 )
 
 
@@ -28,8 +28,8 @@ class RestaurantAdmin(admin.ModelAdmin):
 """
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
-    list_filter = ['menu_name', 'menu_first_name', 'menu_type', 'menu_feature', 'menu_cannoteat', 'is_spicy', 'is_soup']
-    list_display = ['menu_name', 'menu_first_name', 'menu_type', 'menu_feature', 'is_spicy', 'is_soup', 'menu_cannoteat']
+    list_filter = [ 'menu_feature', 'menu_type', 'menu_first_name', 'menu_second_name', 'menu_soup', 'is_spicy', 'is_cold', 'menu_cannoteat']
+    list_display = ['menu_name',  'menu_type', 'menu_first_name', 'menu_second_name', 'is_spicy', 'is_cold', 'menu_cannoteat']
     search_fields = ['menu_name', 'menu_first_name']
 
     class Meta:
@@ -55,12 +55,21 @@ class MenuTypeAdmin(admin.ModelAdmin):
 
 # 메뉴 1차 군집 어드민
 class MenuFirstClassAdmin(admin.ModelAdmin):
-    list_filter = ['class_name']
-    list_display = ['id', 'class_name']
-    search_fields = ['class_name']
+    list_filter = ['first_class_name']
+    list_display = ['id', 'first_class_name']
+    search_fields = ['first_class_name']
 
     class Meta:
         model = MenuFirstClass
+
+# 메뉴 2차 군집 어드민
+class MenuSecondClassAdmin(admin.ModelAdmin):
+    list_filter = ['second_class_name']
+    list_display = ['id', 'second_class_name']
+    search_fields = ['second_class_name']
+
+    class Meta:
+        model = MenuSecondClass
 
 # 메뉴 주재료 어드민
 class MenuIngredientAdmin(admin.ModelAdmin):
@@ -112,4 +121,5 @@ admin.site.register(MenuCannotEat, MenuCannotEatAdmin)
 admin.site.register(ResService, ResServiceAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
+admin.site.register(MenuSecondClass, MenuSecondClassAdmin)
 admin.site.register(MenuFeature, MenuFeatureAdmin)
