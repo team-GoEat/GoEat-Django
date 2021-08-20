@@ -94,6 +94,8 @@ class Menu(models.Model):
     is_cold = models.BooleanField(default=False)
     # 음식 이미지
     menu_image = models.ImageField(null=True, blank=True, upload_to="menu_images")
+    # 음식 가격
+    menu_price = models.CharField(max_length=30, default='')
 
     def __str__(self):
         return self.menu_name
@@ -122,8 +124,6 @@ class Restaurant(models.Model):
     res_address = models.CharField(max_length=50, blank=True)
     # 식당 메뉴
     res_menu = models.ManyToManyField(Menu, related_name='restaurant', blank=True)
-    # 2차 군집
-    res_menu_type = models.ManyToManyField(MenuFirstClass, related_name='restaurant', blank=True)
     # 식당 영업시간
     res_time = models.CharField(max_length=50, blank=True)
     # 식당 이미지

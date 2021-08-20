@@ -2,16 +2,13 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
-from restaurant.models import Restaurant, Menu, ResService
+from restaurant.models import (
+    Restaurant, Menu, ResService, MenuSecondClass
+)
 from restaurant.serializers import (
     MenuSerializer, SimpleRestaurantSerializer, SimpleMenuSerializer, 
     RestaurantSerializer, ResServiceSerializer,
 )
-
-@api_view(['GET'])
-def send_menu(request):
-    pass
-
 
 """
 #############################################################################################
@@ -29,22 +26,21 @@ class ResView(viewsets.ModelViewSet):
 """
 #############################################################################################
 
-                                메뉴로 식당 도출
+                                메뉴ID로 식당 도출
 
 #############################################################################################
 """
-# 메뉴로 식당 검색
+# 메뉴 ID로 식당 검색
 @api_view(['GET'])
-def get_restaurant_by_menu(request, *args, **kwargs):
+def get_restaurant_by_menuid(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
 
     try:
-        menu = Menu.objects.get(pk = menu_id)
-    except Menu.DoesNotExist:
-        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
+         menu = Menu.objects.filter(menu_second_name__id=menu_id)
+    except MenuSecondClass.DoesNotExist:
+        return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     try:
-        restaurants = Restaurant.objects.get(menu = menu)
+        restaurants = Restaurant.objects.filter(res_menu = menu[0])
         serializer = SimpleRestaurantSerializer(restaurants, many=True)
         return Response(serializer.data, status=200)
     except Restaurant.DoesNotExist:
@@ -54,7 +50,7 @@ def get_restaurant_by_menu(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                식당, 메뉴 검색
+                                    식당, 메뉴 검색
 
 #############################################################################################
 """
@@ -64,7 +60,10 @@ def search_res(request, *args, **kwargs):
     keyword = kwargs.get('keyword')
 
     try:
-        restaurants = Restaurant.objects.get(res_name = keyword)
+        menu = Menu.objects.filter(menu_second_name__second_class_name__contains=keyword)
+        print("menu: ", menu)
+        restaurants = Restaurant.objects.filter(res_menu__in=menu).distinct()
+        print("restaurants: ", restaurants)
         serializer = SimpleRestaurantSerializer(restaurants, many=True)
         return Response(serializer.data, status=200)
     except Restaurant.DoesNotExist:
@@ -76,7 +75,7 @@ def search_menu(request, *args, **kwargs):
     keyword = kwargs.get('keyword')
 
     try:
-        menu = Menu.objects.get(menu_name = keyword)
+        menu = Menu.objects.filter(menu_second_name__second_class_name__contains=keyword)
         serializer = SimpleMenuSerializer(menu, many=True)
         return Response(serializer.data, status=200)
     except Menu.DoesNotExist:
