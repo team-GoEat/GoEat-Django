@@ -65,9 +65,9 @@ def get_service_by_res(request, *args, **kwargs):
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     try:
-        service = ResService.objects.get(restaurant=res)
+        res_services = ResService.objects.filter(restaurant=res)
     except ResService.DoesNotExist:
         return JsonResponse({'msg': '식당 서비스가 없습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
-    serializer = ResServiceSerializer(service, many=True)
+    serializer = ResServiceSerializer(res_services, many=True)
     return Response(serializer.data, status=200)

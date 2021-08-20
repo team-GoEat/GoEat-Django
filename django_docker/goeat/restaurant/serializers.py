@@ -1,4 +1,6 @@
-from restaurant.models import Restaurant, Menu, ResService
+from restaurant.models import (
+    Restaurant, Menu, ResService, Service
+)
 from rest_framework import serializers
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -21,7 +23,16 @@ class SimpleMenuSerializer(serializers.ModelSerializer):
         model = Menu
         fields = ('id', 'menu_name', 'menu_image')
 
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ('service_count', 'service_content')
+
 class ResServiceSerializer(serializers.ModelSerializer):
+    services = ServiceSerializer(read_only=True, many=True)
+    res_id = serializers.IntegerField(source='restaurant.id')
+    res_name = serializers.CharField(source='restaurant.res_name')
+
     class Meta:
         model = ResService
-        fields = ('services', 'service_exp')
+        fields = ('res_id', 'res_name', 'services', 'service_exp')
