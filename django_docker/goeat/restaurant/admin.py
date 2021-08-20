@@ -2,16 +2,16 @@ from django.contrib import admin
 from restaurant.models import (
     Restaurant, Menu, MenuIngredient, MenuType, 
     MenuCannotEat, ResService, Service,
+    MenuFirstClass, MenuFeature
 )
 
-class MenuAdmin(admin.ModelAdmin):
-    list_filter = ['menu_name']
-    list_display = ['menu_name', 'menu_first_name']
-    search_fields = ['menu_name', 'menu_first_name']
 
-    class Meta:
-        model = Menu
-
+"""
+#############################################################################################
+음식점 관련 어드민
+#############################################################################################
+"""
+# 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
     list_filter = ['res_type', 'is_affiliate']
     list_display = ['id', 'res_name', 'res_type', 'is_affiliate']
@@ -20,14 +20,31 @@ class RestaurantAdmin(admin.ModelAdmin):
     class Meta:
         model = Restaurant
 
-class MenuIngredientAdmin(admin.ModelAdmin):
-    list_filter = ['ing_name']
-    list_display = ['id', 'ing_name']
-    search_fields = ['ing_name']
+
+"""
+#############################################################################################
+메뉴 관련 어드민
+#############################################################################################
+"""
+# 메뉴 어드민
+class MenuAdmin(admin.ModelAdmin):
+    list_filter = ['menu_name', 'menu_first_name', 'menu_type', 'menu_feature', 'menu_cannoteat', 'is_spicy', 'is_soup']
+    list_display = ['menu_name', 'menu_first_name', 'menu_type', 'menu_feature', 'is_spicy', 'is_soup', 'menu_cannoteat']
+    search_fields = ['menu_name', 'menu_first_name']
 
     class Meta:
-        model = MenuIngredient
+        model = Menu
 
+# 메뉴 특징 어드민
+class MenuFeatureAdmin(admin.ModelAdmin):
+    list_filter = ['feature_name']
+    list_display = ['id', 'feature_name']
+    search_fields = ['feature_name']
+
+    class Meta:
+        model = MenuFeature
+
+# 메뉴 0차 군집 어드민
 class MenuTypeAdmin(admin.ModelAdmin):
     list_filter = ['type_name']
     list_display = ['id', 'type_name']
@@ -36,6 +53,25 @@ class MenuTypeAdmin(admin.ModelAdmin):
     class Meta:
         model = MenuType
 
+# 메뉴 1차 군집 어드민
+class MenuFirstClassAdmin(admin.ModelAdmin):
+    list_filter = ['class_name']
+    list_display = ['id', 'class_name']
+    search_fields = ['class_name']
+
+    class Meta:
+        model = MenuFirstClass
+
+# 메뉴 주재료 어드민
+class MenuIngredientAdmin(admin.ModelAdmin):
+    list_filter = ['ing_name']
+    list_display = ['id', 'ing_name']
+    search_fields = ['ing_name']
+
+    class Meta:
+        model = MenuIngredient
+
+# 메뉴 못먹는재료 어드민
 class MenuCannotEatAdmin(admin.ModelAdmin):
     list_filter = ['cannoteat_name']
     list_display = ['id', 'cannoteat_name']
@@ -44,6 +80,13 @@ class MenuCannotEatAdmin(admin.ModelAdmin):
     class Meta:
         model = MenuCannotEat
 
+
+"""
+#############################################################################################
+음식점 서비스 관련 어드민
+#############################################################################################
+"""
+# 음식점별 서비스 어드민
 class ResServiceAdmin(admin.ModelAdmin):
     list_filter = ['restaurant']
     list_display = ['id', 'restaurant', 'service_exp']
@@ -52,6 +95,7 @@ class ResServiceAdmin(admin.ModelAdmin):
     class Meta:
         model = ResService
 
+# 모든 음식점 서비스 어드민
 class ServiceAdmin(admin.ModelAdmin):
     list_filter = ['service_content', 'service_count']
     list_display = ['service_content', 'service_count']
@@ -67,3 +111,5 @@ admin.site.register(MenuType, MenuTypeAdmin)
 admin.site.register(MenuCannotEat, MenuCannotEatAdmin)
 admin.site.register(ResService, ResServiceAdmin)
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
+admin.site.register(MenuFeature, MenuFeatureAdmin)

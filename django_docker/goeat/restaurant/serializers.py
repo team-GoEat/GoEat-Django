@@ -23,6 +23,12 @@ class SimpleMenuSerializer(serializers.ModelSerializer):
         model = Menu
         fields = ('id', 'menu_name', 'menu_image')
 
+
+"""
+#############################################################################################
+음식점 서비스 관련 시리얼라이저
+#############################################################################################
+"""
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service

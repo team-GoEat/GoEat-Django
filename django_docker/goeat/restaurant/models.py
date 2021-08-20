@@ -1,18 +1,39 @@
 from django.db import models
 
+
+"""
+#############################################################################################
+메뉴 관련 모델
+#############################################################################################
+"""
+
+# 메뉴 특징 (빵, 떡, 면, 빵)
+class MenuFeature(models.Model):
+    feature_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.feature_name
+        
+# 0차 군집
+class MenuType(models.Model):
+    type_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.type_name
+
+# 1차 군집
+class MenuFirstClass(models.Model):
+    class_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.class_name
+
 # 메인 재료
 class MenuIngredient(models.Model):
     ing_name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.ing_name
-
-# 요리 종류
-class MenuType(models.Model):
-    type_name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.type_name
 
 # 못먹는 재료
 # 1. 밀가루
@@ -36,20 +57,6 @@ class MenuCannotEat(models.Model):
 
     def __str__(self):
         return self.cannoteat_name
-
-# 요리특징 (빵, 떡, 면, 빵)
-class MenuFeature(models.Model):
-    feature_name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.feature_name
-
-# 2차군집
-class MenuFirstClass(models.Model):
-    class_name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.class_name
 
 #메뉴
 class Menu(models.Model):
@@ -77,6 +84,12 @@ class Menu(models.Model):
     def __str__(self):
         return self.food_name
 
+
+"""
+#############################################################################################
+음식점 모델
+#############################################################################################
+"""
 #음식점
 class Restaurant(models.Model):
     # 네이버 식당 ID
@@ -99,14 +112,17 @@ class Restaurant(models.Model):
     res_time = models.CharField(max_length=50, blank=True)
     # 식당 이미지
     res_image = models.ImageField(null=True, blank=True, upload_to="res_images")
-    
+
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
 
+
 """
-음식점 서비스
+#############################################################################################
+음식점 서비스 관련 모델
+#############################################################################################
 """
-# 서비스
+# 모든 음식점 서비스 모델
 class Service(models.Model):
     # 서비스 스탬프 목표치 
     service_count = models.IntegerField(default=0)
@@ -116,7 +132,7 @@ class Service(models.Model):
     def __str__(self):
         return '{} {}'.format(self.service_content, self.service_count)
 
-# 음식점별 서비스
+# 음식점별 서비스 모델
 class ResService(models.Model):
     # 음식점
     restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null=True, related_name='restaurant')
