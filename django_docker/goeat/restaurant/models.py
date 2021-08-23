@@ -98,7 +98,7 @@ class Menu(models.Model):
     menu_price = models.CharField(max_length=30, default='')
 
     def __str__(self):
-        return self.menu_name
+        return '{} {}'.format(self.menu_name, self.menu_second_name)
 
 
 """
