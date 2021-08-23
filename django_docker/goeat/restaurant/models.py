@@ -115,7 +115,7 @@ class Restaurant(models.Model):
     # 식당 이름
     res_name = models.CharField(max_length=30)
     # 식당 카테고리
-    res_type = models.ForeignKey(MenuType, on_delete=models.SET_NULL, null=True, related_name='restaurant')
+    res_type = models.ManyToManyField(MenuType, blank=True, related_name='restaurant')
     # 가맹 여부
     is_affiliate = models.BooleanField(default=False)
     # 식당 전화번호

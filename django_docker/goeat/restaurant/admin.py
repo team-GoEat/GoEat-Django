@@ -16,8 +16,8 @@ from restaurant.models import (
 # 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
     list_filter = ['res_type', 'is_affiliate']
-    list_display = ['id', 'res_name', 'res_type', 'is_affiliate']
-    search_fields = ['res_name', 'res_type']
+    list_display = ['id', 'res_name', 'is_affiliate']
+    search_fields = ['res_name']
 
     class Meta:
         model = Restaurant
