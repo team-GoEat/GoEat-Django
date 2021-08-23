@@ -1,8 +1,7 @@
 from django.contrib import admin
-from notice.models import Notice
+from .models import Notice
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_filter = ['notice_title']
     list_display = ['notice_title', 'notice_content', 'notice_date']
     search_fields = ['notice_title']
 
