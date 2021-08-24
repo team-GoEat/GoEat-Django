@@ -76,4 +76,4 @@ class ResServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ResService
-        fields = ('res_id', 'res_name', 'services', 'service_exp')
+        fields = ('res_id', 'res_name', 'services', 'stamp_exp')

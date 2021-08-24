@@ -1,13 +1,11 @@
 from django.conf import settings
 from django.db import IntegrityError
-from accounts.models import User, Team, TeamRequest
-from restaurant.models import Restaurant, Menu, MenuCannotEat
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.google import views as google_view
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.naver import views as naver_view
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.models import SocialAccount
 from django.http import JsonResponse, HttpResponse
 import requests
@@ -17,10 +15,47 @@ from rest_framework.response import Response
 from json.decoder import JSONDecodeError
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-from accounts.serializers import (
-    UserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
-    FavResSerializer, SimpleUserProfileSerializer
+from restaurant.models import (
+    Restaurant, Menu, MenuCannotEat
 )
+from accounts.serializers import (
+    SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
+    FavResSerializer, CouponSerializer, StampSerializer
+)
+
+from accounts.models import (
+    User, Team, TeamRequest, ResService, 
+    Stamp, Coupon
+)
+
+state = settings.STATE
+BASE_URL = 'http://127.0.0.1:8000/'
+# BASE_URL = 'http://52.78.208.80/'
+GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/login/callback/'
+KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/login/callback/'
+NAVER_CALLBACK_URI = BASE_URL + 'accounts/naver/login/callback/'
+
+def all_register(request_data):
+    data = {
+        'username': request_data['username'],
+        'password1': request_data['password1'],
+        'password2': request_data['password2'],
+        'name': request_data['name']
+    }
+
+    try:
+        accept = requests.post(
+            f"{BASE_URL}accounts/register/", data=data)
+        accept_status = accept.status_code
+        print("Accept_Status: ", accept_status)
+        accept_json = accept.json()
+        print("Accept_Json: ", accept_json)
+
+    except IntegrityError as e:
+        if 'unique constraint' in e.message:
+            print("Unique Constraint!!!")
+            return JsonResponse({'err_msg': 'Same Phone Number'}, status=accept_status)
+
 """
 #############################################################################################
 
@@ -142,9 +177,6 @@ def team_accept(request, *args, **kwargs):
         sender = User.objects.get(goeat_id=sender_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-    
-    print(receiver)
-    print(sender)
 
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
@@ -179,6 +211,113 @@ def team_reject(request, *args, **kwargs):
         return JsonResponse({'msg': '팀원 요청을 거절하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except TeamRequest.DoesNotExist:
         return JsonResponse({'msg': '팀원 요청을 거절할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+
+"""
+#############################################################################################
+
+                                        스탬프
+
+#############################################################################################
+"""
+# 유저 스탬프 목록
+@api_view(['GET'])
+def user_stamp_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    stamp = Stamp.objects.filter(user=user)
+    serializer = StampSerializer(stamp, many=True)
+    return Response(serializer.data, status=200)
+
+# 스탬프 적립
+@api_view(['GET'])
+def get_stamp(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    res_id = kwargs.get('res_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    restaurant = Restaurant.objects.get(id=res_id)
+    res_service = ResService.objects.get(restaurant=restaurant)
+
+    print("res_service: ", res_service)
+
+    # 스탬프 받아오기
+    try:
+        stamp = Stamp.objects.get(user=user, res_service=res_service)
+        
+    # 스탬프 처음 사용한다면 스탬프 새로 생성
+    except Stamp.DoesNotExist:
+        Stamp.objects.create(user=user, res_service=res_service)
+        
+    # 스탬프 하나 추가
+    stamp.add_stamp()
+        
+    # 서비스 받아오기
+    services = stamp.get_services()
+    for service in services:
+            
+        # 가진 스탬프 개수가 서비스 개수랑 같으면 쿠폰 추가
+        if stamp.stamp_own == service.service_count:
+            stamp.append_coupon(restaurant=restaurant, service=service)
+
+        # 가진 스탬프 개수가 최대치에 도달하면 리셋
+    if stamp.stamp_own == res_service.stamp_max_cnt:
+        stamp.reset_stamp_own()
+
+    return JsonResponse({'msg': "스탬프가 성공적으로 적립되었습니다."}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+
+"""
+#############################################################################################
+
+                                            쿠폰                                            
+
+#############################################################################################
+"""
+# 유저 쿠폰 목록
+@api_view(['GET'])
+def user_coupon_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_coupon = Coupon.objects.filter(user=user)
+    serializer = CouponSerializer(user_coupon, many=True)
+    return Response(serializer.data, status=200)
+
+# 쿠폰 사용
+@api_view(['GET'])
+def use_coupon(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    coupon_id = kwargs.get('coupon_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        coupon = Coupon.objects.get(pk=coupon_id)
+    except Coupon.DoesNotExist:
+        return JsonResponse({'msg': '쿠폰이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if user == coupon.user:
+        coupon.delete()
+        return JsonResponse({'msg': '쿠폰을 사용하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    else:
+        return JsonResponse({'msg': '사용자가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
 
 """

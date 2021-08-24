@@ -4,8 +4,19 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
-from restaurant.models import Restaurant, Menu, MenuCannotEat
+import datetime
+from restaurant.models import (
+    Restaurant, Menu, MenuCannotEat, ResService,
+    Service
+)
 
+"""
+#############################################################################################
+
+                                    팀원, 팀 요청
+
+#############################################################################################
+"""
 # 팀
 class Team(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
@@ -51,7 +62,7 @@ class TeamRequest(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.sender.username
+        return '{} {}'.format(self.sender.goeat_id, self.receiver.goeat_id)
     
     # 팀원 등록 요청 수락
     def accept(self):
@@ -74,6 +85,14 @@ class TeamRequest(models.Model):
         self.is_active=False
         self.save()
 
+
+"""
+#############################################################################################
+
+                                        User
+
+#############################################################################################
+"""
 # 사용자 매니저
 class UserManager(BaseUserManager):
 
@@ -108,7 +127,9 @@ class User(AbstractUser):
     gender = models.CharField(max_length=30, default='')
     # 나이
     age = models.IntegerField(default=0)
-    
+    # 알림 수신 동의 
+    is_alarm = models.BooleanField(blank=True, null=False, default=False)
+
     # 식당 찜
     fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)
     # 좋아하는 메뉴
@@ -117,12 +138,21 @@ class User(AbstractUser):
     menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user', blank=True)
     # 못먹는 음식
     menu_cannoteat = models.ManyToManyField(MenuCannotEat, related_name='menu_cannoteat_user', blank=True)
-    
-    # 쿠폰?
-    # rank = models.CharField(max_length=30, default='')
+
+    # 유저 쿠폰 QR코드 URL
+    @property
+    def user_coupon_url(self):
+        return '/accounts/coupon/' + self.goeat_id + '/'
+
+    # 유저 스탬프 QR코드 URL
+    @property
+    def user_stamp_url(self):
+        return '/accounts/stamp/' + self.goeat_id + '/'
 
     # 가입한 날짜
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
+    # rank = models.CharField(max_length=30, default='')
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['name']
@@ -133,3 +163,82 @@ class User(AbstractUser):
         return '{} {}'.format(self.goeat_id, self.username)
 
 
+"""
+#############################################################################################
+
+                                        스탬프
+
+#############################################################################################
+"""
+# 스탬프 
+class Stamp(models.Model):
+    # 사용자
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='stamp_owner')
+    # 음식점 서비스
+    res_service = models.ForeignKey(ResService, on_delete=models.CASCADE, related_name='res_service')
+    # 현재 사용자가 가진 스탬프 개수 
+    stamp_own = models.IntegerField(default=0)
+
+    # 음식점 서비스 가져오기
+    def get_services(self):
+        return self.res_service.services.all()
+
+    # 스탬프 적립
+    def add_stamp(self):
+        self.stamp_own += 1
+        self.save()
+
+    # 쿠폰 생성
+    def append_coupon(self, restaurant, service):
+        Coupon.objects.create(user=self.user, restaurant=restaurant, service=service)
+        self.save()
+
+    # 스탬프 개수 초기화
+    def reset_stamp_own(self):
+        self.stamp_own = 0
+        self.save()
+
+    def __str__(self):
+        return '{} {}'.format(self.user.username, self.user.goeat_id, self.res_service.restaurant.res_name)
+
+
+"""
+#############################################################################################
+
+                                        쿠폰
+
+#############################################################################################
+"""
+class Coupon(models.Model):
+    # 사용자
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='coupon_owner')
+    # 음식점
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='coupon')
+    # 음식점 서비스
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='coupon_service')
+    # 쿠폰 발급기간
+    coupon_start_date = models.DateTimeField(auto_now_add=True)
+    # 쿠폰 만료기간
+    coupon_due_date = models.DateTimeField(editable=False)
+    
+    def __str__(self):
+        return '{} {}'.format(self.user.username, self.user.goeat_id, self.restaurant.res_name)
+
+    # 쿠폰 만료기간 = 쿠폰 발급기간 + 음식점 쿠폰 만료기간
+    def save(self, *args, **kwargs):
+        if not self.coupon_start_date:
+            self.coupon_start_date = timezone.now()
+        res_service = ResService.objects.get(restaurant=self.restaurant)
+        self.coupon_due_date = self.coupon_start_date + datetime.timedelta(days = res_service.stamp_max_time)
+        super(Coupon, self).save(*args, **kwargs)
+
+
+"""
+#############################################################################################
+
+                                        알림
+
+#############################################################################################
+"""
+class Alarm(models.Model):
+    pass

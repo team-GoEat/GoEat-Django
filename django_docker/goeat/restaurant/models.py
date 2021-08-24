@@ -156,8 +156,14 @@ class ResService(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null=True, related_name='restaurant')
     # 음식점 서비스
     services = models.ManyToManyField(Service, blank=True, related_name='service')
-    # 서비스 설명 및 이용안내
+    # 음식점 서비스 설명 및 이용안내
     service_exp = models.TextField(blank=True, null=True)
+    # 서비스 설명 및 이용안내
+    coupon_exp = models.TextField(blank=True, null=True)
+    # 스탬프 개수 최대치
+    stamp_max_cnt = models.IntegerField(default=10)
+    # 스탬프 만료기간
+    stamp_max_time = models.IntegerField(default=180)
 
     def __str__(self):
         return '{} {}'.format(self.restaurant, self.service_exp)
