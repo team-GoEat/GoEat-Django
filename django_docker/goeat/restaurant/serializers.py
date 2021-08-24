@@ -1,13 +1,7 @@
 from restaurant.models import (
-    Restaurant, Menu, ResService, Service
+    Restaurant, Menu, ResService, Service, MenuType
 )
 from rest_framework import serializers
-
-
-class MenuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Menu
-        fields = '__all__'
 
 
 """
@@ -17,6 +11,14 @@ class MenuSerializer(serializers.ModelSerializer):
 
 #############################################################################################
 """
+# 메뉴 카테고리 = 음식점 카테고리 Serializer
+class MenuTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MenuType
+        fields = '__all__'
+
+
 # RestaurantSerializer에서 사용
 class Simple2MenuSerializer(serializers.ModelSerializer):
     menu_second_id = serializers.IntegerField(source='menu_second_name.id')
@@ -28,12 +30,28 @@ class Simple2MenuSerializer(serializers.ModelSerializer):
 # ResView에서 사용
 class RestaurantSerializer(serializers.ModelSerializer):
     res_menu = Simple2MenuSerializer(read_only=True, many=True)
-    res_type = serializers.CharField(source='res_type.type_name')
+    res_type = MenuTypeSerializer(read_only=True, many=True)
 
     class Meta:
         model = Restaurant
         fields = ('res_name', 'res_type', 'is_affiliate', 'res_telenum', 'res_address', 'res_time', 'res_image', 'res_menu')
 
+# SimpleResSerializer에서 사용
+class Simple3MenuSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Menu
+        fields = ('menu_name', 'menu_price', 'menu_image')
+
+# get_restaurant_by_menu_type에서 사용
+class SimpleResSerializer(serializers.ModelSerializer):
+     res_type = MenuTypeSerializer(read_only=True, many=True)
+     res_menu = Simple3MenuSerializer(read_only=True, many=True)
+    # 예약 여부 (실시간 예약 가능한지) 필드 필요!!
+
+     class Meta:
+         model = Restaurant
+         fields = ('id', 'res_name', 'res_type', 'res_address', 'res_menu')
 
 """
 #############################################################################################

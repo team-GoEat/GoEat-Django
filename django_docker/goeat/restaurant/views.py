@@ -3,17 +3,20 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from restaurant.models import (
-    Restaurant, Menu, ResService, MenuSecondClass
+    Restaurant, Menu, ResService, MenuSecondClass,
+    MenuType
 )
 from restaurant.serializers import (
-    MenuSerializer, SimpleRestaurantSerializer, SimpleMenuSerializer, 
+    SimpleRestaurantSerializer, SimpleMenuSerializer, 
     RestaurantSerializer, ResServiceSerializer,
+    SimpleResSerializer
 )
+
 
 """
 #############################################################################################
 
-                                음식점 기본 정보
+                                    음식점 기본 정보
 
 #############################################################################################
 """
@@ -26,11 +29,38 @@ class ResView(viewsets.ModelViewSet):
 """
 #############################################################################################
 
-                                메뉴ID로 식당 도출
+                                메뉴 카테고리별 음식점 목록
 
 #############################################################################################
 """
-# 메뉴 ID로 식당 검색
+# 메뉴 카테고리 ID로 음식점 목록
+@api_view(['GET'])
+def get_restaurant_by_menu_type(request, *args, **kwargs):
+    menu_type_id = kwargs.get('menu_type_id')
+    
+    try:
+        menu = Menu.objects.filter(menu_type__pk=menu_type_id)
+    except Menu.DoesNotExist:
+        return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    try:
+        restaurants = Restaurant.objects.filter(res_menu__menu_type__pk=menu_type_id).distinct()
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    print('Restaurants: ', restaurants)
+    serializer = SimpleResSerializer(restaurants, many=True)
+    return Response(serializer.data, status=200)
+
+
+"""
+#############################################################################################
+
+                                    메뉴ID로 식당 도출
+
+#############################################################################################
+"""
+# 메뉴 ID로 음식점 검색
 @api_view(['GET'])
 def get_restaurant_by_menuid(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')

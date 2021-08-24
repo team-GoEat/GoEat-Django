@@ -9,6 +9,8 @@ urlpatterns = [
     # 음식점 정보
     path('', include(router.urls)),
 
+    # 카테고리로 식당 검색
+    path('menu/type/<int:menu_type_id>/', views.get_restaurant_by_menu_type, name='get_restaurant_by_menu_type'),
     # 메뉴로 식당 검색
     path('menu/<int:menu_id>/', views.get_restaurant_by_menuid, name='get_restaurant_by_menuid'),
     # 식당 검색
