@@ -1,5 +1,6 @@
 from restaurant.models import (
-    Restaurant, Menu, ResService, Service, MenuType
+    Restaurant, Menu, ResService, Service, 
+    MenuType, ResReservation
 )
 from rest_framework import serializers
 

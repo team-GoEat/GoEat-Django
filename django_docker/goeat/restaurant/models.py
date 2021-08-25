@@ -189,3 +189,13 @@ class ResReservation(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='res_reservation')
     # 예약 가능 여부
     is_reservable = models.BooleanField(default=True)
+
+    # 예약 가능하게 설정
+    def reject_reserve(self):
+        is_reservable = False
+        self.save()
+
+    # 예약 불가능하게 설정
+    def accept_reserve(self):
+        is_reservable = True
+        self.save()

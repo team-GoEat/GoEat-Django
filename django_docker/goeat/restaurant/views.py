@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from restaurant.models import (
     Restaurant, Menu, ResService, MenuSecondClass,
-    MenuType
+    MenuType, ResReservation
 )
 from restaurant.serializers import (
     SimpleRestaurantSerializer, SimpleMenuSerializer, 
