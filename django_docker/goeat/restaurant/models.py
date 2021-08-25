@@ -153,7 +153,7 @@ class Service(models.Model):
 # 음식점별 서비스 모델
 class ResService(models.Model):
     # 음식점
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null=True, related_name='restaurant')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='restaurant')
     # 음식점 서비스
     services = models.ManyToManyField(Service, blank=True, related_name='service')
     # 음식점 서비스 설명 및 이용안내
