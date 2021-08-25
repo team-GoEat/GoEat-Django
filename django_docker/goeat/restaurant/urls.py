@@ -18,8 +18,11 @@ urlpatterns = [
     # 메뉴 검색
     path('search/menu/<str:keyword>/', views.search_menu, name='search_menu'),
 
-    # 22가지 랜덤 메뉴
-
     # 식당 서비스
     path('service/<int:res_id>/', views.get_service_by_res, name='get_service_by_res'),
+
+    # 식당 예약 여부 바꾸기
+    path('reserve/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
+    
+    # 22가지 랜덤 메뉴
 ]

@@ -136,3 +136,36 @@ def get_service_by_res(request, *args, **kwargs):
 
     serializer = ResServiceSerializer(res_services, many=True)
     return Response(serializer.data, status=200)
+
+
+"""
+#############################################################################################
+
+                                        음식점 예약
+
+#############################################################################################
+"""
+# 식당 예약 여부 바꾸기
+@api_view(['PUT'])
+def res_change_reserve(request, *args, **kwargs):
+    res_id = kwargs.get('res_id')
+    # 0이면 예약 불가능, 1이면 가능
+    reserve_status = request.POST.get('reserve_status')
+
+    print("reserve_status: ", reserve_status)
+
+    try:
+        resReservation = ResReservation.objects.get(restaurant__pk=res_id)
+    except ResReservation.DoesNotExist:
+        return JsonResponse({'msg': '변경이 불가능합니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+    print("resReservation: ", resReservation)
+
+    if reserve_status:
+        resReservation.accept_reserve()
+        print("Accepted!!")
+        print("resReservation: ", resReservation)
+        return JsonResponse({'msg': '예약 가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    else:
+        resReservation.reject_reserve()
+        return JsonResponse({'msg': '예약 불가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
