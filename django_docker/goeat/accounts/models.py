@@ -56,7 +56,7 @@ class TeamRequest(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name = 'sender')
     # 팀원 요청 받는이
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name = 'receiver')
-    # 요청 결과가 아직 안나왔으면 False, 수락/거절을 했으면 True
+    # 요청 결과가 아직 안나왔으면 True, 수락/거절을 했으면 False
     is_active = models.BooleanField(blank=True, null=False, default=True)
     # 요청 보낸 날짜, 시간
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -236,7 +236,7 @@ class Coupon(models.Model):
 """
 #############################################################################################
 
-                                            알림
+                                        User 알림
 
 #############################################################################################
 """

@@ -128,6 +128,13 @@ class Restaurant(models.Model):
     res_time = models.CharField(max_length=50, blank=True)
     # 식당 이미지
     res_image = models.ImageField(null=True, blank=True, upload_to="res_images")
+    # 예약 가능 여부
+    @property
+    def is_reservable(self):
+        res_reservation = self.res_reservation.filter()
+        if res_reservation.exists():
+            return res_reservation.first().is_reservable
+        return ''
 
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
@@ -167,3 +174,18 @@ class ResService(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.restaurant, self.service_exp)
+
+
+"""
+#############################################################################################
+
+                                    음식점 예약 모델
+
+#############################################################################################
+"""
+# 음식점 예약
+class ResReservation(models.Model):
+    # 음식점
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='res_reservation')
+    # 예약 가능 여부
+    is_reservable = models.BooleanField(default=True)

@@ -45,13 +45,13 @@ class Simple3MenuSerializer(serializers.ModelSerializer):
 
 # get_restaurant_by_menu_type에서 사용
 class SimpleResSerializer(serializers.ModelSerializer):
-     res_type = MenuTypeSerializer(read_only=True, many=True)
-     res_menu = Simple3MenuSerializer(read_only=True, many=True)
-    # 예약 여부 (실시간 예약 가능한지) 필드 필요!!
+    res_type = MenuTypeSerializer(read_only=True, many=True)
+    res_menu = Simple3MenuSerializer(read_only=True, many=True)
+    is_reservable = serializers.BooleanField(read_only=True)
 
-     class Meta:
-         model = Restaurant
-         fields = ('id', 'res_name', 'res_type', 'res_address', 'res_menu')
+    class Meta:
+        model = Restaurant
+        fields = ('id', 'res_name', 'res_type', 'res_address', 'res_menu', 'is_reservable')
 
 """
 #############################################################################################
