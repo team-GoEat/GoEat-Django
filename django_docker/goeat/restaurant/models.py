@@ -190,12 +190,15 @@ class ResReservation(models.Model):
     # 예약 가능 여부
     is_reservable = models.BooleanField(default=True)
 
-    # 예약 가능하게 설정
+    # 예약 불가능하게 설정
     def reject_reserve(self):
-        is_reservable = False
+        self.is_reservable = False
         self.save()
 
-    # 예약 불가능하게 설정
+    # 예약 가능하게 설정
     def accept_reserve(self):
-        is_reservable = True
+        self.is_reservable = True
         self.save()
+
+    def __str__(self):
+        return '{} {}'.format(self.restaurant, self.is_reservable)
