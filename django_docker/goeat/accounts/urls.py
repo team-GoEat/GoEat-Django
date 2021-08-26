@@ -57,4 +57,9 @@ urlpatterns = [
     # path('coupon/<str:user_id>/<int:coupon_id>/'),
     # 유저 쿠폰 사용
     path('coupon/<str:user_id>/<int:coupon_id>/use/', views.use_coupon, name='use_coupon'),
+
+    # 식당 예약하기
+    path('reserve/<str:user_id>/', views.user_reserve_res, name='user_reserve_res'),
+    # 유저 식당 내역 리스트
+    path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),
 ]
