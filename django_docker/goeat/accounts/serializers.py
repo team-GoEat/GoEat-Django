@@ -2,7 +2,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from accounts.models import (
-    User, Coupon, Stamp
+    User, Coupon, Stamp, ResReservationRequest
 )
 from restaurant.serializers import (
     SimpleMenuSerializer, SimpleRestaurantSerializer
@@ -95,6 +95,7 @@ class StampSerializer(serializers.ModelSerializer):
         model = Stamp
         fields = ('user_id', 'res_id', 'res_name', 'res_address', 'stamp_max_cnt', 'stamp_own')
 
+
 """
 #############################################################################################
 
@@ -117,3 +118,21 @@ class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         fields = ('user_id', 'user_url', 'res_id', 'res_name', 'coupon_id', 'service_content', 'coupon_due_date')
+
+
+"""
+#############################################################################################
+
+                                        예약 내역
+
+#############################################################################################
+"""
+class UserReservationSerializer(serializers.ModelSerializer):
+    res_id = serializers.IntegerField(source='receiver.id')
+    res_name = serializers.CharField(source='receiver.res_name')
+    res_address = serializers.CharField(source='receiver.res_address')
+    res_telenum = serializers.CharField(source='receiver.res_telenum')
+
+    class Meta:
+        model = ResReservationRequest
+        fields = ('res_id', 'res_name', 'additional_person', 'res_expect_time', 'res_address', 'res_telenum', 'is_active', 'is_accepted')

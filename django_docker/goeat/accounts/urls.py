@@ -44,11 +44,11 @@ urlpatterns = [
     # 못먹는재료
     path('cannoteat/<str:user_id>', views.cannot_eat, name='cannot_eat'),
 
-    # 스탬프 목록
+    # 유저 스탬프 목록
     path('stamp/list/<str:user_id>/', views.user_stamp_list, name='user_stamp_list'),
     # 유저 스탬프 QR코드 URL
     # path('stamp/<str:user_id>/'),
-    # 스탬프 적립
+    # 유저 스탬프 적립
     path('stamp/<str:user_id>/<int:res_id>/', views.get_stamp, name='get_stamp'),
 
     # 유저 쿠폰 목록

@@ -20,12 +20,13 @@ from restaurant.models import (
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
-    FavResSerializer, CouponSerializer, StampSerializer
+    FavResSerializer, CouponSerializer, StampSerializer,
+    UserReservationSerializer
 )
 
 from accounts.models import (
     User, Team, TeamRequest, ResService, 
-    Stamp, Coupon
+    Stamp, Coupon, ResReservationRequest
 )
 
 state = settings.STATE
@@ -478,7 +479,53 @@ def fav_res(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                    못먹는 재료
+                                        음식점 예약
+
+#############################################################################################
+"""
+# 음식점 예약
+@api_view(['POST'])
+def user_reserve_res(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    res_id = request.POST.get('res_id')
+    additional_person = int(request.POST.get('additional_person'))
+    additional_time = int(request.POST.get('additional_time'))
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        restaurant = Restaurant.objects.get(pk=res_id)
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if request.method == 'POST':
+        try:
+            resRes = ResReservationRequest.objects.get(sender=user, receiver=restaurant, is_active=True)
+            return JsonResponse({'msg': '예약할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        except ResReservationRequest.DoesNotExist:
+            resRes = ResReservationRequest(sender=user, receiver=restaurant, additional_person=additional_person, additional_time=additional_time)
+            resRes.save()
+
+        print("resRes: ", resRes)
+        return JsonResponse({'msg': '예약하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 음식점 예약 내역보기
+@api_view(['GET'])
+def user_reserve_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
+    serializer = UserReservationSerializer(resRes, many=True)
+    return Response(serializer.data, status=200)
+    
+
+"""
+#############################################################################################
+
+                                        못먹는 재료
 
 #############################################################################################
 """

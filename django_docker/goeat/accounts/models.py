@@ -236,6 +236,73 @@ class Coupon(models.Model):
 """
 #############################################################################################
 
+                                        User 음식점 예약
+
+#############################################################################################
+"""
+# 사용자 음식점 예약 내역
+class ResReservationRequest(models.Model): 
+    # 사용자
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='res_sender')
+    # 음식점 주인
+    receiver = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='res_receiver')
+    # 상태
+    res_state = models.CharField(max_length=30, default='방문 예정') # 방문예정이 아니라 사실 시간
+    # 예약 추가 인원수
+    additional_person = models.IntegerField(default=0)
+    # 예약 예상 추가 시간
+    additional_time = models.IntegerField(default=5)
+    # 예약한 시간
+    res_start_time = models.DateTimeField(auto_now_add=True)
+    # 예약 약속한 시간
+    res_expect_time = models.DateTimeField(editable = False)
+    # 예약 요청 상태 (승낙은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
+    is_active = models.BooleanField(blank=True, null=False, default=True)
+    # 예약 승낙 여부 (승낙하면 True)
+    is_accepted = models.BooleanField(blank=True, null=False, default=False)
+
+    # res_expect_time = res_start_time + additional_time
+    def save(self, *args, **kwargs):
+        if not self.res_start_time:
+            self.res_start_time = timezone.now()
+        self.res_expect_time = self.res_start_time + datetime.timedelta(minutes = self.additional_time)
+        super(ResReservationRequest, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{} {}'.format(self.sender.goeat_id, self.receiver.id)
+    
+    # 예약 요청 승낙
+    def accept(self):
+        self.is_accepted = True
+        self.save()
+
+    # 예약 요청 거절
+    # decline_msg = 거절(예약 마감), 거절(재료 소진), 거절(기타 사항)
+    def decline(self, decline_msg):
+        self.res_state = decline_msg
+        self.is_active = False
+        self.save()
+
+    # 예약 요청 취소
+    # cancel_msg = 취소(고객 요청), 취소(가게 요청), 취소(기타 사정)
+    def cancel(self, cancel_msg):
+        self.res_state = cancel_msg 
+        self.is_active = False
+        self.save()
+
+    # 고객 방문 완료시
+    def arrived(self):
+        self.res_state = '방문 완료'
+        self.is_active = False
+        self.save()
+
+    # 7일 지나면 삭제
+    # celery 사용?
+
+    
+"""
+#############################################################################################
+
                                         User 알림
 
 #############################################################################################
