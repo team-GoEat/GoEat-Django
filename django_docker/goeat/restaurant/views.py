@@ -48,7 +48,6 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
-    print('Restaurants: ', restaurants)
     serializer = SimpleResSerializer(restaurants, many=True)
     return Response(serializer.data, status=200)
 
@@ -91,9 +90,7 @@ def search_res(request, *args, **kwargs):
 
     try:
         menu = Menu.objects.filter(menu_second_name__second_class_name__contains=keyword)
-        print("menu: ", menu)
         restaurants = Restaurant.objects.filter(res_menu__in=menu).distinct()
-        print("restaurants: ", restaurants)
         serializer = SimpleRestaurantSerializer(restaurants, many=True)
         return Response(serializer.data, status=200)
     except Restaurant.DoesNotExist:
@@ -152,19 +149,13 @@ def res_change_reserve(request, *args, **kwargs):
     # 0이면 예약 불가능, 1이면 가능
     reserve_status = request.POST.get('reserve_status')
 
-    print("reserve_status: ", reserve_status)
-
     try:
         resReservation = ResReservation.objects.get(restaurant__pk=res_id)
     except ResReservation.DoesNotExist:
         return JsonResponse({'msg': '변경이 불가능합니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
-    print("resReservation: ", resReservation)
-
     if reserve_status:
         resReservation.accept_reserve()
-        print("Accepted!!")
-        print("resReservation: ", resReservation)
         return JsonResponse({'msg': '예약 가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     else:
         resReservation.reject_reserve()

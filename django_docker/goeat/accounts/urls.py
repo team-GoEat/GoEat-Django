@@ -4,19 +4,6 @@ from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    # path('google/login/', views.google_login, name='google_login'),
-    # path('google/login/callback/', views.google_callback, name='google_callback'),
-    # path('google/login/finish/', views.GoogleLogin.as_view(), name="google_login_finish"),
-
-    # path('kakao/login/', views.kakao_login, name='kakao_login'),
-     # path('kakao/login/', views.kakao_login_backend, name='kakao_login_backend'),
-    # path('kakao/login/callback/', views.kakao_callback, name='kakao_callback'),
-    # path('kakao/login/finish/', views.KakaoLogin.as_view(), name="kakao_login_finish"),
-
-    # path('naver/login/', views.naver_login, name='naver_login'),
-    # path('naver/login/callback/', views.naver_callback, name='naver_callback'),
-    # path('naver/login/finish/', views.NaverLogin.as_view(), name="naver_login_finish"),
-
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
@@ -58,7 +45,7 @@ urlpatterns = [
     # 유저 쿠폰 사용
     path('coupon/<str:user_id>/<int:coupon_id>/use/', views.use_coupon, name='use_coupon'),
 
-    # 식당 예약하기
+    # 음식점 예약하기
     path('reserve/<str:user_id>/', views.user_reserve_res, name='user_reserve_res'),
     # 유저 식당 내역 리스트
     path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),

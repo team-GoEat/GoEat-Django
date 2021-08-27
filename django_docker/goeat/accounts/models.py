@@ -277,16 +277,10 @@ class ResReservationRequest(models.Model):
         self.save()
 
     # 예약 요청 거절
-    # decline_msg = 거절(예약 마감), 거절(재료 소진), 거절(기타 사항)
-    def decline(self, decline_msg):
-        self.res_state = decline_msg
-        self.is_active = False
-        self.save()
-
-    # 예약 요청 취소
-    # cancel_msg = 취소(고객 요청), 취소(가게 요청), 취소(기타 사정)
-    def cancel(self, cancel_msg):
-        self.res_state = cancel_msg 
+    # msg = 거절(예약 마감), 거절(재료 소진), 거절(기타 사항)
+    # msg = 취소(고객 요청), 취소(가게 요청), 취소(기타 사정)
+    def decline_and_cancel(self, msg):
+        self.res_state = msg
         self.is_active = False
         self.save()
 

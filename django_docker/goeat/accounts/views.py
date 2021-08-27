@@ -1,22 +1,16 @@
-from django.conf import settings
-from django.db import IntegrityError
-from allauth.socialaccount.models import SocialAccount
-from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers.google import views as google_view
-from allauth.socialaccount.providers.kakao import views as kakao_view
-from allauth.socialaccount.providers.naver import views as naver_view
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from allauth.socialaccount.models import SocialAccount
-from django.http import JsonResponse, HttpResponse
-import requests
+from django.http import JsonResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from json.decoder import JSONDecodeError
-from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+import requests
+
 from restaurant.models import (
     Restaurant, Menu, MenuCannotEat
+)
+from accounts.models import (
+    User, Team, TeamRequest, ResService, 
+    Stamp, Coupon, ResReservationRequest
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
@@ -24,38 +18,6 @@ from accounts.serializers import (
     UserReservationSerializer
 )
 
-from accounts.models import (
-    User, Team, TeamRequest, ResService, 
-    Stamp, Coupon, ResReservationRequest
-)
-
-state = settings.STATE
-BASE_URL = 'http://127.0.0.1:8000/'
-# BASE_URL = 'http://52.78.208.80/'
-GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/login/callback/'
-KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/login/callback/'
-NAVER_CALLBACK_URI = BASE_URL + 'accounts/naver/login/callback/'
-
-def all_register(request_data):
-    data = {
-        'username': request_data['username'],
-        'password1': request_data['password1'],
-        'password2': request_data['password2'],
-        'name': request_data['name']
-    }
-
-    try:
-        accept = requests.post(
-            f"{BASE_URL}accounts/register/", data=data)
-        accept_status = accept.status_code
-        print("Accept_Status: ", accept_status)
-        accept_json = accept.json()
-        print("Accept_Json: ", accept_json)
-
-    except IntegrityError as e:
-        if 'unique constraint' in e.message:
-            print("Unique Constraint!!!")
-            return JsonResponse({'err_msg': 'Same Phone Number'}, status=accept_status)
 
 """
 #############################################################################################
@@ -100,6 +62,7 @@ def change_user_profile(request, *args, **kwargs):
                 return Response(serializer.data, status=200)
             except:
                 return JsonResponse({'msg': '변경 실패!'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
 
 """
 #############################################################################################
@@ -509,7 +472,6 @@ def user_reserve_res(request, *args, **kwargs):
             resRes = ResReservationRequest(sender=user, receiver=restaurant, additional_person=additional_person, additional_time=additional_time)
             resRes.save()
 
-        print("resRes: ", resRes)
         return JsonResponse({'msg': '예약하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 음식점 예약 내역보기
