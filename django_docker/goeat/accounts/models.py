@@ -127,6 +127,8 @@ class User(AbstractUser):
     gender = models.CharField(max_length=30, default='')
     # 나이
     age = models.IntegerField(default=0)
+    # 프로필 이미지 번호
+    profile_img = models.IntegerField(default=0)
     # 알림 수신 동의 
     is_alarm = models.BooleanField(blank=True, null=False, default=False)
 

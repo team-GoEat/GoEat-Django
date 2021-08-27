@@ -37,11 +37,20 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "username", "goeat_id", "name", "date_joined")
 
-# Change User Profile View에서 사용
+# change_user_profile에서 사용
 class SimpleUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('goeat_id','username', 'name', 'is_alarm')
+        fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
+
+# user_profile에서 사용
+# 나중에 쿠폰, 예약 내역 필요
+class Simple2UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
+
+
 
 
 """

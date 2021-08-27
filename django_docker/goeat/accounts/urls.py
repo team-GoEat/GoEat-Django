@@ -7,9 +7,13 @@ urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
-
-    # 개인 정보 수정
-    path('change/<str:user_id>/', views.edit_user_profile, name='edit_user_profile'),
+    
+    # 유저 마이페이지 GET
+    path('profile/<str:user_id>/', views.user_profile, name='user_profile'),
+    # 개인 정보 수정 PUT
+    path('change/<str:user_id>/', views.change_user_profile, name='change_user_profile'),
+    # GoeatID로 유저 검색 GET
+    path('search/<str:user_id>/', views.search_user, name='search_user'),
 
     # 팀 요청 알림
     path('team/<user_id>/', views.get_team_request, name='get_team_request'),

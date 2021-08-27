@@ -15,22 +15,37 @@ from accounts.models import (
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
     FavResSerializer, CouponSerializer, StampSerializer,
-    UserReservationSerializer
+    UserReservationSerializer, Simple2UserProfileSerializer
 )
 
 
 """
 #############################################################################################
 
-                                사용자 개인 정보, User Profile
+                                        User 관련
 
 #############################################################################################
 """
+# 유저 마이페이지
+# 나중에 쿠폰 목록, 예약내역 필요
+@api_view(['GET'])
+def user_profile(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    serializer = Simple2UserProfileSerializer(user)
+    return Response(serializer.data, status=200)
+
+# 사용자 개인정보 수정
 @api_view(['PUT'])
 def change_user_profile(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     user_phone = request.POST.get('user_phone')
     user_name = request.POST.get('user_name')
+    profile_img = request.POST.get('profile_img')
     is_alarm = request.POST.get('is_alarm')
 
     try:
@@ -44,6 +59,7 @@ def change_user_profile(request, *args, **kwargs):
                 user.username = user_phone
                 user.name = user_name
                 user.is_alarm = is_alarm
+                user.profile_img = profile_img
                 user.save()
                 serializer = SimpleUserProfileSerializer(user)
                 return Response(serializer.data, status=200)
@@ -57,11 +73,24 @@ def change_user_profile(request, *args, **kwargs):
                 user.username = user_phone
                 user.name = user_name
                 user.is_alarm = is_alarm
+                user.profile_img = profile_img
                 user.save()
                 serializer = SimpleUserProfileSerializer(user)
                 return Response(serializer.data, status=200)
             except:
                 return JsonResponse({'msg': '변경 실패!'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+# GoeatID로 유저 검색
+@api_view(['GET'])
+def search_user(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    serializer = SimpleUserProfileSerializer(user)
+    return Response(serializer.data, status=200)
 
 
 """
