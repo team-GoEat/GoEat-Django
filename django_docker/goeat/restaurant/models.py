@@ -139,6 +139,14 @@ class Restaurant(models.Model):
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
 
+    # 음식점이 생성되고 가맹을 맺었다면 ResReservation Object도 같이 생성
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super().save(*args, **kwargs)
+        if created:
+            if self.is_affiliate:
+                ResReservation.objects.create(restaurant=self)
+
 
 """
 #############################################################################################
