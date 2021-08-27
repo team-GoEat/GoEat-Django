@@ -20,7 +20,7 @@ from restaurant.models import (
 # 팀
 class Team(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
-    teammates = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='team')
+    teammates = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, through='UserRank', related_name='team')
 
     def __str__(self):
         return self.user.username
@@ -49,6 +49,16 @@ class Team(models.Model):
         if teammate in self.teammates.all():
             return True
         return False
+
+
+# 팀원 직급
+class UserRank(models.Model):
+    # 사용자
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # 팀
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # 직급 (선배(1, 2, 3, 4, 5), 동기, 후배(1, 2, 3, 4, 5))
+    rank = models.IntegerField(default=0)
 
 # 팀원 수락/거절 요청
 class TeamRequest(models.Model):
