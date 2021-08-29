@@ -8,6 +8,9 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
     
+    # 유저 전화번호 중복체크 POST
+    path('check/', views.check_userphone, name='check_userphone'),
+
     # 유저 마이페이지 GET
     path('profile/<str:user_id>/', views.user_profile, name='user_profile'),
     # 개인 정보 수정 PUT

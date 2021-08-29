@@ -22,6 +22,27 @@ from accounts.serializers import (
 """
 #############################################################################################
 
+                                    User 회원가입
+
+#############################################################################################
+"""
+# 유저 전화번호 중복체크
+@api_view(['POST'])
+def check_userphone(request, *args, **kwargs):
+    user_phone = request.POST.get('user_phone')
+
+    try:
+        user = User.objects.get(username=user_phone)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용 가능한 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+    if user:
+        return JsonResponse({'msg': '이미 사용중인 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+
+"""
+#############################################################################################
+
                                         User 관련
 
 #############################################################################################
