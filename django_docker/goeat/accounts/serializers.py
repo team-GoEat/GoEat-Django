@@ -8,6 +8,27 @@ from restaurant.serializers import (
     SimpleMenuSerializer, SimpleRestaurantSerializer
 )
 
+
+"""
+#############################################################################################
+
+                                    User 회원가입
+
+#############################################################################################
+"""
+# 유저 회원가입 Serializer, RegistrationAPI에서 사용
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'goeat_id', 'name', 'gender', 'age', 'is_alarm')
+    
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            validated_data['username'], validated_data['name'], validated_data['gender'], validated_data['age'], validated_data['is_alarm']
+        )
+        return user
+
+        
 """
 #############################################################################################
 
@@ -15,28 +36,6 @@ from restaurant.serializers import (
 
 #############################################################################################
 """
-# Register Serializer
-class RegisterSerializer(RegisterSerializer):
-    username = serializers.CharField(max_length=30)
-    email = None
-    name = serializers.CharField(max_length=30)
-    # gender = serializers.CharField(max_length=30)
-    # age = serializers.IntegerField()
-
-    def get_cleaned_data(self):
-        data_dict = super().get_cleaned_data()
-        data_dict['username'] = self.validated_data.get('username', '')
-        data_dict['name'] = self.validated_data.get('name', '')
-        # data_dict['gender'] = self.validated_data.get('gender', '')
-        # data_dict['age'] = self.validated_data.get('age', '')
-        return data_dict
-
-# Register이후 반환 Serializer
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("id", "username", "goeat_id", "name", "date_joined")
-
 # change_user_profile에서 사용
 class SimpleUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,8 +48,6 @@ class Simple2UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
-
-
 
 
 """

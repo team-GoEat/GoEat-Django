@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +15,7 @@ from accounts.models import (
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
     FavResSerializer, CouponSerializer, StampSerializer,
-    UserReservationSerializer, Simple2UserProfileSerializer
+    UserReservationSerializer, CreateUserSerializer, Simple2UserProfileSerializer,
 )
 
 
@@ -38,6 +38,23 @@ def check_userphone(request, *args, **kwargs):
 
     if user:
         return JsonResponse({'msg': '이미 사용중인 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 유저 회원가입
+class RegistrationAPI(generics.GenericAPIView):
+    serializer_class = CreateUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # 토큰도 보내야하나??
+        return Response(
+            {
+                "user": SimpleUserProfileSerializer(
+                    user, context=self.get_serializer_context()
+                ).data,
+            }
+        )
 
 
 """
@@ -136,6 +153,18 @@ def get_team_request(request, *args, **kwargs):
     except TeamRequest.DoesNotExist:
         user_requests = None
         return JsonResponse({'team_list': user_requests}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 팀원 목록
+@api_view(['GET'])
+def team_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    pass
+
+# 팀원 직급 설정
+@api_view(['PUT'])
+def team_rank():
+    pass
 
 # POST 팀 요청
 @csrf_exempt
@@ -261,8 +290,6 @@ def get_stamp(request, *args, **kwargs):
 
     restaurant = Restaurant.objects.get(id=res_id)
     res_service = ResService.objects.get(restaurant=restaurant)
-
-    print("res_service: ", res_service)
 
     # 스탬프 받아오기
     try:
@@ -533,6 +560,18 @@ def user_reserve_list(request, *args, **kwargs):
     serializer = UserReservationSerializer(resRes, many=True)
     return Response(serializer.data, status=200)
     
+@api_view(['PUT'])
+def change_reserve_res(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    res_id = request.POST.get('res_id')
+    msg = request.POST.get('msg')
+
+    try:
+        user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
+    except ResReservationRequest.DoesNotExist:
+        return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+
 
 """
 #############################################################################################

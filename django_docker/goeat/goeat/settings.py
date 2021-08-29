@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     # dj-rest-auth
     'dj_rest_auth',
-    'dj_rest_auth.registration',
     # django-allauth
     'allauth',
     'allauth.account',
@@ -84,7 +83,6 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
 }
@@ -97,17 +95,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailSerializer',
-}
-
-#Registeration
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
-}
-
-ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
 
 #JWT
 REST_USE_JWT = True

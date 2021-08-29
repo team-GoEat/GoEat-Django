@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
@@ -9,6 +8,85 @@ from restaurant.models import (
     Restaurant, Menu, MenuCannotEat, ResService,
     Service
 )
+
+
+"""
+#############################################################################################
+
+                                        User
+
+#############################################################################################
+"""
+# 사용자 매니저
+class UserManager(BaseUserManager):
+
+    def create_user(self, username, name, gender, age, is_alarm):
+        if not username:
+            raise ValueError('전화번호를 입력해주세요.')
+        if not name:
+            raise ValueError('이름을 입력해주세요.')
+        user = self.model(username=username, name=name, gender=gender, age=age, is_alarm=is_alarm)
+        user.save()
+        return user
+    
+    def create_superuser(self, username, name, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self.create_user(username, name, **extra_fields)
+
+# 사용자
+class User(AbstractUser):
+    # Username = 핸드폰번호
+    username = models.CharField(max_length=30, unique=True)
+    # 이름
+    name = models.CharField(max_length=30, unique=False)
+    # 고잇 아이디
+    goeat_id = models.CharField(max_length=30, blank=True, unique=True, editable=False, default=id_generator)
+    # 성별
+    gender = models.CharField(max_length=30, default='')
+    # 나이
+    age = models.IntegerField(default=0)
+    # 프로필 이미지 번호
+    profile_img = models.IntegerField(default=0)
+    # 알림 수신 동의 
+    is_alarm = models.BooleanField(blank=True, null=False, default=False)
+
+    # 식당 찜
+    fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)
+    # 좋아하는 메뉴
+    menu_like = models.ManyToManyField(Menu, related_name='menu_like_user', blank=True)
+    # 싫어하는 메뉴
+    menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user', blank=True)
+    # 못먹는 음식
+    menu_cannoteat = models.ManyToManyField(MenuCannotEat, related_name='menu_cannoteat_user', blank=True)
+
+    # 유저 쿠폰 QR코드 URL
+    @property
+    def user_coupon_url(self):
+        return '/accounts/coupon/' + self.goeat_id + '/'
+
+    # 유저 스탬프 QR코드 URL
+    @property
+    def user_stamp_url(self):
+        return '/accounts/stamp/' + self.goeat_id + '/'
+
+    # 가입한 날짜
+    date_joined = models.DateTimeField('date joined', default=timezone.now)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['name']
+
+    objects = UserManager()
+
+    def __str__(self):
+        return '{} {}'.format(self.goeat_id, self.username)
+
 
 """
 #############################################################################################
@@ -49,7 +127,6 @@ class Team(models.Model):
         if teammate in self.teammates.all():
             return True
         return False
-
 
 # 팀원 직급
 class UserRank(models.Model):
@@ -94,85 +171,6 @@ class TeamRequest(models.Model):
     def cancel(self):
         self.is_active=False
         self.save()
-
-
-"""
-#############################################################################################
-
-                                        User
-
-#############################################################################################
-"""
-# 사용자 매니저
-class UserManager(BaseUserManager):
-
-    def create_user(self, username, password, **extra_fields):
-        if not username:
-            raise ValueError(_('The Username must be set.'))
-        user = self.model(username=username, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
-    
-    def create_superuser(self, username, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self.create_user(username, password, **extra_fields)
-
-# 사용자
-class User(AbstractUser):
-    # Username = 핸드폰번호
-    username = models.CharField(max_length=30, unique=True)
-    # 이름
-    name = models.CharField(max_length=30, unique=False)
-    # 고잇 아이디
-    goeat_id = models.CharField(max_length=30, blank=True, unique=True, editable=False, default=id_generator)
-    # 성별
-    gender = models.CharField(max_length=30, default='')
-    # 나이
-    age = models.IntegerField(default=0)
-    # 프로필 이미지 번호
-    profile_img = models.IntegerField(default=0)
-    # 알림 수신 동의 
-    is_alarm = models.BooleanField(blank=True, null=False, default=False)
-
-    # 식당 찜
-    fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)
-    # 좋아하는 메뉴
-    menu_like = models.ManyToManyField(Menu, related_name='menu_like_user', blank=True)
-    # 싫어하는 메뉴
-    menu_hate = models.ManyToManyField(Menu, related_name='menu_hate_user', blank=True)
-    # 못먹는 음식
-    menu_cannoteat = models.ManyToManyField(MenuCannotEat, related_name='menu_cannoteat_user', blank=True)
-
-    # 유저 쿠폰 QR코드 URL
-    @property
-    def user_coupon_url(self):
-        return '/accounts/coupon/' + self.goeat_id + '/'
-
-    # 유저 스탬프 QR코드 URL
-    @property
-    def user_stamp_url(self):
-        return '/accounts/stamp/' + self.goeat_id + '/'
-
-    # 가입한 날짜
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
-    # rank = models.CharField(max_length=30, default='')
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['name']
-
-    objects = UserManager()
-
-    def __str__(self):
-        return '{} {}'.format(self.goeat_id, self.username)
 
 
 """
@@ -305,7 +303,7 @@ class ResReservationRequest(models.Model):
     # 7일 지나면 삭제
     # celery 사용?
 
-    
+
 """
 #############################################################################################
 
