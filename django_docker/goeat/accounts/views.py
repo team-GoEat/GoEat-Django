@@ -559,7 +559,8 @@ def user_reserve_list(request, *args, **kwargs):
     resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
     serializer = UserReservationSerializer(resRes, many=True)
     return Response(serializer.data, status=200)
-    
+
+# 지우셔도 되고 원하시대로 수정하셔도 됩니다!!
 @api_view(['PUT'])
 def change_reserve_res(request, *args, **kwargs):
     user_id = kwargs.get('user_id')

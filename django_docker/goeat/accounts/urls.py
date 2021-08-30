@@ -4,7 +4,7 @@ from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    path('register/', views.RegistrationAPI.as_view()),
+    path('register/', views.RegistrationAPI.as_view(), name='register'),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
     
@@ -56,4 +56,6 @@ urlpatterns = [
     path('reserve/<str:user_id>/', views.user_reserve_res, name='user_reserve_res'),
     # 유저 식당 내역 리스트
     path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),
+    # 음식점 승인/취소/거절 PUT
+    path('reserve/change/<str:user_id>/', views.change_reserve_res, name='change_reserve_res'),
 ]
