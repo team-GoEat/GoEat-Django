@@ -56,8 +56,6 @@ class User(AbstractUser):
     profile_img = models.IntegerField(default=0)
     # 알림 수신 동의 
     is_alarm = models.BooleanField(blank=True, null=False, default=False)
-    # 마케팅 수신 동의 
-    is_malarm = models.BooleanField(blank=True, null=False, default=False)
 
     # 식당 찜
     fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)
@@ -136,7 +134,7 @@ class UserTeamProfile(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     # 사용자
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # 직급 (선배(1, 2, 3, 4, 5), 동기, 후배(1, 2, 3, 4, 5))
+    # 직급 (선배(1, 2, 3, 4, 5), 동기, 후배(-1, -2, -3, -4, -5))
     rank = models.IntegerField(default=0)
     # 즐겨찾기
     is_fav = models.BooleanField(default=0)
