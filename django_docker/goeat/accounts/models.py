@@ -130,14 +130,27 @@ class Team(models.Model):
 
 # 팀원 직급, 즐겨찾기
 class UserTeamProfile(models.Model):
-    # 사용자
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # 팀
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    # 사용자
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # 직급 (선배(1, 2, 3, 4, 5), 동기, 후배(1, 2, 3, 4, 5))
     rank = models.IntegerField(default=0)
     # 즐겨찾기
     is_fav = models.BooleanField(default=0)
+
+    def __str__(self):
+        return '{} {} {}'.format(self.user.goeat_id, self.rank, self.is_fav)
+
+    # 즐겨찾기 수정
+    def change_teammate_fav(self):
+        self.is_fav = not self.is_fav
+        self.save()
+
+    # 직급 수정
+    def change_teammate_rank(self, rank):
+        self.rank = rank
+        self.save()
 
 # 팀원 수락/거절 요청
 class TeamRequest(models.Model):

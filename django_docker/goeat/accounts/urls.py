@@ -28,7 +28,10 @@ urlpatterns = [
     path('team/accept/<receiver_id>/', views.team_accept, name='team_accept'),
     # 팀 거절 POST
     path('team/reject/<receiver_id>/', views.team_reject, name='team_reject'),
-
+    # 팀원 직급 설정 PUT
+    path('team/rank/<str:user_id>/', views.change_rank, name='change_rank'),
+    # 팀원 즐겨찾기 설정 PUT
+    path('team/fav/<str:user_id>/', views.change_fav, name='change_fav'),
 
     # 메뉴 좋아요 등록 POST
     path('menulike/<user_id>/', views.menu_like, name='menu_like'),
