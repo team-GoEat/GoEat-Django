@@ -193,16 +193,64 @@ def team_list(request, *args, **kwargs):
 
 # 팀원 즐겨찾기 설정
 @api_view(['PUT'])
-def team_fav(request, *args, **kwargs):
-    pass
+def change_fav(request, *args, **kwargs):
+    user_id = kwargs.get("user_id")
+    teammate_id = request.POST.get('teammate_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        teammate = User.objects.get(goeat_id=teammate_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        user_rank = UserTeamProfile.objects.get(team=team, user=teammate)
+    except UserTeamProfile.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_rank.change_teammate_fav()
+    return JsonResponse({'msg': '즐겨찾기 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 팀원 직급 설정
 @api_view(['PUT'])
-def team_rank(request, *args, **kwargs):
-    pass
+def change_rank(request, *args, **kwargs):
+    user_id = kwargs.get("user_id")
+    teammate_id = request.POST.get('teammate_id')
+    teammate_rank = request.POST.get('teammate_rank')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        teammate = User.objects.get(goeat_id=teammate_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        user_rank = UserTeamProfile.objects.get(team=team, user=teammate)
+    except UserTeamProfile.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_rank.change_teammate_rank(teammate_rank)
+    return JsonResponse({'msg': '직급 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # POST 팀 요청
-@csrf_exempt
 @api_view(['POST'])
 def team_request(request, *args, **kwargs):
     sender_id = kwargs.get("sender_id")
@@ -241,7 +289,6 @@ def team_request(request, *args, **kwargs):
         return JsonResponse({'msg': '팀원 요청을 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
 # POST 팀 승낙
-@csrf_exempt
 @api_view(['POST'])
 def team_accept(request, *args, **kwargs):
     receiver_id = kwargs.get("receiver_id")
@@ -268,7 +315,6 @@ def team_accept(request, *args, **kwargs):
         return JsonResponse({'msg': '팀원 요청을 승낙할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
 # POST 팀 거절
-@csrf_exempt
 @api_view(['POST'])
 def team_reject(request, *args, **kwargs):
     receiver_id = kwargs.get("receiver_id")
