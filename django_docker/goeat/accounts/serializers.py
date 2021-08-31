@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from dj_rest_auth.registration.serializers import RegisterSerializer
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
 from allauth.account.adapter import get_adapter
 from accounts.models import (
     User, Coupon, Stamp, ResReservationRequest
@@ -16,17 +17,67 @@ from restaurant.serializers import (
 
 #############################################################################################
 """
-# 유저 회원가입 Serializer, RegistrationAPI에서 사용
-class CreateUserSerializer(serializers.ModelSerializer):
+# 유저 회원가입 Serializer, RegistrationView에서 사용
+class RegisterSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        required=True, 
+        validators=[UniqueValidator(queryset=User.objects.all())]
+        )
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = User
-        fields = ('username', 'goeat_id', 'name', 'gender', 'age', 'is_alarm')
+        fields = ('username', 'password', 'password2', 'name', 'goeat_id')
     
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Wrong Passwords!"})
+    
+        return attrs
+
     def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data['username'], validated_data['name'], validated_data['gender'], validated_data['age'], validated_data['is_alarm']
+        user = User.objects.create(
+            username = validated_data['username'],
+            name = validated_data['name']
         )
+
+        user.set_password(validated_data['password'])
+        user.save()
+
         return user
+
+# JWT Token Serializer
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+
+        token['username'] = user.username
+        return token
+
+# ChangePasswordView에서 사용
+class ChangePasswordSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    
+    class Meta:
+        model = User
+        fields = ('password', 'password2', 'goeat_id')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Wrong Passwords!"})
+    
+        return attrs
+    
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance
 
         
 """

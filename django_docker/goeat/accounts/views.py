@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from rest_framework import status, viewsets, generics
+from rest_framework import status, viewsets, generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +15,9 @@ from accounts.models import (
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
     FavResSerializer, CouponSerializer, StampSerializer,
-    UserReservationSerializer, CreateUserSerializer, Simple2UserProfileSerializer,
+    UserReservationSerializer, Simple2UserProfileSerializer,
+    MyTokenObtainPairSerializer, RegisterSerializer,
+    ChangePasswordSerializer
 )
 
 
@@ -40,21 +42,29 @@ def check_userphone(request, *args, **kwargs):
         return JsonResponse({'msg': '이미 사용중인 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 유저 회원가입
-class RegistrationAPI(generics.GenericAPIView):
-    serializer_class = CreateUserSerializer
+class RegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = RegisterSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        # 토큰도 보내야하나??
-        return Response(
-            {
-                "user": SimpleUserProfileSerializer(
-                    user, context=self.get_serializer_context()
-                ).data,
-            }
-        )
+# 비밀번호 재설정 핸드폰 번호 확인
+@api_view(['POST'])
+def check_pw_userphone(request, *args, **kwargs):
+    user_phone = request.POST.get('user_phone')
+
+    try:
+        user = User.objects.get(username=user_phone)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '전화번호가 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if user:
+        return JsonResponse({'pk': user.id}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 비밀번호 재설정
+class ChangePasswordView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = ChangePasswordSerializer
 
 
 """

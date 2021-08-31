@@ -18,27 +18,27 @@ from restaurant.models import (
 #############################################################################################
 """
 # 사용자 매니저
-class UserManager(BaseUserManager):
+# class UserManager(BaseUserManager):
 
-    def create_user(self, username, name, gender, age, is_alarm):
-        if not username:
-            raise ValueError('전화번호를 입력해주세요.')
-        if not name:
-            raise ValueError('이름을 입력해주세요.')
-        user = self.model(username=username, name=name, gender=gender, age=age, is_alarm=is_alarm)
-        user.save()
-        return user
+#     def create_user(self, username, name, gender, age, is_alarm):
+#         if not username:
+#             raise ValueError('전화번호를 입력해주세요.')
+#         if not name:
+#             raise ValueError('이름을 입력해주세요.')
+#         user = self.model(username=username, name=name, gender=gender, age=age, is_alarm=is_alarm)
+#         user.save()
+#         return user
     
-    def create_superuser(self, username, name, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+#     def create_superuser(self, username, name, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#         extra_fields.setdefault('is_active', True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-        return self.create_user(username, name, **extra_fields)
+#         if extra_fields.get('is_staff') is not True:
+#             raise ValueError('Superuser must have is_staff=True.')
+#         if extra_fields.get('is_superuser') is not True:
+#             raise ValueError('Superuser must have is_superuser=True.')
+#         return self.create_user(username, name, **extra_fields)
 
 # 사용자
 class User(AbstractUser):
@@ -82,7 +82,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['name']
 
-    objects = UserManager()
+    # objects = UserManager()
 
     def __str__(self):
         return '{} {}'.format(self.goeat_id, self.username)

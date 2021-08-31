@@ -1,12 +1,15 @@
 from django.urls import path, include
 from accounts import views
-from dj_rest_auth.registration.views import RegisterView
-from dj_rest_auth.views import LoginView, LogoutView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
-    path('register/', views.RegistrationAPI.as_view(), name='register'),
-    path('login/', LoginView.as_view()),
-    path('logout/', LogoutView.as_view()),
+    path('register/', views.RegistrationView.as_view(), name='register'),
+    path('login/', views.MyObtainTokenPairView.as_view(), name='login'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('changepw/check/', views.check_pw_userphone, name='check_pw_userphone'),
+    path('changepw/<int:pk>/', views.ChangePasswordView.as_view(), name='changepw'),
+    # 로그아웃 POST
+    # path('logout/', ),
     
     # 유저 전화번호 중복체크 POST
     path('check/', views.check_userphone, name='check_userphone'),
