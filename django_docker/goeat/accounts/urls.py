@@ -19,42 +19,44 @@ urlpatterns = [
     path('search/<str:user_id>/', views.search_user, name='search_user'),
 
     # 팀 요청 알림
-    path('team/<user_id>/', views.get_team_request, name='get_team_request'),
-    # 팀 등록
+    # path('team/<str:user_id>/', views.get_team_request, name='get_team_request'),
+    # 팀 목록 GET
+    path('team/list/<str:user_id>/', views.team_list, name='team_list'),
+    # 팀 등록 POST
     path('team/request/<sender_id>/', views.team_request, name='team_request'),
-    # 팀 승낙
+    # 팀 승낙 POST
     path('team/accept/<receiver_id>/', views.team_accept, name='team_accept'),
-    # 팀 거절
+    # 팀 거절 POST
     path('team/reject/<receiver_id>/', views.team_reject, name='team_reject'),
 
 
-    # 메뉴 좋아요 등록
+    # 메뉴 좋아요 등록 POST
     path('menulike/<user_id>/', views.menu_like, name='menu_like'),
-    # 메뉴 싫어요 등록
+    # 메뉴 싫어요 등록 POST
     path('menuhate/<user_id>/', views.menu_hate, name='menu_hate'),
-    # 음식점 찜 등록
+    # 음식점 찜 등록 POST
     path('favres/<user_id>/', views.fav_res, name='fav_res'),
     
     # 못먹는재료
     path('cannoteat/<str:user_id>', views.cannot_eat, name='cannot_eat'),
 
-    # 유저 스탬프 목록
+    # 유저 스탬프 목록 GET
     path('stamp/list/<str:user_id>/', views.user_stamp_list, name='user_stamp_list'),
     # 유저 스탬프 QR코드 URL
     # path('stamp/<str:user_id>/'),
-    # 유저 스탬프 적립
+    # 유저 스탬프 적립 GET
     path('stamp/<str:user_id>/<int:res_id>/', views.get_stamp, name='get_stamp'),
 
-    # 유저 쿠폰 목록
+    # 유저 쿠폰 목록 GET
     path('coupon/list/<str:user_id>/', views.user_coupon_list, name='user_coupon_list'),
     # 유저 쿠폰 QR코드 URL
     # path('coupon/<str:user_id>/<int:coupon_id>/'),
-    # 유저 쿠폰 사용
+    # 유저 쿠폰 사용 GET
     path('coupon/<str:user_id>/<int:coupon_id>/use/', views.use_coupon, name='use_coupon'),
 
-    # 음식점 예약하기
+    # 음식점 예약하기 POST
     path('reserve/<str:user_id>/', views.user_reserve_res, name='user_reserve_res'),
-    # 유저 식당 내역 리스트
+    # 유저 식당 내역 리스트 GET
     path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),
     # 음식점 승인/취소/거절 PUT
     path('reserve/change/<str:user_id>/', views.change_reserve_res, name='change_reserve_res'),

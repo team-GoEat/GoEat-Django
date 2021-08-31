@@ -10,7 +10,7 @@ from restaurant.models import (
 )
 from accounts.models import (
     User, Team, TeamRequest, ResService, 
-    Stamp, Coupon, ResReservationRequest
+    Stamp, Coupon, ResReservationRequest, UserTeamProfile,
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
@@ -159,11 +159,46 @@ def get_team_request(request, *args, **kwargs):
 def team_list(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
 
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        user_rank = UserTeamProfile.objects.filter(team=team).values_list('user__goeat_id', 'user__name', 'user__profile_img', 'rank', 'is_fav')
+    except UserTeamProfile.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    data = {
+        'user_id': user.goeat_id,
+        'teammates': []
+    }
+
+    for teammate in user_rank:
+        teammate_data = {
+            'goeat_id': teammate[0],
+            'name': teammate[1],
+            'profile_img': teammate[2],
+            'rank': teammate[3],
+            'is_fav': teammate[4]
+        }
+        data['teammates'].append(teammate_data)
+
+    return Response(data, status=200)
+
+# 팀원 즐겨찾기 설정
+@api_view(['PUT'])
+def team_fav(request, *args, **kwargs):
     pass
 
 # 팀원 직급 설정
 @api_view(['PUT'])
-def team_rank():
+def team_rank(request, *args, **kwargs):
     pass
 
 # POST 팀 요청
