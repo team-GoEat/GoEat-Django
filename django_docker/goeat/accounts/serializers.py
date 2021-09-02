@@ -3,7 +3,8 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from allauth.account.adapter import get_adapter
 from accounts.models import (
-    User, Coupon, Stamp, ResReservationRequest
+    User, Coupon, Stamp, ResReservationRequest,
+    TeamRequest
 )
 from restaurant.serializers import (
     SimpleMenuSerializer, SimpleRestaurantSerializer
@@ -100,6 +101,15 @@ class Simple2UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
+
+class TeamRequestSerializer(serializers.ModelSerializer):
+    sender_id = serializers.CharField(source='receiver.goeat_id')
+    sender_name = serializers.CharField(source='receiver.name')
+    sender_profile_img = serializers.IntegerField(source='receiver.profile_img')
+    
+    class Meta:
+        model = TeamRequest
+        fields = ('sender_id', 'sender_name', 'sender_profile_img')
 
 
 """

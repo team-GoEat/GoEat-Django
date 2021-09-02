@@ -22,7 +22,7 @@ urlpatterns = [
     path('search/<str:user_id>/', views.search_user, name='search_user'),
 
     # 팀 요청 알림
-    # path('team/<str:user_id>/', views.get_team_request, name='get_team_request'),
+    path('team/<str:user_id>/', views.get_team_request, name='get_team_request'),
     # 팀 목록 GET
     path('team/list/<str:user_id>/', views.team_list, name='team_list'),
     # 팀 등록 POST

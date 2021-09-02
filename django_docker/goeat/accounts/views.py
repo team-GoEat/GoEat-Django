@@ -18,7 +18,7 @@ from accounts.serializers import (
     FavResSerializer, CouponSerializer, StampSerializer,
     UserReservationSerializer, Simple2UserProfileSerializer,
     MyTokenObtainPairSerializer, RegisterSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer, TeamRequestSerializer
 )
 
 
@@ -153,7 +153,8 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-# 팀 요청
+# 팀 요청 알림 목록
+@api_view(['GET'])
 def get_team_request(request, *args, **kwargs):
     user_id = kwargs.get("user_id")
 
@@ -163,11 +164,12 @@ def get_team_request(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     try:
-        user_requests = TeamRequest.objects.get(receiver=user)
-        return JsonResponse({'team_list': user_requests}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        user_requests = TeamRequest.objects.filter(receiver=user, is_active=True)
+        serializer = TeamRequestSerializer(user_requests, many=True)
+        return Response(serializer.data, status=200)
     except TeamRequest.DoesNotExist:
         user_requests = None
-        return JsonResponse({'team_list': user_requests}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({[]}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 팀원 목록
 @api_view(['GET'])

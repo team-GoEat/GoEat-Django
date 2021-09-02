@@ -21,7 +21,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 class TeamRequestAdmin(admin.ModelAdmin):
     list_filter = ['sender', 'receiver']
-    list_display = ['sender', 'receiver']
+    list_display = ['sender', 'receiver', 'is_active']
     search_fields = ['sender__goeat_id', 'sender__username', 'receiver__goeat_id', 'receiver__username']
 
     class Meta:
