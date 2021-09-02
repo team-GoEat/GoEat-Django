@@ -1,9 +1,9 @@
 from django.http import JsonResponse
 from rest_framework import status, viewsets, generics, permissions
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 import requests
 
 from restaurant.models import (
@@ -17,7 +17,7 @@ from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
     FavResSerializer, CouponSerializer, StampSerializer,
     UserReservationSerializer, Simple2UserProfileSerializer,
-    MyTokenObtainPairSerializer, RegisterSerializer,
+    RegisterSerializer,
     ChangePasswordSerializer, TeamRequestSerializer
 )
 
@@ -48,11 +48,6 @@ class RegistrationView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny, )
     serializer_class = RegisterSerializer
 
-# 로그인
-class MyObtainTokenPairView(TokenObtainPairView):
-    permission_classes = (permissions.AllowAny, )
-    serializer_class = MyTokenObtainPairSerializer
-
 # 비밀번호 재설정 핸드폰 번호 확인
 @api_view(['POST'])
 def check_pw_userphone(request, *args, **kwargs):
@@ -71,6 +66,27 @@ class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny, )
     serializer_class = ChangePasswordSerializer
+
+# 로그아웃
+class LogoutView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request):
+        user_id = request.data["user_id"]
+
+        try:
+            user = User.objects.get(goeat_id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        
+        try:
+            tokens = OutstandingToken.objects.filter(user=user)
+            for token in tokens:
+                t, _ = BlacklistedToken.objects.get_or_create(token=token)
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # 회원탈퇴
 @api_view(['POST'])

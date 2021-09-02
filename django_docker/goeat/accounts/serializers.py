@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-from allauth.account.adapter import get_adapter
 from accounts.models import (
     User, Coupon, Stamp, ResReservationRequest,
     TeamRequest
@@ -48,16 +47,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
-
-# JWT Token Serializer
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-
-    @classmethod
-    def get_token(cls, user):
-        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
-        token['username'] = user.username
-        return token
 
 # ChangePasswordView에서 사용
 class ChangePasswordSerializer(serializers.ModelSerializer):

@@ -8,12 +8,12 @@ urlpatterns = [
     # 로그인
     path('login/', views.MyObtainTokenPairView.as_view(), name='login'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # 로그아웃 POST
+    path('logout/', views.LogoutView.as_view(), name='logout'),
     # 비밀번호 재설정 전화번호 중복체크
     path('changepw/check/', views.check_pw_userphone, name='check_pw_userphone'),
     # 비밀번호 재설정
     path('changepw/<int:pk>/', views.ChangePasswordView.as_view(), name='changepw'),
-    # 로그아웃 POST
-    # path('logout/', ),
     # 회원탈퇴
     path('withdraw/', views.account_withdraw, name='account_withdraw'),
 
