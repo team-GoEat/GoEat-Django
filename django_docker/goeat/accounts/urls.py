@@ -35,6 +35,8 @@ urlpatterns = [
     path('team/rank/<str:user_id>/', views.change_rank, name='change_rank'),
     # 팀원 즐겨찾기 설정 PUT
     path('team/fav/<str:user_id>/', views.change_fav, name='change_fav'),
+    # 팀원 삭제
+    path('team/remove/<str:user_id>/', views.team_remove, name='team_remove'),
 
     # 비회원 생성 POST
     path('nonmember/create/<str:user_id>/', views.create_nonmember, name='create_nonmember'),

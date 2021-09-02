@@ -102,6 +102,7 @@ class Simple2UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
 
+# get_team_request에서 사용
 class TeamRequestSerializer(serializers.ModelSerializer):
     sender_id = serializers.CharField(source='receiver.goeat_id')
     sender_name = serializers.CharField(source='receiver.name')

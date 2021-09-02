@@ -366,6 +366,28 @@ def team_reject(request, *args, **kwargs):
         return JsonResponse({'msg': '팀원 요청을 거절할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
 # 팀원 삭제
+@api_view(['POST'])
+def team_remove(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    removee_id = request.POST.get('removee_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        removee = User.objects.get(goeat_id=removee_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    team.unteam(removee)
+    return JsonResponse({'msg': '팀원을 삭제했습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 비회원 생성
 @api_view(['POST'])

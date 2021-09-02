@@ -144,7 +144,7 @@ class Team(models.Model):
         remover_teammates_list.remove_team(removee)
 
         team_list = Team.objects.get(user = removee)
-        team_list.remove_friend(self.user)
+        team_list.remove_team(self.user)
 
     # 팀원 맞는지 여부
     def is_team(self, teammate):
