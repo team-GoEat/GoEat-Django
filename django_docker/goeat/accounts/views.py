@@ -72,6 +72,21 @@ class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (permissions.AllowAny, )
     serializer_class = ChangePasswordSerializer
 
+# 회원탈퇴
+@api_view(['POST'])
+def account_withdraw(request, *args, **kwargs):
+    user_id = request.POST.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if user:
+        user.delete()
+        return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+
 """
 #############################################################################################
 
