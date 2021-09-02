@@ -3,7 +3,8 @@ from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from .models import (
     User, Team, TeamRequest, Stamp, Coupon,
-    ResReservationRequest, UserTeamProfile
+    ResReservationRequest, UserTeamProfile,
+    NonMember
 )
 
 class OutstandingTokenAdmin(OutstandingTokenAdmin):
@@ -59,12 +60,20 @@ class ReservationRequestAdmin(admin.ModelAdmin):
         model = ResReservationRequest
 
 class UserTeamProfileAdmin(admin.ModelAdmin):
-    list_filter = ['rank']
+    list_filter = ['rank', 'is_fav']
     list_display = ['user', 'team', 'rank', 'is_fav']
     search_fields = ['user__goeat_id', 'user__username']
 
     class Meta:
         model = UserTeamProfile
+
+class NonMemberAdmin(admin.ModelAdmin):
+    list_filter = ['rank', 'is_fav']
+    list_display = ['id', 'name', 'rank', 'is_fav']
+    search_fields = ['id', 'name']
+
+    class Meta:
+        model = NonMember
 
 admin.site.unregister(OutstandingToken)
 admin.site.register(OutstandingToken, OutstandingTokenAdmin)
@@ -75,3 +84,4 @@ admin.site.register(Stamp, StampAdmin)
 admin.site.register(Coupon, CouponAdmin)
 admin.site.register(ResReservationRequest, ReservationRequestAdmin)
 admin.site.register(UserTeamProfile, UserTeamProfileAdmin)
+admin.site.register(NonMember, NonMemberAdmin)

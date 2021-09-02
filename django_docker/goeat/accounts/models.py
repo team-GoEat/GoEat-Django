@@ -87,6 +87,30 @@ class User(AbstractUser):
     def __str__(self):
         return '{} {}'.format(self.goeat_id, self.username)
 
+# 비회원
+class NonMember(models.Model):
+    # 이름
+    name = models.CharField(max_length=30, null=True, blank=True)
+    # 못먹는 음식
+    menu_cannoteat = models.ManyToManyField(MenuCannotEat, related_name='menu_cannoteat_nonmember', blank=True)
+    # 직급 (선배(1, 2, 3, 4, 5), 동기, 후배(-1, -2, -3, -4, -5))
+    rank = models.IntegerField(default=0)
+    # 즐겨찾기
+    is_fav = models.BooleanField(default=0)
+    
+    def __str__(self):
+        return '{}'.format(self.name)
+
+    # 즐겨찾기 수정
+    def change_nonmember_fav(self):
+        self.is_fav = not self.is_fav
+        self.save()
+
+    # 직급 수정
+    def change_nonmember_rank(self, rank):
+        self.rank = rank
+        self.save()
+
 
 """
 #############################################################################################
@@ -127,6 +151,14 @@ class Team(models.Model):
         if teammate in self.teammates.all():
             return True
         return False
+
+    # 비회원 생성
+    def add_nonmember(self, nonmember):
+        self.nonmembers.add(nonmember)
+
+    # 비회원 삭제
+    def del_nonmember(self, nonmember):
+        self.nonmembers.remove(nonmember)
 
 # 팀원 직급, 즐겨찾기
 class UserTeamProfile(models.Model):

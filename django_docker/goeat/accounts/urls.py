@@ -36,6 +36,17 @@ urlpatterns = [
     # 팀원 즐겨찾기 설정 PUT
     path('team/fav/<str:user_id>/', views.change_fav, name='change_fav'),
 
+    # 비회원 생성 POST
+    path('nonmember/create/<str:user_id>/', views.create_nonmember, name='create_nonmember'),
+    # 비회원 삭제 DELETE
+    path('nonmember/delete/<int:nonmember_id>/', views.delete_nonmember, name='delete_nonmember'),
+    # 비회원 즐겨찾기 설정 PUT
+    path('nonmember/fav/<int:nonmember_id>/', views.change_nonmember_fav, name='change_nonmember_fav'),
+    # 비회원 직급 설정 PUT
+    path('nonmember/rank/<int:nonmember_id>/', views.change_nonmember_rank, name='change_nonmember_rank'),
+    # 비회원 비선호 재료 설정 POST
+    path('nonmember/cannoteat/<int:nonmember_id>/', views.nonmember_cannot_eat, name='nonmember_cannot_eat'),
+
     # 메뉴 좋아요 등록 POST
     path('menulike/<user_id>/', views.menu_like, name='menu_like'),
     # 메뉴 싫어요 등록 POST

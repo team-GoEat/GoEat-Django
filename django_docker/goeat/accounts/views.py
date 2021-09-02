@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from rest_framework import status, viewsets, generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views.decorators.csrf import csrf_exempt
 import requests
 
@@ -9,7 +10,7 @@ from restaurant.models import (
     Restaurant, Menu, MenuCannotEat
 )
 from accounts.models import (
-    User, Team, TeamRequest, ResService, 
+    User, Team, TeamRequest, ResService, NonMember,
     Stamp, Coupon, ResReservationRequest, UserTeamProfile,
 )
 from accounts.serializers import (
@@ -36,16 +37,21 @@ def check_userphone(request, *args, **kwargs):
     try:
         user = User.objects.get(username=user_phone)
     except User.DoesNotExist:
-        return JsonResponse({'msg': '사용 가능한 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': 1}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
     if user:
-        return JsonResponse({'msg': '이미 사용중인 전화번호입니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': 0}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 유저 회원가입
 class RegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny, )
     serializer_class = RegisterSerializer
+
+# 로그인
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = MyTokenObtainPairSerializer
 
 # 비밀번호 재설정 핸드폰 번호 확인
 @api_view(['POST'])
@@ -55,17 +61,16 @@ def check_pw_userphone(request, *args, **kwargs):
     try:
         user = User.objects.get(username=user_phone)
     except User.DoesNotExist:
-        return JsonResponse({'msg': '전화번호가 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': 0}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
     if user:
-        return JsonResponse({'pk': user.id}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        return JsonResponse({'msg': 1, 'pk': user.id}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 비밀번호 재설정
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny, )
     serializer_class = ChangePasswordSerializer
-
 
 """
 #############################################################################################
@@ -184,9 +189,12 @@ def team_list(request, *args, **kwargs):
     except UserTeamProfile.DoesNotExist:
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    nonmembers = team.nonmembers.all().values_list('id', 'name', 'rank', 'is_fav')
+
     data = {
         'user_id': user.goeat_id,
-        'teammates': []
+        'teammates': [],
+        'nonmembers': []
     }
 
     for teammate in user_rank:
@@ -198,6 +206,15 @@ def team_list(request, *args, **kwargs):
             'is_fav': teammate[4]
         }
         data['teammates'].append(teammate_data)
+
+    for nonmember in nonmembers:
+        nonmember_data = {
+            'nonmember_id': nonmember[0],
+            'name': nonmember[1],
+            'rank': nonmember[2],
+            'is_fav': nonmember[3]
+        }
+        data['nonmembers'].append(nonmember_data)
 
     return Response(data, status=200)
 
@@ -346,6 +363,96 @@ def team_reject(request, *args, **kwargs):
     except TeamRequest.DoesNotExist:
         return JsonResponse({'msg': '팀원 요청을 거절할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+# 팀원 삭제
+
+# 비회원 생성
+@api_view(['POST'])
+def create_nonmember(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    nonmember_name = request.POST.get('nonmember_name')
+    nonmember_rank = request.POST.get('nonmember_rank')
+    nonmember_fav = request.POST.get('nonmember_fav')
+
+    nonmember = NonMember.objects.create(name=nonmember_name, rank=nonmember_rank, is_fav=nonmember_fav)
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    team.add_nonmember(nonmember)
+    return JsonResponse({'msg': '비회원을 생성하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 비회원 삭제
+@api_view(['DELETE'])
+def delete_nonmember(request, *args, **kwargs):
+    nonmember_id = kwargs.get('nonmember_id')
+
+    try:
+        nonmember = NonMember.objects.get(pk=nonmember_id)
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '비회원이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    nonmember.delete()
+    return JsonResponse({'msg': '비회원이 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 비회원 즐겨찾기 설정
+@api_view(['PUT'])
+def change_nonmember_fav(request, *args, **kwargs):
+    nonmember_id = kwargs.get('nonmember_id')
+
+    try:
+        nonmember = NonMember.objects.get(pk=nonmember_id)
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '비회원이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    nonmember.change_nonmember_fav()
+    return JsonResponse({'msg': '즐겨찾기 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+# 비회원 직급 설정
+@api_view(['PUT'])
+def change_nonmember_rank(request, *args, **kwargs):
+    nonmember_id = kwargs.get('nonmember_id')
+    nonmember_rank = request.POST.get('nonmember_rank')
+
+    try:
+        nonmember = NonMember.objects.get(pk=nonmember_id)
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '비회원이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    nonmember.change_nonmember_rank(nonmember_rank)
+    return JsonResponse({'msg': '직급 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+
+# 비회원 비선호 재료 설정
+@api_view(['POST'])
+def nonmember_cannot_eat(request, *args, **kwargs):
+    nonmember_id = kwargs.get('nonmember_id')
+    cannoteat_string = request.POST.get('cannoteat_str')
+
+    try:
+        nonmember = NonMember.objects.get(pk=nonmember_id)
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '비회원이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    if request.method == 'POST':
+        for c in cannoteat_string:
+            if c == '0':
+                continue
+            else:
+                mce_id = int(c)
+                try:
+                    mce = MenuCannotEat.objects.get(pk = mce_id)
+                except MenuCannotEat.DoesNotExist:
+                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+                
+                nonmember.menu_cannoteat.add(mce)
+        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 """
 #############################################################################################
@@ -650,9 +757,8 @@ def user_reserve_list(request, *args, **kwargs):
     resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
     serializer = UserReservationSerializer(resRes, many=True)
     return Response(serializer.data, status=200)
-
-# 지우셔도 되고 원하시대로 수정하셔도 됩니다!!
-@api_view(['PUT'])
+    
+# @api_view(['PUT'])
 def change_reserve_res(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     res_id = request.POST.get('res_id')
@@ -662,7 +768,6 @@ def change_reserve_res(request, *args, **kwargs):
         user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
     except ResReservationRequest.DoesNotExist:
         return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
 
 
 """
