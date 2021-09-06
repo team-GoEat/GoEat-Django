@@ -33,9 +33,9 @@ class RestaurantAdmin(admin.ModelAdmin):
 """
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
-    list_filter = [ 'menu_feature', 'menu_type', 'menu_first_name', 'menu_second_name', 'menu_soup', 'is_spicy', 'is_cold', 'menu_cannoteat']
-    list_display = ['menu_name',  'menu_type', 'menu_first_name', 'menu_second_name', 'is_spicy', 'is_cold', 'menu_cannoteat']
-    search_fields = ['menu_name', 'menu_first_name']
+    list_filter = ['menu_feature', 'menu_type', 'menu_first_name', 'menu_second_name', 'menu_soup', 'is_spicy', 'is_cold', 'menu_cannoteat']
+    list_display = ['id', 'menu_name',  'menu_type', 'menu_first_name', 'menu_second_name', 'is_spicy', 'is_cold', 'menu_cannoteat']
+    search_fields = ['menu_name', 'menu_first_name__first_class_name']
 
     class Meta:
         model = Menu
