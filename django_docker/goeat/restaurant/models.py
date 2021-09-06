@@ -78,7 +78,7 @@ class Menu(models.Model):
     # 1차 군집 (갈비, ...)
     menu_first_name = models.ForeignKey(MenuFirstClass, on_delete=models.SET_NULL, null=True, related_name='menu')
     # 2차 군집 (등갈비, 갈비찜, ...)
-    menu_second_name = models.ForeignKey(MenuSecondClass, on_delete=models.SET_NULL, null=True, related_name='menu')
+    menu_second_name = models.ManyToManyField(MenuSecondClass, blank=True, related_name='menu')
     # 메인 재료
     menu_ingredients = models.ManyToManyField(MenuIngredient, related_name='menu', blank=True)
     # 못먹는 재료

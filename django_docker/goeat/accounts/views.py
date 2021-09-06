@@ -72,18 +72,11 @@ class LogoutView(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request):
-        user_id = request.data["user_id"]
-
         try:
-            user = User.objects.get(goeat_id=user_id)
-        except User.DoesNotExist:
-            return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-        
-        try:
-            tokens = OutstandingToken.objects.filter(user=user)
-            for token in tokens:
-                t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)

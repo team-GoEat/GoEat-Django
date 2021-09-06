@@ -1,6 +1,6 @@
 from restaurant.models import (
     Restaurant, Menu, ResService, Service, 
-    MenuType, ResReservation
+    MenuType, ResReservation, MenuSecondClass
 )
 from rest_framework import serializers
 
@@ -12,6 +12,11 @@ from rest_framework import serializers
 
 #############################################################################################
 """
+class MenuSecondClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuSecondClass
+        fields = '__all__'
+
 # 메뉴 카테고리 = 음식점 카테고리 Serializer
 class MenuTypeSerializer(serializers.ModelSerializer):
 
@@ -19,14 +24,13 @@ class MenuTypeSerializer(serializers.ModelSerializer):
         model = MenuType
         fields = '__all__'
 
-
 # RestaurantSerializer에서 사용
 class Simple2MenuSerializer(serializers.ModelSerializer):
-    menu_second_id = serializers.IntegerField(source='menu_second_name.id')
+    menu_second_name = MenuSecondClassSerializer(read_only=True, many=True)
 
     class Meta:
         model = Menu
-        fields = ('menu_name', 'menu_price', 'menu_image', 'menu_second_id')
+        fields = ('menu_name', 'menu_price', 'menu_image', 'menu_second_name')
 
 # ResView에서 사용
 class RestaurantSerializer(serializers.ModelSerializer):
