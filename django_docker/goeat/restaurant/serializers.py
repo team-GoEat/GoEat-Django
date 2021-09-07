@@ -15,7 +15,7 @@ from rest_framework import serializers
 class MenuSecondClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuSecondClass
-        fields = '__all__'
+        fields = ('id', 'name')
 
 # 메뉴 카테고리 = 음식점 카테고리 Serializer
 class MenuTypeSerializer(serializers.ModelSerializer):

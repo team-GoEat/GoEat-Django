@@ -33,8 +33,8 @@ class RestaurantAdmin(admin.ModelAdmin):
 """
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
-    list_filter = ['menu_feature', 'menu_type', 'menu_first_name', 'menu_second_name', 'menu_soup', 'is_spicy', 'is_cold', 'menu_cannoteat']
-    list_display = ['id', 'menu_name',  'menu_type', 'menu_first_name', 'menu_second_name', 'is_spicy', 'is_cold', 'menu_cannoteat']
+    list_filter = []
+    list_display = ['id', 'menu_name',  'menu_price']
     search_fields = ['menu_name', 'menu_first_name__first_class_name']
 
     class Meta:
@@ -69,8 +69,8 @@ class MenuFirstClassAdmin(admin.ModelAdmin):
 
 # 메뉴 2차 군집 어드민
 class MenuSecondClassAdmin(admin.ModelAdmin):
-    list_filter = ['second_class_name']
-    list_display = ['id', 'second_class_name']
+    list_filter = ['menu_feature', 'menu_type']
+    list_display = ['id', 'second_class_name', 'menu_type', 'menu_first_name']
     search_fields = ['second_class_name']
 
     class Meta:
