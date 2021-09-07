@@ -4,7 +4,7 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from .models import (
     User, Team, TeamRequest, Stamp, Coupon,
     ResReservationRequest, UserTeamProfile,
-    NonMember
+    NonMember,
 )
 
 class OutstandingTokenAdmin(OutstandingTokenAdmin):

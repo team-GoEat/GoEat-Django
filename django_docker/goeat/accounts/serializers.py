@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import (
+    TokenObtainPairSerializer, TokenRefreshSerializer
+)
 from accounts.models import (
-    User, Coupon, Stamp, ResReservationRequest,
+    User, Coupon, Stamp, ResReservationRequest, 
     TeamRequest
 )
 from restaurant.serializers import (
@@ -69,8 +72,20 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+ 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
-        
+    # @classmethod
+    # def get_token(cls, user):
+    #     token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+    #     token['user_id'] = user.goeat_id
+
+    #     return token
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user_id'] = self.user.goeat_id
+        return data
+
 """
 #############################################################################################
 

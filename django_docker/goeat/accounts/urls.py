@@ -1,13 +1,14 @@
 from django.urls import path, include
 from accounts import views
-from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView, TokenVerifyView
 
 urlpatterns = [
     # 회원가입
     path('register/', views.RegistrationView.as_view(), name='register'),
     # 로그인
-    path('login/', views.MyObtainTokenPairView.as_view(), name='login'),
+    path('login/', views.MyTokenObtainPairView.as_view(), name='login'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # 로그아웃 POST
     path('logout/', views.LogoutView.as_view(), name='logout'),
     # 비밀번호 재설정 전화번호 중복체크

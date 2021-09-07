@@ -17,7 +17,7 @@ from restaurant.models import (
 # 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
     list_filter = ['res_type', 'is_affiliate']
-    list_display = ['id', 'res_name', 'is_affiliate']
+    list_display = ['id', 'res_name', 'is_affiliate', 'res_address', 'res_telenum', 'res_time', 'short_res_exp', 'short_res_image']
     search_fields = ['res_name']
 
     class Meta:
@@ -34,8 +34,8 @@ class RestaurantAdmin(admin.ModelAdmin):
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
     list_filter = []
-    list_display = ['id', 'menu_name',  'menu_price']
-    search_fields = ['menu_name', 'menu_first_name__first_class_name']
+    list_display = ['id', 'menu_name',  'menu_price', 'short_menu_image']
+    search_fields = ['menu_name', 'menu_second_name__second_class_name']
 
     class Meta:
         model = Menu
@@ -70,7 +70,7 @@ class MenuFirstClassAdmin(admin.ModelAdmin):
 # 메뉴 2차 군집 어드민
 class MenuSecondClassAdmin(admin.ModelAdmin):
     list_filter = ['menu_feature', 'menu_type']
-    list_display = ['id', 'second_class_name', 'menu_type', 'menu_first_name']
+    list_display = ['id', 'second_class_name', 'menu_type', 'menu_first_name', 'menu_soup', 'is_spicy', 'is_cold', 'short_menu_image']
     search_fields = ['second_class_name']
 
     class Meta:

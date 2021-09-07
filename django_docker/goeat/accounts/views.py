@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 import requests
 
 from restaurant.models import (
@@ -17,7 +18,7 @@ from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
     FavResSerializer, CouponSerializer, StampSerializer,
     UserReservationSerializer, Simple2UserProfileSerializer,
-    RegisterSerializer,
+    RegisterSerializer, MyTokenObtainPairSerializer,
     ChangePasswordSerializer, TeamRequestSerializer
 )
 
@@ -30,22 +31,22 @@ from accounts.serializers import (
 #############################################################################################
 """
 # 유저 전화번호 중복체크
-@api_view(['POST'])
-def check_userphone(request, *args, **kwargs):
-    user_phone = request.POST.get('user_phone')
+class CheckUserphoneView(APIView):
 
-    try:
-        user = User.objects.get(username=user_phone)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': 1}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    def post(self, request):
+        user_phone = request.data["user_phone"]
 
-    if user:
-        return JsonResponse({'msg': 0}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        try:
+            user = User.objects.get(username=user_phone)
+        except User.DoesNotExist:
+            return JsonResponse({'msg': 1}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+        if user:
+            return JsonResponse({'msg': 0}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 유저 회원가입
 class RegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny, )
     serializer_class = RegisterSerializer
 
 # 비밀번호 재설정 핸드폰 번호 확인
@@ -64,16 +65,19 @@ def check_pw_userphone(request, *args, **kwargs):
 # 비밀번호 재설정
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.IsAuthenticated, )
     serializer_class = ChangePasswordSerializer
+
+# 로그인
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 # 로그아웃
 class LogoutView(APIView):
-    permission_classes = (permissions.AllowAny, )
 
     def post(self, request):
         try:
-            refresh_token = request.data["refresh_token"]
+            refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
             
@@ -85,15 +89,22 @@ class LogoutView(APIView):
 @api_view(['POST'])
 def account_withdraw(request, *args, **kwargs):
     user_id = request.POST.get('user_id')
+    refresh_token = request.data["refresh"]
 
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    if user:
-        user.delete()
-        return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    try:
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+
+        if user:
+            user.delete()
+            return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    except Exception as e:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 """
