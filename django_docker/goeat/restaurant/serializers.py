@@ -71,12 +71,6 @@ class SimpleRestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = ('id', 'res_name', 'res_image')
 
-# search_menu에서 사용
-class SimpleMenuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Menu
-        fields = ('id', 'menu_name', 'menu_image')
-
 
 """
 #############################################################################################
@@ -100,3 +94,37 @@ class ResServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResService
         fields = ('res_id', 'res_name', 'services', 'stamp_exp')
+
+
+"""
+#############################################################################################
+
+                                   2차군집, 음식점 자동완성                            
+
+#############################################################################################
+"""
+# AutoResView에서 사용
+class AutoResSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = ('res_name', )
+
+# AutoSecondMenuView에서 사용
+class AutoSecondMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuSecondClass
+        fields = ('second_class_name', )
+
+
+"""
+#############################################################################################
+
+                            
+
+#############################################################################################
+"""
+# Test용
+class SimpleMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuSecondClass
+        fields = ('id', 'second_class_name', 'menu_second_image')

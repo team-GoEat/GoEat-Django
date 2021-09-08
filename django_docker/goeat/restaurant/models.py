@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.template.defaultfilters import truncatechars
 
 """
 #############################################################################################
@@ -70,7 +70,11 @@ class MenuSecondClass(models.Model):
     menu_second_image = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "{} {}".format(self.second_class_name, menu_type)
+        return "{}".format(self.second_class_name)
+
+    @property
+    def short_menu_image(self):
+        return truncatechars(self.menu_second_image, 35)
 
 #메뉴
 class Menu(models.Model):
@@ -85,6 +89,10 @@ class Menu(models.Model):
 
     def __str__(self):
         return '{}'.format(self.menu_name)
+    
+    @property
+    def short_menu_image(self):
+        return truncatechars(self.menu_image, 50)
 
 
 """
@@ -116,7 +124,7 @@ class Restaurant(models.Model):
     res_exp = models.TextField(blank=True, null=True)
     # 식당 이미지
     res_image = models.TextField(blank=True, null=True)
-    
+
     # 예약 가능 여부
     @property
     def is_reservable(self):
@@ -124,6 +132,14 @@ class Restaurant(models.Model):
         if res_reservation.exists():
             return res_reservation.first().is_reservable
         return ''
+
+    @property
+    def short_res_image(self):
+        return truncatechars(self.res_image, 35)
+
+    @property
+    def short_res_exp(self):
+        return truncatechars(self.res_exp, 20)
 
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
@@ -183,7 +199,7 @@ class ResService(models.Model):
 # 음식점 예약
 class ResReservation(models.Model):
     # 음식점
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='res_reservation')
+    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='res_reservation')
     # 예약 가능 여부
     is_reservable = models.BooleanField(default=True)
 
