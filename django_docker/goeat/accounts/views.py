@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 import requests
 
 from restaurant.models import (
-    Restaurant, Menu, MenuCannotEat
+    Restaurant, Menu, MenuCannotEat, MenuSecondClass
 )
 from accounts.models import (
     User, Team, TeamRequest, ResService, NonMember,
@@ -347,7 +347,7 @@ def team_request(request, *args, **kwargs):
         if teamrequest.is_active is True:
             return JsonResponse({'msg': '팀원 요청을 이미 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
         else:
-            return JsonResponse({'msg': '팀원이 거절하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+            return JsonResponse({'msg': '팀원이 거절하거나 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except TeamRequest.DoesNotExist:
         TeamRequest.objects.create(sender=sender, receiver=receiver)
         return JsonResponse({'msg': '팀원 요청을 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -369,7 +369,6 @@ def team_accept(request, *args, **kwargs):
 
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
-        print("TeamRequest: ", teamrequest)
         if teamrequest.is_active:
             teamrequest.accept()
             return JsonResponse({'msg': '팀원 요청을 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -650,8 +649,8 @@ def menu_like(request, *args, **kwargs):
             return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         try:
-            menu = Menu.objects.get(pk=menu_id)
-        except Menu.DoesNotExist:
+            menu = MenuSecondClass.objects.get(pk=menu_id)
+        except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_like.add(menu)
@@ -667,8 +666,8 @@ def menu_like(request, *args, **kwargs):
             return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         try:
-            menu = Menu.objects.get(pk=menu_id)
-        except Menu.DoesNotExist:
+            menu = MenuSecondClass.objects.get(pk=menu_id)
+        except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_like.remove(menu)
@@ -699,8 +698,8 @@ def menu_hate(request, *args, **kwargs):
             return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         try:
-            menu = Menu.objects.get(pk=menu_id)
-        except Menu.DoesNotExist:
+            menu = MenuSecondClass.objects.get(pk=menu_id)
+        except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_hate.add(menu)
@@ -716,8 +715,8 @@ def menu_hate(request, *args, **kwargs):
             return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         try:
-            menu = Menu.objects.get(pk=menu_id)
-        except Menu.DoesNotExist:
+            menu = MenuSecondClass.objects.get(pk=menu_id)
+        except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_hate.remove(menu)

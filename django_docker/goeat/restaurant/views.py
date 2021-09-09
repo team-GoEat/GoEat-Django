@@ -121,7 +121,7 @@ def search_menu(request, *args, **kwargs):
     try:
         data = []
 
-        menu_second = MenuSecondClass.objects.filter(second_class_name__contains=keyword)
+        menu_second = MenuSecondClass.objects.filter(second_class_search_name__contains=keyword)
         for second in menu_second:
             temp = {
                 'menu_id': second.id,
