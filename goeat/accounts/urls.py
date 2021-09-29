@@ -6,7 +6,7 @@ urlpatterns = [
     # 회원가입
     path('register/', views.RegistrationView.as_view(), name='register'),
     # 로그인
-    path('login/', views.MyTokenObtainPairView.as_view(), name='login'),
+    path('login', views.MyTokenObtainPairView.as_view(), name='login'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # 로그아웃 POST

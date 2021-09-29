@@ -31,9 +31,9 @@ for key, value in secrets.items():
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['goeat.kr']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -56,8 +56,6 @@ INSTALLED_APPS = [
     # 'django_hosts',
     'app_owner',
     'rest_framework_simplejwt.token_blacklist',
-    # dj-rest-auth
-    'dj_rest_auth',
     # django-allauth
     'allauth',
     'allauth.account',
@@ -71,10 +69,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        # 'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
@@ -88,7 +85,7 @@ JWT_AUTH_COOKIE = 'my-app-auth'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
