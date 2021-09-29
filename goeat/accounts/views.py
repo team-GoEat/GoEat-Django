@@ -563,6 +563,7 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
     type_id_list = data.get('type_id')
     is_cold_list = data.get('is_cold')
     is_spicy_list = data.get('is_spicy')
+    start_idx = data.get('start_idx')
 
     try:
         user = User.objects.get(goeat_id=user_id)
@@ -619,7 +620,7 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
     score = sorted(score, key=lambda x: -x['score'])
     score_lst = sort_first_class(score)
 
-    for i in range(len(score_lst)):
+    for i in range(start_idx, start_idx+50):
         try:
             menu = MenuSecondClass.objects.get(pk=score_lst[i]['menu_id'])
 
@@ -649,7 +650,7 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
             score_lst[i-1]['is_last'] = True
             break
     
-    return Response(score_lst, status=200)
+    return Response(score_lst[start_idx:start_idx+50], status=200)
 
 # 취향 조사 초기화
 @api_view(['GET'])
