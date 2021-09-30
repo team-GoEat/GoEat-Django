@@ -540,7 +540,7 @@ def send_usertaste_menu(request, *args, **kwargs):
                 score_lst[i]['menu_ingredients'].append({'id': ingredient.id})
 
             res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
-                'res_id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
+                'id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
 
             # rmenu = menu.menu.all()
             # for m in rmenu:
@@ -609,13 +609,9 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
         'menu__id', 'menu__second_class_name', 'points', 'menu__menu_first_name__id', 'menu__menu_first_name__first_class_name',
         'menu__menu_type', 'menu__menu_soup', 'menu__is_spicy', 'menu__is_cold', 'menu__menu_second_image')
         
-    print(len(all_menu))
     score = []
     for menu in all_menu:
         if menu[1] == '추천안함':
-            continue
-
-        if not menu[3]:
             continue
 
         temp = {
@@ -638,11 +634,10 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
         score.append(temp)
 
     score_lst = sorted(score, key=lambda x: -x['score'])
-    # score_lst = sort_first_class(score)
 
     for i in range(start_idx, start_idx+50):
         try:
-            menu = MenuSecondClass.objects.get(pk=score_lst[i]['menu_id'])
+            menu = MenuSecondClass.objects.prefetch_related('menu__restaurant').get(pk=score_lst[i]['menu_id'])
 
             for feature in menu.menu_feature.all():
                 score_lst[i]['menu_feature'].append({'id': feature.id})
@@ -650,22 +645,35 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
             for ingredient in menu.menu_ingredients.all():
                 score_lst[i]['menu_ingredients'].append({'id': ingredient.id})
 
-            rmenu = menu.menu.all()
-            for m in rmenu:
-                res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
-                for r in res:
-                    if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
-                        r_temp = {
-                            'res_id': r[0],
-                            'res_name': r[1],
-                            'res_address': r[2],
-                            'x_cor': r[3],
-                            'y_cor': r[4],
-                            'is_fav': False
-                        }
-                        score_lst[i]['restaurants'].append(r_temp)
-                    else:
-                        continue
+            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
+                'id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
+
+            # rmenu = menu.menu.all()
+            # for m in rmenu:
+            #     res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
+            #     for r in res:
+            #         if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
+            #             r_temp = {
+            #                 'res_id': r[0],
+            #                 'res_name': r[1],
+            #                 'res_address': r[2],
+            #                 'x_cor': r[3],
+            #                 'y_cor': r[4],
+            #                 'is_fav': False
+            #             }
+            #             score_lst[i]['restaurants'].append(r_temp)
+            #         else:
+            #             continue
+            for r in res:
+                r_temp = {
+                    'res_id': r[0],
+                    'res_name': r[1],
+                    'res_address': r[2],
+                    'x_cor': r[3],
+                    'y_cor': r[4]
+                }
+                score_lst[i]['restaurants'].append(r_temp)
+
         except IndexError:
             score_lst[i-1]['is_last'] = True
             break
