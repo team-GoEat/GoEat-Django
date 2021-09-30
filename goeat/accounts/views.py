@@ -290,12 +290,12 @@ def usertaste_menu(request, *args, **kwargs):
             continue
         cannoteat_list.append(int(i))
 
-    all_menu = MenuSecondClass.objects.exclude(menu_cannoteat__pk__in=cannoteat_list).filter()
+    all_menu = MenuSecondClass.objects.exclude(menu_cannoteat__pk__in=cannoteat_list)
     
     score = []
 
     for menu in all_menu:
-        if not menu.menu_first_name:
+        if menu.second_class_name == '추천안함':
             continue
 
         temp = {
@@ -348,44 +348,43 @@ def usertaste_menu(request, *args, **kwargs):
         score.append(temp)
 
     score_lst = sorted(score, key=lambda x: -x['score'])
-    score_lst = sort_first_class(score_lst)
 
-    for i in range(start_idx, start_idx + 50):
-        try:
-            menu = MenuSecondClass.objects.get(pk=score_lst[i]['menu_id'])
-            for menu_ingredient in menu_ingredient_data:
-                for key in menu_ingredient:
-                    value = menu_ingredient[key]
-                    for ing in menu.menu_ingredients.all():
-                        if ing.id == key:
-                            score_lst[i]['score'] += value
-                            break
+    # for i in range(start_idx, start_idx + 50):
+    #     try:
+    #         menu = MenuSecondClass.objects.get(pk=score_lst[i]['menu_id'])
+    #         for menu_ingredient in menu_ingredient_data:
+    #             for key in menu_ingredient:
+    #                 value = menu_ingredient[key]
+    #                 for ing in menu.menu_ingredients.all():
+    #                     if ing.id == key:
+    #                         score_lst[i]['score'] += value
+    #                         break
 
-            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
-            for r in res:
-                r_temp = {
-                    'res_id': r.id
-                }
-                score_lst[i]['restaurants'].append(r_temp)
+    #         res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
+    #         for r in res:
+    #             r_temp = {
+    #                 'res_id': r.id
+    #             }
+    #             score_lst[i]['restaurants'].append(r_temp)
     
-            rmenu = menu.menu.all()
-            for m in rmenu:
-                res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
-                for r in res:
-                    if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
-                        r_temp = {
-                            'res_id': r[0],
-                            'res_name': r[1],
-                            'res_address': r[2],
-                            'x_cor': r[3],
-                            'y_cor': r[4]
-                        }
-                        score_lst[i]['restaurants'].append(r_temp)
-                    else:
-                        continue
-        except IndexError:
-            score_lst[i-1]['is_last'] = True
-            break
+    #         rmenu = menu.menu.all()
+    #         for m in rmenu:
+    #             res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
+    #             for r in res:
+    #                 if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
+    #                     r_temp = {
+    #                         'res_id': r[0],
+    #                         'res_name': r[1],
+    #                         'res_address': r[2],
+    #                         'x_cor': r[3],
+    #                         'y_cor': r[4]
+    #                     }
+    #                     score_lst[i]['restaurants'].append(r_temp)
+    #                 else:
+    #                     continue
+    #     except IndexError:
+    #         score_lst[i-1]['is_last'] = True
+    #         break
 
     return Response(score_lst[start_idx:start_idx+50], status=200)
 
@@ -870,7 +869,10 @@ def change_with(request, *args, **kwargs):
 
     rank_lst = []
     for teammate in team.teammates.all():
-        team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+        try:
+            team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+        except UserTeamProfile.DoesNotExist:
+            continue
         rank_lst.append([teammate, team_profile.rank])
 
     MenuPoint.objects.filter(team=team).update(points=0)
