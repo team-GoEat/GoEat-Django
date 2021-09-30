@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.db.models import F
+from django.db.models import F, Q
 from rest_framework import status, viewsets, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -290,8 +290,8 @@ def usertaste_menu(request, *args, **kwargs):
             continue
         cannoteat_list.append(int(i))
 
-    all_menu = MenuSecondClass.objects.exclude(menu_cannoteat__pk__in=cannoteat_list)
-    
+    all_menu = MenuSecondClass.objects.select_related().filter(~Q(menu_cannoteat__pk__in=cannoteat_list))
+
     score = []
 
     for menu in all_menu:
@@ -360,12 +360,12 @@ def usertaste_menu(request, *args, **kwargs):
                             score_lst[i]['score'] += value
                             break
 
-            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
-            for r in res:
-                r_temp = {
-                    'res_id': r.id
-                }
-                score_lst[i]['restaurants'].append(r_temp)
+            # res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
+            # for r in res:
+            #     r_temp = {
+            #         'res_id': r.id
+            #     }
+            #     score_lst[i]['restaurants'].append(r_temp)
     
             rmenu = menu.menu.all()
             for m in rmenu:
@@ -387,6 +387,7 @@ def usertaste_menu(request, *args, **kwargs):
             break
 
     return Response(score_lst[start_idx:start_idx+50], status=200)
+    # return Response(score, status=200)
 
 # 유저 취향 조사 반영, 재반영
 @api_view(['POST', 'PUT'])
