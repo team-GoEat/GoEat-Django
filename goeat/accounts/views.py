@@ -290,7 +290,7 @@ def usertaste_menu(request, *args, **kwargs):
             continue
         cannoteat_list.append(int(i))
 
-    all_menu = MenuSecondClass.objects.exclude(menu_cannoteat__pk__in=cannoteat_list)
+    all_menu = MenuSecondClass.objects.exclude(menu_cannoteat__pk__in=cannoteat_list).filter()
     
     score = []
 
@@ -301,11 +301,11 @@ def usertaste_menu(request, *args, **kwargs):
         temp = {
             'menu_id': menu.id,
             'menu_name': menu.second_class_name,
-            'score': 0,
             'menu_image': menu.menu_second_image,
             'menu_first_id': menu.menu_first_name.id,
             'menu_first_name': menu.menu_first_name.first_class_name,
             'restaurants': [],
+            'score': 0,
             "is_last": False
         }
 
@@ -361,12 +361,12 @@ def usertaste_menu(request, *args, **kwargs):
                             score_lst[i]['score'] += value
                             break
 
-            # res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
-            # for r in res:
-            #     r_temp = {
-            #         'res_id': r.id
-            #     }
-            #     score_lst[i]['restaurants'].append(r_temp)
+            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).distinct()
+            for r in res:
+                r_temp = {
+                    'res_id': r.id
+                }
+                score_lst[i]['restaurants'].append(r_temp)
     
             rmenu = menu.menu.all()
             for m in rmenu:
@@ -497,9 +497,6 @@ def send_usertaste_menu(request, *args, **kwargs):
         if menu[1] == '추천안함':
             continue
 
-        if not menu[3]:
-            continue
-
         temp = {
             'menu_id': menu[0],
             'menu_name': menu[1],
@@ -516,15 +513,25 @@ def send_usertaste_menu(request, *args, **kwargs):
             'restaurants': [],
             'is_last': False
         }
-
         score.append(temp)
 
-    score = sorted(score, key=lambda x: -x['score'])
-    score_lst = sort_first_class(score)
+    # score = [{
+    #     'menu_id': b.menu.id,
+    #     'name': b.menu.second_class_name,
+    #     'score': b.points,
+    #     'menu_image': b.menu.menu_second_image,
+    #     'menu_first_id': b.menu.menu_first_name.id,
+    #     'menu_first_name': b.menu.menu_first_name.first_class_name,
+    #     'menu_type': b.menu.menu_type.type_name,
+    #     'ingredients': [{'id': a.id} for a in b.menu.menu_ingredients.all()]
+    #     } for b in MenuPoint.objects.select_related('menu').filter(team=team).exclude(
+    #         menu__menu_cannoteat__pk__in=cannoteat_list).exclude(menu__id=3)]
+
+    score_lst = sorted(score, key=lambda x: -x['score'])
 
     for i in range(start_idx, start_idx+50):
         try:
-            menu = MenuSecondClass.objects.get(pk=score_lst[i]['menu_id'])
+            menu = MenuSecondClass.objects.prefetch_related('menu__restaurant').get(pk=score_lst[i]['menu_id'])
 
             for feature in menu.menu_feature.all():
                 score_lst[i]['menu_feature'].append({'id': feature.id})
@@ -532,27 +539,40 @@ def send_usertaste_menu(request, *args, **kwargs):
             for ingredient in menu.menu_ingredients.all():
                 score_lst[i]['menu_ingredients'].append({'id': ingredient.id})
 
-            rmenu = menu.menu.all()
-            for m in rmenu:
-                res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
-                for r in res:
-                    if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
-                        r_temp = {
-                            'res_id': r[0],
-                            'res_name': r[1],
-                            'res_address': r[2],
-                            'x_cor': r[3],
-                            'y_cor': r[4],
-                            'is_fav': False
-                        }
-                        score_lst[i]['restaurants'].append(r_temp)
-                    else:
-                        continue
+            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
+                'res_id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
+
+            # rmenu = menu.menu.all()
+            # for m in rmenu:
+            #     res = m.restaurant.values_list('id', 'res_name', 'res_address', 'x_cor', 'y_cor')
+            #     for r in res:
+            #         if not any(d['res_id'] == r[0] for d in score_lst[i]['restaurants']):
+            #             r_temp = {
+            #                 'res_id': r[0],
+            #                 'res_name': r[1],
+            #                 'res_address': r[2],
+            #                 'x_cor': r[3],
+            #                 'y_cor': r[4],
+            #                 'is_fav': False
+            #             }
+            #             score_lst[i]['restaurants'].append(r_temp)
+            #         else:
+            #             continue
+            for r in res:
+                r_temp = {
+                    'res_id': r[0],
+                    'res_name': r[1],
+                    'res_address': r[2],
+                    'x_cor': r[3],
+                    'y_cor': r[4]
+                }
+                score_lst[i]['restaurants'].append(r_temp)
+
         except IndexError:
             score_lst[i-1]['is_last'] = True
             break
     
-    return Response(score_lst[start_idx:start_idx+50], status=200)
+    return Response(sort_first_class(score_lst[start_idx:start_idx+50]), status=200)
 
 # 메뉴필터, 취향 조사에 따른 메뉴 추천
 @api_view(['POST'])
@@ -617,8 +637,8 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
 
         score.append(temp)
 
-    score = sorted(score, key=lambda x: -x['score'])
-    score_lst = sort_first_class(score)
+    score_lst = sorted(score, key=lambda x: -x['score'])
+    # score_lst = sort_first_class(score)
 
     for i in range(start_idx, start_idx+50):
         try:
@@ -650,7 +670,7 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
             score_lst[i-1]['is_last'] = True
             break
     
-    return Response(score_lst[start_idx:start_idx+50], status=200)
+    return Response(sort_first_class(score_lst[start_idx:start_idx+50], status=200))
 
 # 취향 조사 초기화
 @api_view(['GET'])
@@ -668,18 +688,9 @@ def usertaste_reset(request, *args, **kwargs):
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     # 취향 점수 초기화
-    mfp = MenuFeaturePoint.objects.filter(user=user)
-    for m in mfp:
-        m.points = 0
-        m.save()
-    mtp = MenuTypePoint.objects.filter(user=user)
-    for m in mtp:
-        m.points = 0
-        m.save()
-    mip = MenuIngredientPoint.objects.filter(user=user)
-    for m in mip:
-        m.points = 0
-        m.save()
+    MenuFeaturePoint.objects.filter(user=user).update(points=0)
+    MenuTypePoint.objects.filter(user=user).update(points=0)
+    MenuIngredientPoint.objects.filter(user=user).update(points=0)
     user.menu_soup_2_points = 0
     user.menu_soup_1_points = 0
     user.menu_soup_0_points = 0
@@ -694,10 +705,13 @@ def usertaste_reset(request, *args, **kwargs):
 
     rank_lst = []
     for teammate in team.teammates.all():
-        team_profile = UserTeamProfile.objects.get(team=team, user=teammate)
+        team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
         rank_lst.append([teammate, team_profile.rank])
 
-    calculate_mp(user=user, team=team, lst=rank_lst)
+    MenuPoint.objects.filter(team=team).update(points=0)
+
+    if rank_lst:
+        calculate_mp(user=user, team=team, lst=rank_lst)
 
     return Response({'msg': 'OK'}, status=200)
 
@@ -848,7 +862,7 @@ def change_with(request, *args, **kwargs):
 
     rank_lst = []
     for teammate in team.teammates.all():
-        team_profile = UserTeamProfile.objects.get(team=team, user=teammate)
+        team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
         rank_lst.append([teammate, team_profile.rank])
 
     MenuPoint.objects.filter(team=team).update(points=0)

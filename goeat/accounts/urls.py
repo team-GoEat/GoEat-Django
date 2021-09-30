@@ -10,7 +10,7 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # 로그아웃 POST
-    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('logout', views.LogoutView.as_view(), name='logout'),
     # 비밀번호 재설정 전화번호 중복체크
     path('changepw/check/', views.check_pw_userphone, name='check_pw_userphone'),
     # 비밀번호 재설정

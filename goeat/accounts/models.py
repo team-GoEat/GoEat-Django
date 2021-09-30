@@ -229,6 +229,9 @@ class MenuPoint(models.Model):
         self.points = 0
         self.save()
 
+    def __str__(self):
+        return '{} {}'.format(self.menu.second_class_name, self.points)
+
 # 팀원 직급, 즐겨찾기
 class UserTeamProfile(models.Model):
     # 팀
