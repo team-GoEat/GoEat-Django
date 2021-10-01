@@ -107,5 +107,5 @@ urlpatterns = [
     # 알림 읽음
     path('alarm/read/', views.alarm_read, name='alarm_read'),
 
-    path('test/', views.test, name='test')
+    path('test/<str:user_id>/', views.test, name='test')
 ]

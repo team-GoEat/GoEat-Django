@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.db.models import F, Q
+from django.db.models import F, Q, Prefetch
 from rest_framework import status, viewsets, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -219,15 +219,24 @@ def sort_first_class(lst):
 # 메뉴 점수 계산
 def calculate_mp(user, team, lst):
 
-    menu_feature_data = MenuFeaturePoint.objects.filter(user=user).prefetch_related('')
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(
+    #     user=user).prefetch_related(
+    #         Prefetch('menu_ingredient__menu', queryset=MenuSecondClass.objects.all()),
+    #         Prefetch('menu_ingredient__menu__menu_point', queryset=MenuPoint.objects.filter(team=team)))
+    # for menu_ingredient in menu_ingredient_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[menu_ingredient.menu_ingredient]).update(points=F('points')+menu_ingredient.points)
+    
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    for menu_ingredient in menu_ingredient_data:
+        MenuPoint.objects.filter(team=team).prefetch_related(
+            Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=menu_ingredient.menu_ingredient.id)
+        )).update(points=F('points')+menu_ingredient.points)
+
+    menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
     for menu_feature in menu_feature_data:
         MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(points=F('points')+menu_feature.points)
     
-    menu_ingredient_data = MenuIngredientPoint.objects.filter(user=user)
-    for menu_ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[menu_ingredient.menu_ingredient]).update(points=F('points')+menu_ingredient.points)
-
-    menu_type_data = MenuTypePoint.objects.filter(user=user)
+    menu_type_data = MenuTypePoint.objects.select_related('menu_type').filter(user=user)
     for menu_type in menu_type_data:
         MenuPoint.objects.filter(team=team, menu__menu_type__in=[menu_type.menu_type]).update(points=F('points')+menu_type.points)
 
@@ -244,17 +253,20 @@ def calculate_mp(user, team, lst):
     if lst:
         for teammate_data in lst:
             teammate, rank = teammate_data
-            rank = int(rank)
+            rank = int(rank)-5
+            if rank == 0:
+                rank = 1
+
+            menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+            for menu_ingredient in menu_ingredient_data:
+                MenuPoint.objects.filter(team=team).prefetch_related(
+                    Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=menu_ingredient.menu_ingredient.id)
+                )).update(points=F('points')+rank*menu_ingredient.points)
 
             menu_feature_data = MenuFeaturePoint.objects.filter(user=teammate)
             for menu_feature in menu_feature_data:
                 MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(
                     points=F('points')+rank*menu_feature.points)
-    
-            menu_ingredient_data = MenuIngredientPoint.objects.filter(user=user)
-            for menu_ingredient in menu_ingredient_data:
-                MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[menu_ingredient.menu_ingredient]).update(
-                    points=F('points')+rank*menu_ingredient.points)
 
             menu_type_data = MenuTypePoint.objects.filter(user=user)
             for menu_type in menu_type_data:
@@ -1476,13 +1488,18 @@ def cannot_eat(request, *args, **kwargs):
 
 @api_view(['POST'])
 def test(request, *args, **kwargs):
-    data = json.loads(request.body)
-    test_list = data.get('test_list')
-    # test_list = request.POST.getlist('test_list')
+    user_id = kwargs.get('user_id')
 
-    # print("test: ", test)
-    # print("type(test): ", type(test))
-    print("test_list: ", test_list)
-    print("type(test_list): ", type(test_list))
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    calculate_mp(user=user, team=team, lst=[])
 
     return Response(status=200)

@@ -77,28 +77,28 @@ class NonMemberAdmin(admin.ModelAdmin):
         model = NonMember
 
 class MenuFeaturePointAdmin(admin.ModelAdmin):
-    list_display = ['user', 'menu_feature', 'points']
+    list_display = ['id', 'user', 'menu_feature', 'points']
     search_fields = ['user__goeat_id', 'user__username', 'menu_feature__feature_name']
 
     class Meta:
         model = MenuFeaturePoint
 
 class MenuTypePointAdmin(admin.ModelAdmin):
-    list_display = ['user', 'menu_type', 'points']
+    list_display = ['id', 'user', 'menu_type', 'points']
     search_fields = ['user__goeat_id', 'user__username', 'menu_type__type_name']
 
     class Meta:
         model = MenuTypePoint
 
 class MenuIngredientPointAdmin(admin.ModelAdmin):
-    list_display = ['user', 'menu_ingredient', 'points']
+    list_display = ['id', 'user', 'menu_ingredient', 'points']
     search_fields = ['user__goeat_id', 'user__username', 'menu_ingredient__ing_name']
 
     class Meta:
         model = MenuIngredientPoint
 
 class MenuPointAdmin(admin.ModelAdmin):
-    list_display = ['team', 'menu', 'points']
+    list_display = ['id', 'team', 'menu', 'points']
     search_fields = ['team__user__goeat_id', 'team__user__username', 'menu__second_class_name']
 
     class Meta:

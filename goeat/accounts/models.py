@@ -222,7 +222,7 @@ class Team(models.Model):
 # Menu 점수
 class MenuPoint(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    menu = models.ForeignKey(MenuSecondClass, on_delete=models.CASCADE)
+    menu = models.ForeignKey(MenuSecondClass, on_delete=models.CASCADE, related_name='menu_point')
     points = models.IntegerField(default=0)
 
     def reset_points(self):
