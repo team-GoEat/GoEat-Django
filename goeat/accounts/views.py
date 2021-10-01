@@ -227,10 +227,10 @@ def calculate_mp(user, team, lst):
     #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[menu_ingredient.menu_ingredient]).update(points=F('points')+menu_ingredient.points)
     
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    for menu_ingredient in menu_ingredient_data:
+    for ingredient in menu_ingredient_data:
         MenuPoint.objects.filter(team=team).prefetch_related(
-            Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=menu_ingredient.menu_ingredient.id)
-        )).update(points=F('points')+menu_ingredient.points)
+            Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id)
+        )).update(points=F('points')+ingredient.points)
 
     menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
     for menu_feature in menu_feature_data:
@@ -577,7 +577,10 @@ def send_usertaste_menu_with_filter(request, *args, **kwargs):
         menu__is_cold__in=is_cold_list).values_list(
         'menu__id', 'menu__second_class_name', 'points', 'menu__menu_first_name__id', 'menu__menu_first_name__first_class_name',
         'menu__menu_type', 'menu__menu_soup', 'menu__is_spicy', 'menu__is_cold', 'menu__menu_second_image')
-    
+
+    if not all_menu:
+        return Response([], status=200)
+
     score = []
     for menu in all_menu:
         if menu[1] == '추천안함':
