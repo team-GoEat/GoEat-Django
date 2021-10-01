@@ -372,7 +372,7 @@ def usertaste_menu(request, *args, **kwargs):
             }
             score_lst[i]['restaurants'].append(r_temp)
 
-    return Response(sort_first_class(score_lst[start_idx:start_idx+100], status=200))
+    return Response(sort_first_class(score_lst[start_idx:start_idx+100]), status=200)
 
 # 유저 취향 조사 반영, 재반영
 @api_view(['POST', 'PUT'])
