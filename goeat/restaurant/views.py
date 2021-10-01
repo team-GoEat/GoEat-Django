@@ -267,6 +267,9 @@ def get_restaurant_from_cat(request, *args, **kwargs):
             "is_rep": False
         }
         for second_name in menu.menu_second_name.all():
+            if second_name.second_class_name == '추천안함':
+                m_temp['menu_second_name'].append(second_name.id)
+                continue
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.menu_type.id == int(type_id):
                 m_temp['is_rep'] = True
@@ -314,6 +317,9 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
             "is_rep": False
         }
         for second_name in menu.menu_second_name.all():
+            if second_name.second_class_name == '추천안함':
+                m_temp['menu_second_name'].append(second_name.id)
+                continue
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.menu_type.id == int(type_id):
                 m_temp['is_rep'] = True
