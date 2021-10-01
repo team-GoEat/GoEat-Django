@@ -358,7 +358,7 @@ def usertaste_menu(request, *args, **kwargs):
 
     score_lst = sorted(score, key=lambda x: -x['score'])
 
-    for i in range(start_idx, start_idx + 50):
+    for i in range(start_idx, start_idx + 100):
         res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
             'id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
 
@@ -372,7 +372,7 @@ def usertaste_menu(request, *args, **kwargs):
             }
             score_lst[i]['restaurants'].append(r_temp)
 
-    return Response(score_lst[start_idx:start_idx+50], status=200)
+    return Response(sort_first_class(score_lst[start_idx:start_idx+100], status=200))
 
 # 유저 취향 조사 반영, 재반영
 @api_view(['POST', 'PUT'])
