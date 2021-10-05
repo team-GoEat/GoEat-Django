@@ -56,20 +56,28 @@ class RegisterSerializer(serializers.ModelSerializer):
         team.save()
 
         all_menu = MenuSecondClass.objects.all()
+        all_mp_list = []
         for menu in all_menu:
-            MenuPoint.objects.create(team=team, menu=menu)
+            all_mp_list.append(MenuPoint(team=team, menu=menu))
+        MenuPoint.objects.bulk_create(all_mp_list)
 
         all_feature = MenuFeature.objects.all()
+        all_mfp_list = []
         for feature in all_feature:
-            MenuFeaturePoint.objects.create(user=user, menu_feature=feature)
+            all_mfp_list.append(MenuFeaturePoint(user=user, menu_feature=feature))
+        MenuFeaturePoint.objects.bulk_create(all_mfp_list)
 
         all_type = MenuType.objects.all()
+        all_mtp_list = []
         for mtype in all_type:
-            MenuTypePoint.objects.create(user=user, menu_type=mtype)
+            all_mtp_list.append(MenuTypePoint(user=user, menu_type=mtype))
+        MenuTypePoint.objects.bulk_create(all_mtp_list)
 
         all_ingredient = MenuIngredient.objects.all()
+        all_mip_list = []
         for ingredient in all_ingredient:
-            MenuIngredientPoint.objects.create(user=user, menu_ingredient=ingredient)
+            all_mip_list.append(MenuIngredientPoint(user=user, menu_ingredient=ingredient))
+        MenuIngredientPoint.objects.bulk_create(all_mip_list)
 
         return user
 

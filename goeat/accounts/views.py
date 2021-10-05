@@ -1503,6 +1503,14 @@ def test(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    calculate_mp(user=user, team=team, lst=[])
+    # calculate_mp(user=user, team=team, lst=[])
+
+    all_menu = MenuSecondClass.objects.all()
+    all_mp_list = []
+    for menu in all_menu:
+        all_mp_list.append(MenuPoint(team=team, menu=menu))
+
+    print(all_mp_list)
+    print(len(all_mp_list))
 
     return Response(status=200)
