@@ -27,3 +27,10 @@ class faq(models.Model):
     faq_content = models.TextField(blank=True, null=True)
     # active
     active = models.BooleanField(default=True)
+
+# 오픈소스 라이선스
+class OpenSourceLicense(models.Model):
+    # 라이선스 제목
+    license_title = models.CharField(max_length=30, default='license_title')
+    # 라이선스 내용
+    license_content = models.TextField(blank=True, null=True)

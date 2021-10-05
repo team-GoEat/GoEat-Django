@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notice, faq
+from .models import Notice, faq, OpenSourceLicense
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ['id', 'notice_title', 'notice_content', 'notice_date']
@@ -15,5 +15,13 @@ class FaqAdmin(admin.ModelAdmin):
     class Meta:
         model = faq
 
+class OpenSourceLicenseAdmin(admin.ModelAdmin):
+    list_display = ['id', 'license_title', 'license_content']
+    search_fields = ['license_title']
+
+    class Meta:
+        model = OpenSourceLicense
+
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(faq, FaqAdmin)
+admin.site.register(OpenSourceLicense, OpenSourceLicenseAdmin)

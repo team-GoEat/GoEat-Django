@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Notice, faq
+from .models import Notice, faq, OpenSourceLicense
 
 """
 #############################################################################################
@@ -19,3 +19,9 @@ class FaqSerializer(serializers.ModelSerializer):
     class Meta:
         model = faq
         fields = ('id', 'faq_content')
+
+# 오픈소스 라이센스 Serializer
+class OpenSourceLicenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OpenSourceLicense
+        fields = ('id', 'license_title', 'license_content')

@@ -9,5 +9,4 @@ sqlparse==0.4.1
 cryptography==2.8
 django-extensions
 djangorestframework-simplejwt
-dj-rest-auth
 django-allauth

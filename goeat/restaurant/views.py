@@ -91,7 +91,7 @@ def taste_menu(request, *args, **kwargs):
         menu_type = MenuType.objects.get(pk=i)
         menu_second = all_menu.filter(menu_type = menu_type)
         menu_second_cnt = menu_second.count() - 1
-        print("음식 종류별 2차군집 개수: ", menu_second_cnt)
+        print("{}: {}".format(menu_type, menu_second_cnt))
         if menu_second_cnt < 2:
             continue
         index1 = random.randint(0, menu_second_cnt)
@@ -115,6 +115,8 @@ def taste_menu(request, *args, **kwargs):
         print("추가 메뉴 2차군집 개수: ", menu_second_cnt)
         if index in idx_data:
             index += 1
+            if index >= menu_second_cnt:
+                index = 0
 
         idx_data.append(index)
         menu_second = all_menu.all()[index]

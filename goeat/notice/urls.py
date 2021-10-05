@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('list', views.NoticeView)
- 
+router.register('license', views.OpenSourceLicenseView)
+
 urlpatterns = [
     path('', include(router.urls)),
 
