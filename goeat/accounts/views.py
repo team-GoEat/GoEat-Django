@@ -193,9 +193,73 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
+@api_view(['POST'])
+def test(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    # try:
+    #     user = User.objects.get(goeat_id=user_id)
+    # except User.DoesNotExist:
+    #     return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    # try:
+    #     team = Team.objects.get(user=user)
+    # except Team.DoesNotExist:
+    #     return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    lst = [1, 1, 2, 1, 1, 3, 4, 1, 4, 5, 5, 6, 6, 5, 7, 8, 9, 10, 11, 7, 7, 11, 7, 7, 7, 12]
+    
+    n = len(lst)
+    p = int(MenuFirstClass.objects.count() // 10)
+    # data = [0]*n
+    # data[0] = n[0]
+
+    # for i in range(1, n):
+    #     diff_cnt = 0
+    #     for j in range(i, -1, -1):
+    #         if lst[j] != lst[i]:
+    #             diff_cnt += 1
+    #             if diff_cnt >= p:
+    #                 break
+    #         else:
+                
+    #     if diff_cnt <= p:
+    #         pass
+
+    for i in range(1, n):
+        up_cnt = set()
+        down_cnt = set()
+        for j in range(i, -1, -1):
+            if lst[i] != lst[j]:
+                up_cnt.add(lst[j])
+                if len(up_cnt) >= p:
+                    break
+            else:
+                for k in range(i+1, n):
+                    if lst[i] != lst[k]:
+                        down_cnt.add(lst[k])
+                        if len(down_cnt) >= p:
+                            lst.insert(k, lst.pop(i))
+                            break
+                break
+    
+    print(lst)
+    return Response(status=200)
+
 def sort_first_class(lst):
     n = len(lst)
     p = int(MenuFirstClass.objects.count() // 10)
+
+    # ret = []
+    # cnt_dict = {}
+    # for i in range(n):
+    #     if lst[i]['menu_first_id'] in cnt_dict:
+    #         cnt_dict[lst[i]['menu_first_id']] += 1
+    #     else:
+    #         cnt_dict[lst[i]['menu_first_id']] = 1
+
+    # cnt_dict = sorted(cnt_dict.items(), key=lambda x:x[1])
+
 
     for i in range(1, n):
         up_cnt = set()
@@ -212,7 +276,7 @@ def sort_first_class(lst):
                         if len(down_cnt) >= p:
                             lst.insert(k, lst.pop(i))
                             break
-                break
+            break
 
     return lst
 
@@ -668,7 +732,10 @@ def usertaste_reset(request, *args, **kwargs):
 
     rank_lst = []
     for teammate in team.teammates.all():
-        team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+        try:
+            team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+        except UserTeamProfile.DoesNotExist:
+            break
         rank_lst.append([teammate, team_profile.rank])
 
     MenuPoint.objects.filter(team=team).update(points=0)
@@ -1489,28 +1556,3 @@ def cannot_eat(request, *args, **kwargs):
         return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 
-@api_view(['POST'])
-def test(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        team = Team.objects.get(user=user)
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    # calculate_mp(user=user, team=team, lst=[])
-
-    all_menu = MenuSecondClass.objects.all()
-    all_mp_list = []
-    for menu in all_menu:
-        all_mp_list.append(MenuPoint(team=team, menu=menu))
-
-    print(all_mp_list)
-    print(len(all_mp_list))
-
-    return Response(status=200)
