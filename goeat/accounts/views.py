@@ -197,53 +197,55 @@ def search_user(request, *args, **kwargs):
 def test(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
 
-    # try:
-    #     user = User.objects.get(goeat_id=user_id)
-    # except User.DoesNotExist:
-    #     return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # try:
-    #     team = Team.objects.get(user=user)
-    # except Team.DoesNotExist:
-    #     return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    lst = [1, 1, 2, 1, 1, 3, 4, 1, 4, 5, 5, 6, 6, 5, 7, 8, 9, 10, 11, 7, 7, 11, 7, 7, 7, 12]
+    print("0으로 초기화 전: ", MenuPoint.objects.filter(pk=4584)[0].points)
+
+    MenuPoint.objects.filter(team=team).update(points=0)
+
+    print("0으로 초기화 후: ", MenuPoint.objects.filter(pk=4584)[0].points)
+
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    for ingredient in menu_ingredient_data:
+        # MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+        # MenuPoint.objects.filter(team=team).prefetch_related(
+        #     Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id)
+        # )).update(points=F('points')+ingredient.points)
+        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
+            Prefetch('menu', queryset=MenuSecondClass.objects.filter(menu_ingredients__in=[ingredient.menu_ingredient])),
+            Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id))
+            ).update(points=F('points')+ingredient.points)
+
+    # menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
+    # for menu_feature in menu_feature_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(points=F('points')+menu_feature.points)
     
-    n = len(lst)
-    p = int(MenuFirstClass.objects.count() // 10)
-    # data = [0]*n
-    # data[0] = n[0]
+    # menu_type_data = MenuTypePoint.objects.select_related('menu_type').filter(user=user)
+    # for menu_type in menu_type_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_type__in=[menu_type.menu_type]).update(points=F('points')+menu_type.points)
 
-    # for i in range(1, n):
-    #     diff_cnt = 0
-    #     for j in range(i, -1, -1):
-    #         if lst[j] != lst[i]:
-    #             diff_cnt += 1
-    #             if diff_cnt >= p:
-    #                 break
-    #         else:
-                
-    #     if diff_cnt <= p:
-    #         pass
+    # MenuPoint.objects.filter(team=team, menu__menu_soup=0).update(points=F('points')+user.menu_soup_0_points)
+    # MenuPoint.objects.filter(team=team, menu__menu_soup=1).update(points=F('points')+user.menu_soup_1_points)
+    # MenuPoint.objects.filter(team=team, menu__menu_soup=2).update(points=F('points')+user.menu_soup_2_points)
 
-    for i in range(1, n):
-        up_cnt = set()
-        down_cnt = set()
-        for j in range(i, -1, -1):
-            if lst[i] != lst[j]:
-                up_cnt.add(lst[j])
-                if len(up_cnt) >= p:
-                    break
-            else:
-                for k in range(i+1, n):
-                    if lst[i] != lst[k]:
-                        down_cnt.add(lst[k])
-                        if len(down_cnt) >= p:
-                            lst.insert(k, lst.pop(i))
-                            break
-                break
+    # MenuPoint.objects.filter(team=team, menu__is_spicy=True).update(points=F('points')+user.is_spicy_1_points)
+    # MenuPoint.objects.filter(team=team, menu__is_spicy=False).update(points=F('points')+user.is_spicy_0_points)
+
+    # MenuPoint.objects.filter(team=team, menu__is_cold=True).update(points=F('points')+user.is_cold_1_points)
+    # MenuPoint.objects.filter(team=team, menu__is_cold=False).update(points=F('points')+user.is_cold_0_points)
+
+    # menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
+    # for menu_feature in menu_feature_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(points=F('points')+menu_feature.points)
     
-    print(lst)
     return Response(status=200)
 
 def sort_first_class(lst):
@@ -292,9 +294,10 @@ def calculate_mp(user, team, lst):
     
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     for ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team).prefetch_related(
-            Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id)
-        )).update(points=F('points')+ingredient.points)
+        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
+            Prefetch('menu', queryset=MenuSecondClass.objects.filter(menu_ingredients__in=[ingredient.menu_ingredient])),
+            Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id))
+            ).update(points=F('points')+ingredient.points)
 
     menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
     for menu_feature in menu_feature_data:
