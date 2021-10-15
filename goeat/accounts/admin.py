@@ -30,7 +30,7 @@ class TeamRequestAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     list_filter = ['gender', 'age']
-    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm']
+    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm', 'fcm_token']
     search_fields = ['goeat_id', 'username']
 
     class Meta:

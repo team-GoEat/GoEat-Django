@@ -37,7 +37,7 @@ class MenuIngredientPoint(models.Model):
     menu_ingredient = models.ForeignKey(MenuIngredient, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
 
-    
+
 """
 #############################################################################################
 
@@ -84,6 +84,8 @@ class User(AbstractUser):
     profile_img = models.IntegerField(default=0)
     # 마케팅 수신 동의 
     is_alarm = models.BooleanField(blank=True, null=False, default=False)
+    # FCM 서버 토큰
+    fcm_token = models.CharField(max_length=300, null=True, blank=True)
 
     # 식당 찜
     fav_res = models.ManyToManyField(Restaurant, related_name='fav_res_user', blank=True)

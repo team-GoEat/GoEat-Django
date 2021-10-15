@@ -9,3 +9,4 @@ cryptography==2.8
 django-extensions
 djangorestframework-simplejwt
 django-allauth
+firebase-admin

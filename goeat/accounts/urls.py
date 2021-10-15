@@ -107,5 +107,10 @@ urlpatterns = [
     # 알림 읽음
     path('alarm/read/', views.alarm_read, name='alarm_read'),
 
-    path('test/<str:user_id>/', views.test, name='test')
+    # FCM 토큰 저장
+    path('fcm/save/<str:user_id>/', views.save_fcm_token, name='save_fcm_token'),
+    # FCM 메시지 보내기
+    path('fcm/send/', views.send_fcm_message, name='send_fcm_message'),
+
+    path('test/<str:user_id>/', views.test, name='test'),
 ]

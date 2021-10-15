@@ -6,8 +6,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from firebase_admin import messaging
 import requests
 import json
+from collections import defaultdict
 from restaurant.models import (
     Restaurant, Menu, MenuCannotEat, MenuSecondClass, MenuFeature,
     MenuType, MenuIngredient, MenuFirstClass
@@ -16,7 +18,7 @@ from accounts.models import (
     User, Team, TeamRequest, ResService, NonMember,
     Stamp, Coupon, ResReservationRequest, UserTeamProfile,
     MenuFeaturePoint, MenuTypePoint, MenuIngredientPoint, MenuPoint,
-    Alarm
+    Alarm,
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
@@ -207,45 +209,12 @@ def test(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    print("0으로 초기화 전: ", MenuPoint.objects.filter(pk=4584)[0].points)
-
-    MenuPoint.objects.filter(team=team).update(points=0)
-
-    print("0으로 초기화 후: ", MenuPoint.objects.filter(pk=4584)[0].points)
-
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     for ingredient in menu_ingredient_data:
-        # MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
-        # MenuPoint.objects.filter(team=team).prefetch_related(
-        #     Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id)
-        # )).update(points=F('points')+ingredient.points)
         MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
-            Prefetch('menu', queryset=MenuSecondClass.objects.filter(menu_ingredients__in=[ingredient.menu_ingredient])),
-            Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id))
+            Prefetch('menu', queryset=MenuSecondClass.objects.select_related('menu_ingredients'))
             ).update(points=F('points')+ingredient.points)
 
-    # menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
-    # for menu_feature in menu_feature_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(points=F('points')+menu_feature.points)
-    
-    # menu_type_data = MenuTypePoint.objects.select_related('menu_type').filter(user=user)
-    # for menu_type in menu_type_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_type__in=[menu_type.menu_type]).update(points=F('points')+menu_type.points)
-
-    # MenuPoint.objects.filter(team=team, menu__menu_soup=0).update(points=F('points')+user.menu_soup_0_points)
-    # MenuPoint.objects.filter(team=team, menu__menu_soup=1).update(points=F('points')+user.menu_soup_1_points)
-    # MenuPoint.objects.filter(team=team, menu__menu_soup=2).update(points=F('points')+user.menu_soup_2_points)
-
-    # MenuPoint.objects.filter(team=team, menu__is_spicy=True).update(points=F('points')+user.is_spicy_1_points)
-    # MenuPoint.objects.filter(team=team, menu__is_spicy=False).update(points=F('points')+user.is_spicy_0_points)
-
-    # MenuPoint.objects.filter(team=team, menu__is_cold=True).update(points=F('points')+user.is_cold_1_points)
-    # MenuPoint.objects.filter(team=team, menu__is_cold=False).update(points=F('points')+user.is_cold_0_points)
-
-    # menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
-    # for menu_feature in menu_feature_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_feature__in=[menu_feature.menu_feature]).update(points=F('points')+menu_feature.points)
-    
     return Response(status=200)
 
 def sort_first_class(lst):
@@ -253,15 +222,19 @@ def sort_first_class(lst):
     p = int(MenuFirstClass.objects.count() // 10)
 
     # ret = []
-    # cnt_dict = {}
+    # first_class_cnt = dict()
+
     # for i in range(n):
-    #     if lst[i]['menu_first_id'] in cnt_dict:
-    #         cnt_dict[lst[i]['menu_first_id']] += 1
+    #     if int(lst[i]['menu_first_id']) in first_class_cnt:
+    #         first_class_cnt[int(lst[i]['menu_first_id'])] += 1
     #     else:
-    #         cnt_dict[lst[i]['menu_first_id']] = 1
+    #         first_class_cnt[int(lst[i]['menu_first_id'])] = 1
+    # first_class_cnt = sorted(first_class_cnt.items(), key=lambda x:-x[1])
 
-    # cnt_dict = sorted(cnt_dict.items(), key=lambda x:x[1])
-
+    # lsts = [{t[0]:[]} for t in first_class_cnt[:p]]
+    # [{39: []}, {69: []}, {3: []}, {29: []}, {43: []}, {7: []}, {86: []}, {1: []}, {79: []}, {80: []}]
+    
+    
 
     for i in range(1, n):
         up_cnt = set()
@@ -1559,3 +1532,60 @@ def cannot_eat(request, *args, **kwargs):
         return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 
+"""
+#############################################################################################
+
+                                        FCM 토큰 관련
+
+#############################################################################################
+"""
+@api_view(['POST'])
+def save_fcm_token(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    fcm_token = request.POST.get('fcm_token')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user.fcm_token = fcm_token
+    user.save()
+
+    return Response(status=200)
+
+@api_view(['POST'])
+def send_fcm_message(request, *args, **kwargs):
+    message_title = request.POST.get('message_title')
+    message_body = request.POST.get('message_body')
+
+    users = User.objects.filter(is_alarm=True)
+    n = users.count()
+    idx = 0
+
+    while idx <= n:
+        users_list = []
+        for i in range(idx, idx+500):
+            users_list.append(users[i].fcm_token)
+
+        message = messaging.MulticastMessage(
+            notification=messaging.Notification(
+                title=message_title,
+                body=message_body,
+            ),
+            apns=messaging.APNSConfig(
+                payload=messaging.APNSPayload(
+                    aps=messaging.Aps(sound='default', badge=0,)
+                ),
+            ),
+            tokens=users_list,
+        )
+
+        try:
+            response = messaging.send_multicast(message)
+        except Exception as e:
+            print("Unsent: ", e)
+        
+        idx = idx+500
+
+    return Response(status=200)
