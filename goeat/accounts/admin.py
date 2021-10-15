@@ -5,7 +5,7 @@ from .models import (
     User, Team, TeamRequest, Stamp, Coupon,
     ResReservationRequest, UserTeamProfile,
     NonMember, MenuFeaturePoint, MenuIngredientPoint,
-    MenuTypePoint, MenuPoint, Alarm
+    MenuTypePoint, MenuPoint, Alarm, UserFcmClientToken
 )
 
 class OutstandingTokenAdmin(OutstandingTokenAdmin):
@@ -30,7 +30,7 @@ class TeamRequestAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     list_filter = ['gender', 'age']
-    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm', 'fcm_token']
+    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm']
     search_fields = ['goeat_id', 'username']
 
     class Meta:
@@ -112,6 +112,13 @@ class AlarmAdmin(admin.ModelAdmin):
     class Meta:
         model = Alarm
 
+class UserFcmClientTokenAdmin(admin.ModelAdmin):
+    list_display = ['user', 'fcm_token']
+    search_fields = ['user__goeat_id', 'user__username', 'fcm_token']
+
+    class Meta:
+        model = UserFcmClientToken
+
 admin.site.unregister(OutstandingToken)
 admin.site.register(OutstandingToken, OutstandingTokenAdmin)
 admin.site.register(User, UserAdmin)
@@ -127,3 +134,4 @@ admin.site.register(MenuTypePoint, MenuTypePointAdmin)
 admin.site.register(MenuIngredientPoint, MenuIngredientPointAdmin)
 admin.site.register(MenuPoint, MenuPointAdmin)
 admin.site.register(Alarm, AlarmAdmin)
+admin.site.register(UserFcmClientToken, UserFcmClientTokenAdmin)

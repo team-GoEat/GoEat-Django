@@ -18,7 +18,7 @@ from accounts.models import (
     User, Team, TeamRequest, ResService, NonMember,
     Stamp, Coupon, ResReservationRequest, UserTeamProfile,
     MenuFeaturePoint, MenuTypePoint, MenuIngredientPoint, MenuPoint,
-    Alarm,
+    Alarm, UserFcmClientToken
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
@@ -1549,8 +1549,7 @@ def save_fcm_token(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    user.fcm_token = fcm_token
-    user.save()
+    UserFcmClientToken.objects.create(user=user, fcm_token=fcm_token)
 
     return Response(status=200)
 
@@ -1559,33 +1558,34 @@ def send_fcm_message(request, *args, **kwargs):
     message_title = request.POST.get('message_title')
     message_body = request.POST.get('message_body')
 
-    users = User.objects.filter(is_alarm=True)
-    n = users.count()
-    idx = 0
+    pass
+    # users = User.objects.filter(is_alarm=True)
+    # n = users.count()
+    # idx = 0
 
-    while idx <= n:
-        users_list = []
-        for i in range(idx, idx+500):
-            users_list.append(users[i].fcm_token)
+    # while idx <= n:
+    #     users_list = []
+    #     for i in range(idx, idx+500):
+    #         users_list.append(users[i].fcm_token)
 
-        message = messaging.MulticastMessage(
-            notification=messaging.Notification(
-                title=message_title,
-                body=message_body,
-            ),
-            apns=messaging.APNSConfig(
-                payload=messaging.APNSPayload(
-                    aps=messaging.Aps(sound='default', badge=0,)
-                ),
-            ),
-            tokens=users_list,
-        )
+    #     message = messaging.MulticastMessage(
+    #         notification=messaging.Notification(
+    #             title=message_title,
+    #             body=message_body,
+    #         ),
+    #         apns=messaging.APNSConfig(
+    #             payload=messaging.APNSPayload(
+    #                 aps=messaging.Aps(sound='default', badge=0,)
+    #             ),
+    #         ),
+    #         tokens=users_list,
+    #     )
 
-        try:
-            response = messaging.send_multicast(message)
-        except Exception as e:
-            print("Unsent: ", e)
+    #     try:
+    #         response = messaging.send_multicast(message)
+    #     except Exception as e:
+    #         print("Unsent: ", e)
         
-        idx = idx+500
+    #     idx = idx+500
 
-    return Response(status=200)
+    # return Response(status=200)
