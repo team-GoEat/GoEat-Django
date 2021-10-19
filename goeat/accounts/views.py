@@ -239,9 +239,6 @@ def sort_first_class(lst):
         if is_empty:
             break
 
-    for i in range(n):
-        print(ret[i]['menu_first_id'])
-
     # for i in range(1, n):
     #     up_cnt = set()
     #     down_cnt = set()
