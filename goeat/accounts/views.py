@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from firebase_admin import messaging
+from accounts.push_fcm import push_team_request, push_notice
 import requests
 import json
 from collections import defaultdict
@@ -219,41 +220,46 @@ def test(request, *args, **kwargs):
 
 def sort_first_class(lst):
     n = len(lst)
+    f_length = MenuFirstClass.objects.count() + 1
     p = int(MenuFirstClass.objects.count() // 10)
 
-    # ret = []
-    # first_class_cnt = dict()
+    ret = []
+    all_first_classes = [[] for _ in range(f_length)]
+    for i in range(n):
+        all_first_classes[int(lst[i]['menu_first_id'])].append(lst[i])
 
-    # for i in range(n):
-    #     if int(lst[i]['menu_first_id']) in first_class_cnt:
-    #         first_class_cnt[int(lst[i]['menu_first_id'])] += 1
-    #     else:
-    #         first_class_cnt[int(lst[i]['menu_first_id'])] = 1
-    # first_class_cnt = sorted(first_class_cnt.items(), key=lambda x:-x[1])
-
-    # lsts = [{t[0]:[]} for t in first_class_cnt[:p]]
-    # [{39: []}, {69: []}, {3: []}, {29: []}, {43: []}, {7: []}, {86: []}, {1: []}, {79: []}, {80: []}]
-    
-    
-
-    for i in range(1, n):
-        up_cnt = set()
-        down_cnt = set()
-        for j in range(i, -1, -1):
-            if lst[i]['menu_first_id'] != lst[j]['menu_first_id']:
-                up_cnt.add(lst[j]['menu_first_id'])
-                if len(up_cnt) >= p:
-                    break
+    while all_first_classes:
+        is_empty = True
+        for i in range(f_length):
+            if not all_first_classes[i]:
+                continue
             else:
-                for k in range(i+1, n):
-                    if lst[i]['menu_first_id'] != lst[k]['menu_first_id']:
-                        down_cnt.add(lst[k]['menu_first_id'])
-                        if len(down_cnt) >= p:
-                            lst.insert(k, lst.pop(i))
-                            break
+                is_empty = False
+                ret.append(all_first_classes[i].pop(0))
+        if is_empty:
             break
 
-    return lst
+    for i in range(n):
+        print(ret[i]['menu_first_id'])
+
+    # for i in range(1, n):
+    #     up_cnt = set()
+    #     down_cnt = set()
+    #     for j in range(i, -1, -1):
+    #         if lst[i]['menu_first_id'] != lst[j]['menu_first_id']:
+    #             up_cnt.add(lst[j]['menu_first_id'])
+    #             if len(up_cnt) >= p:
+    #                 break
+    #         else:
+    #             for k in range(i+1, n):
+    #                 if lst[i]['menu_first_id'] != lst[k]['menu_first_id']:
+    #                     down_cnt.add(lst[k]['menu_first_id'])
+    #                     if len(down_cnt) >= p:
+    #                         lst.insert(k, lst.pop(i))
+    #                         break
+    #         break
+
+    return ret
 
 # 메뉴 점수 계산
 def calculate_mp(user, team, lst):
@@ -926,28 +932,41 @@ def team_request(request, *args, **kwargs):
         return JsonResponse({'msg': '팀원이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     try:
-        team = Team.objects.get(user=sender)
-    except Team.DoesNotExist:
-        team = Team(user=sender)
-        team.save()
+        receiver_tokens = UserFcmClientToken.objects.filter(user=receiver, is_active=True)
+    except:
+        return JsonResponse({'msg': 'FCM 토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     try:
-        team = Team.objects.get(user=receiver)
-    except Team.DoesNotExist:
-        team = Team(user=receiver)
-        team.save()
+        team = Team.objects.get(user=sender)
+    except:
+        return JsonResponse({'msg': '팀이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    # 친구 요청을 다시 보내는 경우
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
+        # 친구 요청을 보내고 받는이가 아직 아무것도 안했을 경우
         if teamrequest.is_active is True:
-            return JsonResponse({'msg': '팀원 요청을 이미 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+            return JsonResponse({'msg': 1}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        # 친구 요청을 보내고 받는이가 이미 수락이나 거절을 했을 경우
         else:
-            Alarm.objects.create(sender=sender, receiver=receiver, message=1)
-            return JsonResponse({'msg': '팀원이 거절하거나 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+            # 이미 친구인 경우
+            if team.is_team(receiver):
+                return JsonResponse({'msg': 2}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            # 한번 거절했을 경우
+            else:
+                teamrequest.is_active = True
+                teamrequest.save()
+                Alarm.objects.create(sender=sender, receiver=receiver, message=1)
+                for token in receiver_tokens:
+                    push_team_request(token.fcm_token, '친구 요청이 왔어요!', '수락을 눌러주세요!')
+                return JsonResponse({'msg': '친구 요청을 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    # 친구 요청을 처음 보내는 경우
     except TeamRequest.DoesNotExist:
         TeamRequest.objects.create(sender=sender, receiver=receiver)
         Alarm.objects.create(sender=sender, receiver=receiver, message=1)
-        return JsonResponse({'msg': '팀원 요청을 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        for token in receiver_tokens:
+            push_team_request(token.fcm_token, '친구 요청이 왔어요!', '수락을 눌러주세요!')
+        return JsonResponse({'msg': '친구 요청을 보냈습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
 # POST 팀 승낙
 @api_view(['POST'])
@@ -965,9 +984,17 @@ def team_accept(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     try:
+        sender_tokens = UserFcmClientToken.objects.filter(user=sender, is_active=True)
+    except:
+        return JsonResponse({'msg': 'FCM 토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         if teamrequest.is_active:
             teamrequest.accept()
+            Alarm.objects.create(sender=sender, receiver=receiver, message=2)
+            for token in sender_tokens:
+                push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '확인해주세요!')
             return JsonResponse({'msg': '팀원 요청을 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
         else:
             return JsonResponse({'msg': '팀원 요청이 이미 완료되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -990,8 +1017,17 @@ def team_reject(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     try:
+        sender_tokens = UserFcmClientToken.objects.filter(user=sender, is_active=True)
+    except:
+        return JsonResponse({'msg': 'FCM 토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         teamrequest.decline()
+        Alarm.objects.create(sender=sender, receiver=receiver, message=3)
+        for token in sender_tokens:
+            push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '확인해주세요!')
+        teamrequest.delete()
         return JsonResponse({'msg': '팀원 요청을 거절하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except TeamRequest.DoesNotExist:
         return JsonResponse({'msg': '팀원 요청을 거절할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
@@ -1558,34 +1594,20 @@ def send_fcm_message(request, *args, **kwargs):
     message_title = request.POST.get('message_title')
     message_body = request.POST.get('message_body')
 
-    pass
-    # users = User.objects.filter(is_alarm=True)
-    # n = users.count()
-    # idx = 0
+    tokens = UserFcmClientToken.objects.filter(is_active=True)
+    n = tokens.count()
+    idx = 0
 
-    # while idx <= n:
-    #     users_list = []
-    #     for i in range(idx, idx+500):
-    #         users_list.append(users[i].fcm_token)
-
-    #     message = messaging.MulticastMessage(
-    #         notification=messaging.Notification(
-    #             title=message_title,
-    #             body=message_body,
-    #         ),
-    #         apns=messaging.APNSConfig(
-    #             payload=messaging.APNSPayload(
-    #                 aps=messaging.Aps(sound='default', badge=0,)
-    #             ),
-    #         ),
-    #         tokens=users_list,
-    #     )
-
-    #     try:
-    #         response = messaging.send_multicast(message)
-    #     except Exception as e:
-    #         print("Unsent: ", e)
+    while idx <= n:
+        tokens_list = []
+        for i in range(idx, idx+500):
+            try:
+                tokens_list.append(tokens[i].fcm_token)
+            except IndexError:
+                break
         
-    #     idx = idx+500
+        push_notice(tokens_list, message_title, message_body)
+        
+        idx = idx+500
 
-    # return Response(status=200)
+    return Response(status=200)

@@ -296,7 +296,7 @@ class TeamRequest(models.Model):
                 self.is_active = False
                 self.save()
     
-    # 팀원 등록 요청 거철
+    # 팀원 등록 요청 거절
     def decline(self):
         self.is_active = False
         self.save()
@@ -446,10 +446,15 @@ class ResReservationRequest(models.Model):
 #############################################################################################
 """
 class Alarm(models.Model):
+    # 보내는이
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_sender', null=True)
+    # 받는이
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_receiver', null=True)
+    # 프론트에서 나올 메시지 (1=친구추가)
     message = models.IntegerField(default=0)
+    # 읽음 여부
     is_read = models.BooleanField(default=False)
+    # 시간
     sent_time = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
