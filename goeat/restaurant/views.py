@@ -112,7 +112,6 @@ def taste_menu(request, *args, **kwargs):
     while len(data) < 22:
         menu_second_cnt = all_menu.count() - 1
         index = random.randint(0, menu_second_cnt)
-        print("추가 메뉴 2차군집 개수: ", menu_second_cnt)
         if index in idx_data:
             index += 1
             if index >= menu_second_cnt:
@@ -120,10 +119,8 @@ def taste_menu(request, *args, **kwargs):
 
         idx_data.append(index)
         menu_second = all_menu.all()[index]
-        print("추가 메뉴: ", menu_second)
         data.append(menu_to_json(menu_second))
 
-    print("len(data): ", len(data))
     return Response(data, status=200)
 
 

@@ -10,6 +10,7 @@ from firebase_admin import messaging
 from accounts.push_fcm import push_team_request, push_notice
 import requests
 import json
+import logging
 from collections import defaultdict
 from restaurant.models import (
     Restaurant, Menu, MenuCannotEat, MenuSecondClass, MenuFeature,
@@ -29,6 +30,7 @@ from accounts.serializers import (
     ChangePasswordSerializer, TeamRequestSerializer, AlarmSerializer,
 )
 
+logger = logging.getLogger('collection')
 
 """
 #############################################################################################
@@ -205,16 +207,18 @@ def test(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    try:
-        team = Team.objects.get(user=user)
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    # a = 3/0
 
-    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    for ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
-            Prefetch('menu', queryset=MenuSecondClass.objects.select_related('menu_ingredients'))
-            ).update(points=F('points')+ingredient.points)
+    # try:
+    #     team = Team.objects.get(user=user)
+    # except Team.DoesNotExist:
+    #     return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    # for ingredient in menu_ingredient_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
+    #         Prefetch('menu', queryset=MenuSecondClass.objects.select_related('menu_ingredients'))
+    #         ).update(points=F('points')+ingredient.points)
 
     return Response(status=200)
 
@@ -878,6 +882,7 @@ def change_with(request, *args, **kwargs):
         rank_lst.append([teammate, team_profile.rank])
 
     MenuPoint.objects.filter(team=team).update(points=0)
+    logger.info('%-20s with %20s' % (user, teammate))
     calculate_mp(user=user, team=team, lst=rank_lst)
         
     return JsonResponse({'msg': '위드잇 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -989,7 +994,7 @@ def team_accept(request, *args, **kwargs):
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         if teamrequest.is_active:
             teamrequest.accept()
-            Alarm.objects.create(sender=sender, receiver=receiver, message=2)
+            Alarm.objects.create(sender=receiver, receiver=sender, message=2)
             for token in sender_tokens:
                 push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '확인해주세요!')
             return JsonResponse({'msg': '팀원 요청을 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -1021,7 +1026,7 @@ def team_reject(request, *args, **kwargs):
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         teamrequest.decline()
-        Alarm.objects.create(sender=sender, receiver=receiver, message=3)
+        Alarm.objects.create(sender=receiver, receiver=sender, message=3)
         for token in sender_tokens:
             push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '확인해주세요!')
         teamrequest.delete()
@@ -1339,6 +1344,7 @@ def menu_like(request, *args, **kwargs):
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_like.add(menu)
+        logger.info('%-20s 좋아요 -> %-5s %s' % (user, menu_id, menu))
         return JsonResponse({'msg': '좋아하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
     # PUT - 사용자의 좋아한 메뉴 삭제
@@ -1388,6 +1394,7 @@ def menu_hate(request, *args, **kwargs):
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
         user.menu_hate.add(menu)
+        logger.info('%-20s 싫어요 -> %-5s %s' % (user, menu_id, menu))
         return JsonResponse({'msg': '싫어하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     
     # PUT - 사용자의 좋아한 메뉴 삭제
