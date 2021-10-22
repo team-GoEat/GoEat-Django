@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db.models import F, Q, Prefetch
+from django.db import transaction
 from rest_framework import status, viewsets, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -198,27 +199,31 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@api_view(['POST'])
+@api_view(['GET'])
 def test(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
+    user_id = 'JPED'
+    teammate_id = ''
 
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # a = 3/0
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # try:
-    #     team = Team.objects.get(user=user)
-    # except Team.DoesNotExist:
-    #     return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    for ingredient in menu_ingredient_data:
+        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
 
-    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user).values('menu_ingredient', 'points')
     # for ingredient in menu_ingredient_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
-    #         Prefetch('menu', queryset=MenuSecondClass.objects.select_related('menu_ingredients'))
-    #         ).update(points=F('points')+ingredient.points)
+    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__pk__in=[ingredient['menu_ingredient']]).update(
+    #         points=F('points')+ingredient['points'])
+
+    # calculate_mp(user, team, [])
 
     return Response(status=200)
 
@@ -265,19 +270,16 @@ def sort_first_class(lst):
 # 메뉴 점수 계산
 def calculate_mp(user, team, lst):
 
-    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(
-    #     user=user).prefetch_related(
-    #         Prefetch('menu_ingredient__menu', queryset=MenuSecondClass.objects.all()),
-    #         Prefetch('menu_ingredient__menu__menu_point', queryset=MenuPoint.objects.filter(team=team)))
-    # for menu_ingredient in menu_ingredient_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[menu_ingredient.menu_ingredient]).update(points=F('points')+menu_ingredient.points)
-    
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    for ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
-            Prefetch('menu', queryset=MenuSecondClass.objects.filter(menu_ingredients__in=[ingredient.menu_ingredient])),
-            Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id))
-            ).update(points=F('points')+ingredient.points)
+    for ingredient in menu_ingredient_data.iterator():
+        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    # for ingredient in menu_ingredient_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).prefetch_related(
+    #         Prefetch('menu', queryset=MenuSecondClass.objects.filter(menu_ingredients__in=[ingredient.menu_ingredient])),
+    #         Prefetch('menu__menu_ingredients', queryset=MenuIngredient.objects.filter(id=ingredient.menu_ingredient.id))
+    #         ).update(points=F('points')+ingredient.points)
 
     menu_feature_data = MenuFeaturePoint.objects.select_related('menu_feature').filter(user=user)
     for menu_feature in menu_feature_data:

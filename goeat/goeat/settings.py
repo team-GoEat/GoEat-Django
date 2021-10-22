@@ -239,6 +239,13 @@ LOGGING = {
             'filename': f'logs/collection/{str_now}.log',
             'formatter': 'verbose',
         },
+        'sql_test_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filters': ['require_debug_true'],
+            'filename': BASE_DIR /'logs/sql_test.log',
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
@@ -253,7 +260,12 @@ LOGGING = {
         'collection': {
             'handlers': ['console', 'collect_file'],
             'level': 'INFO',
-        }
+        },
+        'django.db.backends': {
+            'handlers': ['sql_test_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }
 

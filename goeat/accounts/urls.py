@@ -112,5 +112,5 @@ urlpatterns = [
     # FCM 메시지 보내기
     path('fcm/send/', views.send_fcm_message, name='send_fcm_message'),
 
-    path('test/<str:user_id>/', views.test, name='test'),
+    path('test/', views.test, name='test'),
 ]
