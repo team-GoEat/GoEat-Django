@@ -214,9 +214,10 @@ def test(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    for ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+    with transaction.atomic():
+        menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+        for ingredient in menu_ingredient_data:
+            MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
 
     # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user).values('menu_ingredient', 'points')
     # for ingredient in menu_ingredient_data:
@@ -270,9 +271,10 @@ def sort_first_class(lst):
 # 메뉴 점수 계산
 def calculate_mp(user, team, lst):
 
-    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    for ingredient in menu_ingredient_data:
-        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+    with transaction.atomic():
+        menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+        for ingredient in menu_ingredient_data:
+            MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
 
     # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     # for ingredient in menu_ingredient_data:

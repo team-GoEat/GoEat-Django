@@ -8,4 +8,4 @@ killall -9 uwsgi
 echo "############# KILL OK #############"
 uwsgi --ini /usr/local/share/GoEat-Docker/goeat/goeat_uwsgi.ini
 echo "############# START OK #############"
-tail -111f /usr/local/share/GoEat-Docker/goeat/logs/uwsgi.log
+tail -111f /usr/local/share/GoEat-Docker/goeat/logs/goeat_error.log
