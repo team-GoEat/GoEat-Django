@@ -285,10 +285,9 @@ def sort_first_class(lst):
 # 메뉴 점수 계산
 def calculate_mp(user, team, lst):
 
-    with transaction.atomic():
-        menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-        for ingredient in menu_ingredient_data:
-            MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    for ingredient in menu_ingredient_data:
+        MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
 
     # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     # for ingredient in menu_ingredient_data:
