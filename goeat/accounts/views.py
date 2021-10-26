@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.db.models import F, Q, Prefetch
+from django.db.models import F, Q, Prefetch, Sum
 from django.db import transaction
 from rest_framework import status, viewsets, generics, permissions
 from rest_framework.views import APIView
@@ -75,7 +75,7 @@ def check_pw_userphone(request, *args, **kwargs):
 # 비밀번호 재설정
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (permissions.IsAuthenticated, )
+    # permission_classes = (permissions.IsAuthenticated, )
     serializer_class = ChangePasswordSerializer
 
 # 로그인
@@ -214,17 +214,31 @@ def test(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    with transaction.atomic():
-        menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-        for ingredient in menu_ingredient_data:
-            MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
-
-    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user).values('menu_ingredient', 'points')
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    # mp_list = []
     # for ingredient in menu_ingredient_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__pk__in=[ingredient['menu_ingredient']]).update(
-    #         points=F('points')+ingredient['points'])
+    #     # MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+    #     mp_list.append([MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]), ingredient.points])
+    
+    # for queryset in mp_list:
+    #     points = queryset[1]
+    #     for mp in queryset[0]:
+    #         mp.points += points
 
-    # calculate_mp(user, team, [])
+    # update_list = [mp for mp in MenuPoint.objects.select_related('menu').filter(team=team).prefetch_related('menu__menu_ingredients')]
+    # for mp in update_list:
+    #     ing_list = mp.menu.menu_ingredients.all()
+
+        # sum_points = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list).aggregate(Sum('points'))
+        # sum_points = MenuIngredientPoint.objects.filter(user=user).prefetch_related().aggregate(Sum('points'))
+        # mp.points += sum_points['points__sum']
+    # MenuPoint.objects.bulk_update(update_list, ['points'])
+
+    update_list = [mp for mp in MenuPoint.objects.select_related('menu').filter(team=team)]
+    for mp in update_list:
+        ing_list = mp.menu.menu_ingredients.all()
+        sum_points = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list).aggregate(Sum('points'))
+        # mp = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list)
 
     return Response(status=200)
 
@@ -998,9 +1012,9 @@ def team_accept(request, *args, **kwargs):
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         if teamrequest.is_active:
             teamrequest.accept()
-            Alarm.objects.create(sender=receiver, receiver=sender, message=2)
-            for token in sender_tokens:
-                push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '확인해주세요!')
+            # Alarm.objects.create(sender=receiver, receiver=sender, message=2)
+            # for token in sender_tokens:
+            #     push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '확인해주세요!')
             return JsonResponse({'msg': '팀원 요청을 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
         else:
             return JsonResponse({'msg': '팀원 요청이 이미 완료되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -1030,9 +1044,9 @@ def team_reject(request, *args, **kwargs):
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         teamrequest.decline()
-        Alarm.objects.create(sender=receiver, receiver=sender, message=3)
-        for token in sender_tokens:
-            push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '확인해주세요!')
+        # Alarm.objects.create(sender=receiver, receiver=sender, message=3)
+        # for token in sender_tokens:
+        #     push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '확인해주세요!')
         teamrequest.delete()
         return JsonResponse({'msg': '팀원 요청을 거절하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except TeamRequest.DoesNotExist:

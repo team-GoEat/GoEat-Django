@@ -58,6 +58,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         all_menu = MenuSecondClass.objects.all()
         all_mp_list = []
         for menu in all_menu:
+            if menu.second_class_name == '추천안함':
+                continue
             all_mp_list.append(MenuPoint(team=team, menu=menu))
         MenuPoint.objects.bulk_create(all_mp_list)
 

@@ -25,17 +25,26 @@ class MenuFeaturePoint(models.Model):
     menu_feature = models.ForeignKey(MenuFeature, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
 
+    def __str__(self):
+        return '{} {}'.format(self.menu_feature, self.points)
+
 # MenuType 점수
 class MenuTypePoint(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     menu_type = models.ForeignKey(MenuType, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
 
+    def __str__(self):
+        return '{} {}'.format(self.menu_type, self.points)
+
 # MenuIngredient 점수
 class MenuIngredientPoint(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     menu_ingredient = models.ForeignKey(MenuIngredient, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+
+    def __str__(self):
+        return '{} {}'.format(self.menu_ingredient, self.points)
 
 
 """
