@@ -199,6 +199,7 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
+@transaction.atomic
 @api_view(['GET'])
 def test(request, *args, **kwargs):
     user_id = 'JPED'
@@ -234,11 +235,11 @@ def test(request, *args, **kwargs):
         # mp.points += sum_points['points__sum']
     # MenuPoint.objects.bulk_update(update_list, ['points'])
 
-    update_list = [mp for mp in MenuPoint.objects.select_related('menu').filter(team=team)]
-    for mp in update_list:
-        ing_list = mp.menu.menu_ingredients.all()
-        sum_points = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list).aggregate(Sum('points'))
-        # mp = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list)
+    # with transaction.atomic():
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    for ingredient in menu_ingredient_data:
+        mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+        print(mp)
 
     return Response(status=200)
 
@@ -283,6 +284,7 @@ def sort_first_class(lst):
     return ret
 
 # 메뉴 점수 계산
+@transaction.atomic
 def calculate_mp(user, team, lst):
 
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
@@ -322,10 +324,8 @@ def calculate_mp(user, team, lst):
                 rank = 1
 
             menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-            for menu_ingredient in menu_ingredient_data:
-                MenuPoint.objects.filter(team=team).prefetch_related(
-                    Prefetch('menu__menu_ingredient', queryset=MenuIngredient.objects.filter(id=menu_ingredient.menu_ingredient.id)
-                )).update(points=F('points')+rank*menu_ingredient.points)
+            for ingredient in menu_ingredient_data:
+                MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
 
             menu_feature_data = MenuFeaturePoint.objects.filter(user=teammate)
             for menu_feature in menu_feature_data:
@@ -852,6 +852,7 @@ def change_fav(request, *args, **kwargs):
     return JsonResponse({'msg': '즐겨찾기 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 팀원 위드잇 설정
+@transaction.atomic
 @api_view(['PUT'])
 def change_with(request, *args, **kwargs):
     user_id = kwargs.get("user_id")
