@@ -236,7 +236,7 @@ LOGGING = {
             'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': f'logs/collection/{str_now}.log',
+            'filename': f'logs/collection/data.log',
             'formatter': 'verbose',
         },
         'sql_test_file': {

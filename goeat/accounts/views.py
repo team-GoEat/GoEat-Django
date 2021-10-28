@@ -235,7 +235,6 @@ def test(request, *args, **kwargs):
         # mp.points += sum_points['points__sum']
     # MenuPoint.objects.bulk_update(update_list, ['points'])
 
-    # with transaction.atomic():
     menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     for ingredient in menu_ingredient_data:
         mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
