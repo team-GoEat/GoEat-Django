@@ -491,7 +491,7 @@ def search_res(request, *args, **kwargs):
     keyword = kwargs.get('keyword')
 
     try:
-        restaurant = Restaurant.objects.filter(res_name__contains=keyword)
+        restaurant = Restaurant.objects.filter(res_search_name__contains=keyword)
         serializer = SimpleRestaurantSerializer(restaurant, many=True)
         return Response(serializer.data, status=200)
     except Restaurant.DoesNotExist:

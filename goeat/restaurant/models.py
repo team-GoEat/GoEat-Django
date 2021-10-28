@@ -115,6 +115,8 @@ class Restaurant(models.Model):
     res_id = models.CharField(max_length=30, blank=True)
     # 식당 이름
     res_name = models.CharField(max_length=30)
+    # 식당 검색용 이름
+    res_search_name = models.CharField(max_length=30, default='')
     # 식당 카테고리
     res_type = models.ManyToManyField(MenuType, blank=True, related_name='restaurant')
     # 가맹 여부
