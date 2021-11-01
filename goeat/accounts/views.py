@@ -1104,18 +1104,17 @@ def create_nonmember(request, *args, **kwargs):
     team.add_nonmember(nonmember)
 
     if request.method == 'POST':
-        for c in cannoteat_string:
-            for i in range(len(cannoteat_string)):
-                if cannoteat_string[i] == '0':
-                    continue
-            else:
-                mce_id = i
-                try:
-                    mce = MenuCannotEat.objects.get(pk = mce_id)
-                except MenuCannotEat.DoesNotExist:
-                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-                
-                nonmember.menu_cannoteat.add(mce)
+        for i in range(len(cannoteat_string)):
+            if cannoteat_string[i] == '0':
+                continue
+        else:
+            mce_id = i
+            try:
+                mce = MenuCannotEat.objects.get(pk = mce_id)
+            except MenuCannotEat.DoesNotExist:
+                return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            
+            nonmember.menu_cannoteat.add(mce)
 
     return JsonResponse({'msg': '비회원을 생성하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
