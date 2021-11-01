@@ -199,21 +199,20 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@transaction.atomic
 @api_view(['GET'])
 def test(request, *args, **kwargs):
-    # user_id = 'JPED'
-    # teammate_id = ''
+    user_id = 'JPED'
+    teammate_id = ''
 
-    # try:
-    #     user = User.objects.get(goeat_id=user_id)
-    # except User.DoesNotExist:
-    #     return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # try:
-    #     team = Team.objects.get(user=user)
-    # except Team.DoesNotExist:
-    #     return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
     # mp_list = []
@@ -235,13 +234,16 @@ def test(request, *args, **kwargs):
         # mp.points += sum_points['points__sum']
     # MenuPoint.objects.bulk_update(update_list, ['points'])
 
-    all_res = Restaurant.objects.all()
-    for res in all_res:
-        res_name = res.res_name
-        res_search_name = res_name.replace(" ", "")
-        res.res_search_name = res_search_name
-        res.save()
-        print(res.res_search_name)
+    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
+    # for ingredient in menu_ingredient_data:
+    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
+
+    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user).values('menu_ingredient_id', 'points')
+    # mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient['menu_ingredient_id'] for ingredient in menu_ingredient_data])
+    for ingredient in menu_ingredient_data:
+        mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__id__in=[ingredient['menu_ingredient_id']])
+        for m in mp:
+            m.points += ingredient['points']
 
     return Response(status=200)
 
@@ -1103,10 +1105,11 @@ def create_nonmember(request, *args, **kwargs):
 
     if request.method == 'POST':
         for c in cannoteat_string:
-            if c == '0':
-                continue
+            for i in range(len(cannoteat_string)):
+                if cannoteat_string[i] == '0':
+                    continue
             else:
-                mce_id = int(c)
+                mce_id = i
                 try:
                     mce = MenuCannotEat.objects.get(pk = mce_id)
                 except MenuCannotEat.DoesNotExist:
