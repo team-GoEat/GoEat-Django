@@ -417,7 +417,7 @@ def get_restaurant_by_menuid(request, *args, **kwargs):
 
     data = []
 
-    menu = Menu.objects.filter(menu_second_name__pk = menu_id)
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
     res_id_list = []
 
     for m in menu:
@@ -453,7 +453,7 @@ def get_restaurant_by_menuid_notlogin(request, *args, **kwargs):
 
     data = []
 
-    menu = Menu.objects.filter(menu_second_name__pk = menu_id)
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
     res_id_list = []
 
     for m in menu:
