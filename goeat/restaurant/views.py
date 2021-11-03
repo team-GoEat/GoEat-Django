@@ -372,7 +372,7 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
 
     return Response(data, status=200)
 
-# 메뉴 카테고리 ID로 음식점 목록
+# 메뉴 카테고리 ID로 음식점 목록 (비회원)
 @api_view(['GET'])
 def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
@@ -418,11 +418,16 @@ def get_restaurant_by_menuid(request, *args, **kwargs):
     data = []
 
     menu = Menu.objects.filter(menu_second_name__pk = menu_id)
-    
+    res_id_list = []
+
     for m in menu:
         res = Restaurant.objects.filter(res_menu=m)
-        
         for r in res:
+            if r.id in res_id_list:
+                continue
+            else:
+                res_id_list.append(r.id)
+            
             temp = {
                 'menu_name': m.menu_name,
                 'menu_price': m.menu_price,
@@ -438,7 +443,7 @@ def get_restaurant_by_menuid(request, *args, **kwargs):
                 if fav_res.id == r.id:
                     temp['is_fav']=True
             data.append(temp)
-
+        
     return Response(data, status=200)
 
 # 메뉴 ID로 음식점 검색 (비회원)
@@ -449,22 +454,27 @@ def get_restaurant_by_menuid_notlogin(request, *args, **kwargs):
     data = []
 
     menu = Menu.objects.filter(menu_second_name__pk = menu_id)
-    
+    res_id_list = []
+
     for m in menu:
         res = Restaurant.objects.filter(res_menu=m)
         
         for r in res:
-            temp = {
-                'menu_name': m.menu_name,
-                'menu_price': m.menu_price,
-                'res_id': r.id,
-                'res_name': r.res_name,
-                'res_address': r.res_address,
-                'x_cor': r.x_cor,
-                'y_cor': r.y_cor,
-                'is_fav': False
-            }
-            data.append(temp)
+            if r.id in res_id_list:
+                continue
+            else:
+                res_id_list.append(r.id)
+                temp = {
+                    'menu_name': m.menu_name,
+                    'menu_price': m.menu_price,
+                    'res_id': r.id,
+                    'res_name': r.res_name,
+                    'res_address': r.res_address,
+                    'x_cor': r.x_cor,
+                    'y_cor': r.y_cor,
+                    'is_fav': False
+                }
+                data.append(temp)
 
     return Response(data, status=200)
 
