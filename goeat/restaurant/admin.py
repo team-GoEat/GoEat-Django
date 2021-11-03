@@ -69,7 +69,7 @@ class MenuFirstClassAdmin(admin.ModelAdmin):
 
 # 메뉴 2차 군집 어드민
 class MenuSecondClassAdmin(admin.ModelAdmin):
-    list_filter = ['menu_feature', 'menu_type']
+    list_filter = ['menu_feature', 'menu_type', 'menu_first_name']
     list_display = ['id', 'second_class_name', 'menu_type', 'menu_first_name', 'menu_soup', 'is_spicy', 'is_cold', 'is_favor', 'short_menu_image']
     search_fields = ['second_class_name']
 
