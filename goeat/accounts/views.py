@@ -1610,7 +1610,10 @@ def save_fcm_token(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    UserFcmClientToken.objects.create(user=user, fcm_token=fcm_token)
+    token, created = UserFcmClientToken.objects.get_or_create(user=user, fcm_token=fcm_token)
+    
+    if not created:
+        return JsonResponse({'msg': '중복된 토큰입니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     return Response(status=200)
 
