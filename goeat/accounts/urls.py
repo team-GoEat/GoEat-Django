@@ -111,6 +111,8 @@ urlpatterns = [
     path('fcm/save/<str:user_id>/', views.save_fcm_token, name='save_fcm_token'),
     # FCM 메시지 보내기
     path('fcm/send/', views.send_fcm_message, name='send_fcm_message'),
+    # FCM 토큰 삭제
+    path('fcm/delete/<str:user_id>/', views.delete_fcm_token, name='delete_fcm_token'),
 
     path('test/', views.test, name='test'),
 ]

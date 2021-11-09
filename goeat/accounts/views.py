@@ -1639,3 +1639,22 @@ def send_fcm_message(request, *args, **kwargs):
         idx = idx+500
 
     return Response(status=200)
+
+@api_view(['DELETE'])
+def delete_fcm_token(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    fcm_token = request.POST.get('fcm_token')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        token = UserFcmClientToken.objects.get(user=user, fcm_token=fcm_token)
+    except:
+        return JsonResponse({'msg': '토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    token.delete()
+    
+    return Response(status=200)
