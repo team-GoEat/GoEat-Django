@@ -230,14 +230,15 @@ LOGGING = {
             'filename': BASE_DIR /'logs/goeat_error.log',
             'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
-            'formatter': 'verbose',
+            'formatter': 'verbose', 
         },
         'collect_file': {
             'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': f'logs/collection/data.log',
+            'filename': BASE_DIR/'logs/collection/data.log',
             'formatter': 'verbose',
+            'when': 'midnight',
         },
         'sql_test_file': {
             'level': 'DEBUG',
