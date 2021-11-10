@@ -1,0 +1,197 @@
+2021-10-20 12:01:02,817 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:01:17,460 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-20 12:01:19,493 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:02:01,640 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-20 12:02:03,680 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:02:30,749 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-20 12:02:32,664 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:02:48,579 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-20 12:02:50,542 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:56:34,343 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 12:56:36,365 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 12:57:31,933 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 12:57:33,930 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:00:26,352 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:00:28,418 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:02:44,310 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:02:46,408 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:02:48,704 [ERROR] django.request: Internal Server Error: /accounts/menulike/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 1346, in menu_like
+    logger.info('{:<10} ¡¡æ∆ø‰ -> {} {}'.format(user, menu_id, menu))
+TypeError: unsupported format string passed to User.__format__
+2021-10-20 13:03:01,683 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:03:03,699 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:03:05,974 [ERROR] django.request: Internal Server Error: /accounts/menulike/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 1346, in menu_like
+    logger.info('{0:<10} ¡¡æ∆ø‰ -> {} {}'.format(user, menu_id, menu))
+TypeError: unsupported format string passed to User.__format__
+2021-10-20 13:03:15,529 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:03:17,583 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:03:21,279 [ERROR] django.request: Internal Server Error: /accounts/menulike/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 1346, in menu_like
+    logger.info('{0:<10} ¡¡æ∆ø‰ -> {1} {2}'.format(user, menu_id, menu))
+TypeError: unsupported format string passed to User.__format__
+2021-10-20 13:04:13,718 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:04:15,705 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:04:19,000 [ERROR] django.request: Internal Server Error: /accounts/menulike/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 1346, in menu_like
+    logger.info('{0:<20} ¡¡æ∆ø‰ -> {1} {2}'.format(user, menu_id, menu))
+TypeError: unsupported format string passed to User.__format__
+2021-10-20 13:11:13,711 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:11:15,804 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:11:18,272 [ERROR] django.request: Internal Server Error: /accounts/menulike/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 1346, in menu_like
+    logger.info('%s ¡¡æ∆ø‰ -> %d %s' % (user, menu_id, menu))
+TypeError: %d format: a number is required, not str
+2021-10-20 13:11:30,914 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:11:32,989 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:12:25,980 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:12:28,053 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:12:56,795 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:12:58,841 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:14:26,814 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:14:28,904 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:16:16,356 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:16:18,400 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:17:12,294 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:17:14,261 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:41:47,507 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:41:49,435 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 13:43:55,357 [WARNING] django.request: Method Not Allowed: /accounts/team/with/JPED/
+2021-10-20 13:45:08,240 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 13:45:10,310 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 14:35:37,215 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 14:35:39,368 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 14:35:41,590 [ERROR] django.request: Internal Server Error: /accounts/team/with/JPED/
+Traceback (most recent call last):
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\jyang\AppData\Local\Programs\Python\Python37\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py", line 885, in change_with
+    logger.info('%-20s with %20s' % (user, lst))
+NameError: name 'lst' is not defined
+2021-10-20 14:35:49,845 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 14:35:51,898 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 14:36:15,963 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\accounts\views.py changed, reloading.
+2021-10-20 14:36:17,927 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 16:17:35,653 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-20 16:17:43,623 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-25 10:39:36,463 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-25 10:39:43,527 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-10-25 10:39:43,529 [WARNING] django.request: Bad Request: /admin/
+2021-10-25 10:39:55,835 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-10-26 16:45:27,828 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-10-26 16:45:30,192 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-10-26 16:45:30,193 [WARNING] django.request: Bad Request: /accounts/test/
+2021-10-26 16:45:36,997 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-11-03 10:21:41,865 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
