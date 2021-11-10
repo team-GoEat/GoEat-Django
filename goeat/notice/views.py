@@ -12,7 +12,7 @@ from .models import Notice, faq, OpenSourceLicense
 #############################################################################################
 """
 # 기본적인 공지 REST API
-class NoticeView(viewsets.ModelViewSet):
+class NoticeView(viewsets.ReadOnlyModelViewSet):
     queryset = Notice.objects.filter(active=True).order_by('id')
     serializer_class = NoticeSerializer
 
