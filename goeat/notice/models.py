@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import truncatechars
 
 """
 #############################################################################################
@@ -20,6 +21,10 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.notice_title
+    
+    @property
+    def short_notice_content(self):
+        return truncatechars(self.notice_content, 40)
 
 # FAQ
 class faq(models.Model):
