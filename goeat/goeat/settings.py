@@ -187,9 +187,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-now = datetime.now()
-str_now = now.strftime('%Y-%m-%d')
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
