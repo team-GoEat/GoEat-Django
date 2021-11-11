@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Notice, faq, OpenSourceLicense
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'notice_title', 'notice_content', 'notice_date']
+    list_display = ['id', 'notice_title', 'short_notice_content', 'notice_date']
     search_fields = ['notice_title']
 
     class Meta:
