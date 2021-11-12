@@ -199,51 +199,35 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@api_view(['GET'])
+@api_view(['POST'])
 def test(request, *args, **kwargs):
-    user_id = 'JPED'
-    teammate_id = ''
+    user_id = 'MFNJ'
 
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    try:
-        team = Team.objects.get(user=user)
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    message_title = request.POST.get('message_title')
+    message_body = request.POST.get('message_body')
 
-    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    # mp_list = []
-    # for ingredient in menu_ingredient_data:
-    #     # MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
-    #     mp_list.append([MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]), ingredient.points])
+    tokens = UserFcmClientToken.objects.filter(is_active=True, user=user)
+    print(tokens)
     
-    # for queryset in mp_list:
-    #     points = queryset[1]
-    #     for mp in queryset[0]:
-    #         mp.points += points
+    n = tokens.count()
+    idx = 0
 
-    # update_list = [mp for mp in MenuPoint.objects.select_related('menu').filter(team=team).prefetch_related('menu__menu_ingredients')]
-    # for mp in update_list:
-    #     ing_list = mp.menu.menu_ingredients.all()
-
-        # sum_points = MenuIngredientPoint.objects.filter(user=user, menu_ingredient__in=ing_list).aggregate(Sum('points'))
-        # sum_points = MenuIngredientPoint.objects.filter(user=user).prefetch_related().aggregate(Sum('points'))
-        # mp.points += sum_points['points__sum']
-    # MenuPoint.objects.bulk_update(update_list, ['points'])
-
-    # menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user)
-    # for ingredient in menu_ingredient_data:
-    #     MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient.menu_ingredient]).update(points=F('points')+ingredient.points)
-
-    menu_ingredient_data = MenuIngredientPoint.objects.select_related('menu_ingredient').filter(user=user).values('menu_ingredient_id', 'points')
-    # mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__in=[ingredient['menu_ingredient_id'] for ingredient in menu_ingredient_data])
-    for ingredient in menu_ingredient_data:
-        mp = MenuPoint.objects.filter(team=team, menu__menu_ingredients__id__in=[ingredient['menu_ingredient_id']])
-        for m in mp:
-            m.points += ingredient['points']
+    while idx <= n:
+        tokens_list = []
+        for i in range(idx, idx+500):
+            try:
+                tokens_list.append(tokens[i].fcm_token)
+            except IndexError:
+                break
+        
+        push_notice(tokens_list, message_title, message_body)
+        
+        idx = idx+500
 
     return Response(status=200)
 

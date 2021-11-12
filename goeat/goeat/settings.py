@@ -28,9 +28,9 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_BASE_FILE = os.path.join(BASE_DIR, 'secrets.json')
 
 # SECRET_KEY = '_8fp6^rssql@$81(z3b17_=vo3ayy^1dajsgtsco^6m+2%84x^'
-# cred_path = os.path.join(BASE_DIR, "serviceAccountKey.json")
-# cred = credentials.Certificate(cred_path)
-# firebase_admin.initialize_app(cred)
+cred_path = os.path.join(BASE_DIR, "serviceAccountKey.json")
+cred = credentials.Certificate(cred_path)
+firebase_admin.initialize_app(cred)
 
 secrets = json.loads(open(SECRET_BASE_FILE).read())
 for key, value in secrets.items():

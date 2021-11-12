@@ -16,7 +16,6 @@ def push_team_request(token, title, body):
 
     try:
         response = messaging.send(message)
-        print(response)
     except Exception as e:
         print(e)
 
@@ -36,5 +35,5 @@ def push_notice(token_list, title, body):
 
     try:
         response = messaging.send_multicast(message)
-    except:
-        pass
+    except Exception as e:
+        print(e)
