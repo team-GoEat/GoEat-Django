@@ -9,5 +9,9 @@ router.register('license', views.OpenSourceLicenseView)
 urlpatterns = [
     path('', include(router.urls)),
 
+    # FAQ
     path('faq/', views.get_faq_list, name='get_faq_list'),
+    
+    # 개인정보처리방침
+    path('policy/', views.privacy_policy, name='privacy_policy'),
 ]
