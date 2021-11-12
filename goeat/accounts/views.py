@@ -1560,6 +1560,9 @@ def cannot_eat(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     if request.method == 'POST':
+        
+        user.menu_cannoteat.clear()
+        
         for i in range(len(cannoteat_string)):
             if cannoteat_string[i] == '0':
                 continue
@@ -1589,7 +1592,7 @@ def cannot_eat(request, *args, **kwargs):
                     return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
                 
                 user.menu_cannoteat.add(mce)
-                user.save()
+                
         return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 
