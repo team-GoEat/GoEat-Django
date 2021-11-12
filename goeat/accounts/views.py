@@ -201,7 +201,7 @@ def search_user(request, *args, **kwargs):
 """
 @api_view(['POST'])
 def test(request, *args, **kwargs):
-    user_id = 'MFNJ'
+    user_id = 'FQDP'
 
     try:
         user = User.objects.get(goeat_id=user_id)
