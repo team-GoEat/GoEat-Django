@@ -17,7 +17,7 @@ def push_team_request(token, title, body):
     try:
         response = messaging.send(message)
     except Exception as e:
-        print(e)
+        print("Exception: ", e)
 
 def push_notice(token_list, title, body):
     message = messaging.MulticastMessage(
@@ -35,5 +35,6 @@ def push_notice(token_list, title, body):
 
     try:
         response = messaging.send_multicast(message)
+        print(response)
     except Exception as e:
-        print(e)
+        print("Exception: ", e)
