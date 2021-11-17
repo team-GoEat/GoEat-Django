@@ -347,7 +347,7 @@ def usertaste_menu(request, *args, **kwargs):
     menu_cold_data = data.get('is_cold')
     cannoteat_string = data.get('cannoteat_str')
     start_idx = 0
-
+    
     cannoteat_list = []
     for i in range(len(cannoteat_string)):
         if cannoteat_string[i] == '0':
@@ -421,21 +421,24 @@ def usertaste_menu(request, *args, **kwargs):
         score.append(temp)
 
     score_lst = sorted(score, key=lambda x: -x['score'])
-
+    
     for i in range(start_idx, start_idx + 100):
-        res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
-            'id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
+        try:
+            res = Restaurant.objects.filter(res_menu__menu_second_name__pk=score_lst[i]['menu_id']).values_list(
+                'id', 'res_name', 'res_address', 'x_cor', 'y_cor').distinct()
 
-        for r in res:
-            r_temp = {
-                'res_id': r[0],
-                'res_name': r[1],
-                'res_address': r[2],
-                'x_cor': r[3],
-                'y_cor': r[4]
-            }
-            score_lst[i]['restaurants'].append(r_temp)
-
+            for r in res:
+                r_temp = {
+                    'res_id': r[0],
+                    'res_name': r[1],
+                    'res_address': r[2],
+                    'x_cor': r[3],
+                    'y_cor': r[4]
+                }
+                score_lst[i]['restaurants'].append(r_temp)
+        except IndexError:
+            break
+        
     return Response(sort_first_class(score_lst[start_idx:start_idx+100]), status=200)
 
 # 유저 취향 조사 반영, 재반영
