@@ -189,13 +189,13 @@ class FavResSerializer(serializers.ModelSerializer):
 #############################################################################################
 """
 class AlarmSerializer(serializers.ModelSerializer):
-    sender_id = serializers.CharField(source='sender.name')
-    receiver_id = serializers.CharField(source='receiver.name')
+    sender_name = serializers.CharField(source='sender.name')
+    receiver_name = serializers.CharField(source='receiver.name')
     sent_date = serializers.CharField(source='get_timestamp')
 
     class Meta:
         model = Alarm
-        fields = ('id', 'sender_id', 'receiver_id', 'message', 'is_read', 'sent_date')
+        fields = ('id', 'sender_name', 'receiver_name', 'message', 'is_read', 'sent_date')
 
 """
 #############################################################################################
