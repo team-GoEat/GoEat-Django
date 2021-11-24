@@ -111,6 +111,8 @@ def account_withdraw(request, *args, **kwargs):
         token.blacklist()
 
         if user:
+            
+            
             user.delete()
             return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except Exception as e:
@@ -1570,40 +1572,45 @@ def cannot_eat(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    user.menu_cannoteat.clear()
+    
+    for i in range(len(cannoteat_string)):
+        if cannoteat_string[i] == '0':
+            continue
+        else:
+            mce_id = i
+            try:
+                mce = MenuCannotEat.objects.get(pk = mce_id)
+            except MenuCannotEat.DoesNotExist:
+                return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            user.menu_cannoteat.add(mce)
+    
     if request.method == 'POST':
-        
-        user.menu_cannoteat.clear()
-        
-        for i in range(len(cannoteat_string)):
-            if cannoteat_string[i] == '0':
-                continue
-            else:
-                mce_id = i
-                try:
-                    mce = MenuCannotEat.objects.get(pk = mce_id)
-                except MenuCannotEat.DoesNotExist:
-                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-                
-                user.menu_cannoteat.add(mce)
+        for mce in user.menu_cannoteat.all():
+            team.menu_cannoteat.add(mce)
                 
         return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
     elif request.method == 'PUT':
-
-        user.menu_cannoteat.clear()
-        
-        for i in range(len(cannoteat_string)):
-            if cannoteat_string[i] == '0':
+        # 팀 비선호재료 초기화
+        team.menu_cannoteat.clear()
+        # 위드잇하는 팀원 목록
+        for teammate in team.teammates.all():
+            try:
+                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+            except UserTeamProfile.DoesNotExist:
                 continue
-            else:
-                mce_id = i
-                try:
-                    mce = MenuCannotEat.objects.get(pk = mce_id)
-                except MenuCannotEat.DoesNotExist:
-                    return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-                
-                user.menu_cannoteat.add(mce)
-                
+            for cne in team_profile.user.menu_cannoteat.all():
+                team.menu_cannoteat.add(cne)
+        # 사용자의 비선호재료 다시 추가
+        for cne in user.menu_cannoteat.all():
+            team.menu_cannoteat.add(cne)
+        
         return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 
