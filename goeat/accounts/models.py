@@ -197,6 +197,7 @@ class Team(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user')
     teammates = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, through='UserTeamProfile', related_name='team')
     nonmembers = models.ManyToManyField(NonMember, blank=True)
+    menu_cannoteat = models.ManyToManyField(MenuCannotEat, blank=True)
     # 메뉴 점수
     menu_points = models.ManyToManyField(MenuSecondClass, through='MenuPoint')
 

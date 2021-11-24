@@ -91,9 +91,9 @@ urlpatterns = [
     # 음식점 취소/거절 PUT
     path('reserve/change/<str:user_id>/', views.change_reserve_res, name='change_reserve_res'),
 
-    # 취향조사 후 바로 메뉴 추천
+    # 비로그인 추천 메뉴 목록
     path('usertaste/', views.usertaste_menu, name='usertaste_menu'),
-    # 취향조사 저장
+    # 로그인 취향조사 저장
     path('usertaste/<str:user_id>/', views.save_usertaste, name='save_usertaste'),
     # 로그인 추천 메뉴 목록
     path('usertaste/menu/<str:user_id>/', views.send_usertaste_menu, name='send_usertaste_menu'),

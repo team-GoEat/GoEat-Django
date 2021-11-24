@@ -201,46 +201,31 @@ def search_user(request, *args, **kwargs):
 """
 @api_view(['POST'])
 def test(request, *args, **kwargs):
-    user_id = 'ISBK'
+    user_id = 'S1H8'
 
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    message_title = request.POST.get('message_title')
-    message_body = request.POST.get('message_body')
-
-    tokens = UserFcmClientToken.objects.filter(is_active=True, user=user)
-    print(tokens)
-    
-    n = tokens.count()
-    idx = 0
-
-    while idx <= n:
-        tokens_list = []
-        for i in range(idx, idx+500):
-            try:
-                tokens_list.append(tokens[i].fcm_token)
-            except IndexError:
-                break
-        
-        push_notice(tokens_list, message_title, message_body)
-        
-        idx = idx+500
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     return Response(status=200)
 
 def sort_first_class(lst):
     n = len(lst)
     f_length = MenuFirstClass.objects.count() + 1
-    p = int(MenuFirstClass.objects.count() // 10)
-
+    # p = int(MenuFirstClass.objects.count() // 10)
+    
     ret = []
     all_first_classes = [[] for _ in range(f_length)]
     for i in range(n):
         all_first_classes[int(lst[i]['menu_first_id'])].append(lst[i])
-
+    
+    short_ret = []
     while all_first_classes:
         is_empty = True
         for i in range(f_length):
@@ -251,23 +236,6 @@ def sort_first_class(lst):
                 ret.append(all_first_classes[i].pop(0))
         if is_empty:
             break
-
-    # for i in range(1, n):
-    #     up_cnt = set()
-    #     down_cnt = set()
-    #     for j in range(i, -1, -1):
-    #         if lst[i]['menu_first_id'] != lst[j]['menu_first_id']:
-    #             up_cnt.add(lst[j]['menu_first_id'])
-    #             if len(up_cnt) >= p:
-    #                 break
-    #         else:
-    #             for k in range(i+1, n):
-    #                 if lst[i]['menu_first_id'] != lst[k]['menu_first_id']:
-    #                     down_cnt.add(lst[k]['menu_first_id'])
-    #                     if len(down_cnt) >= p:
-    #                         lst.insert(k, lst.pop(i))
-    #                         break
-    #         break
 
     return ret
 
@@ -535,7 +503,7 @@ def send_usertaste_menu(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    menu_cannoteat = user.menu_cannoteat.all()
+    menu_cannoteat = team.menu_cannoteat.all()
     cannoteat_list = []
     for cannoteat in menu_cannoteat:
         cannoteat_list.append(cannoteat.id)
@@ -543,7 +511,7 @@ def send_usertaste_menu(request, *args, **kwargs):
     all_menu = MenuPoint.objects.filter(team=team).exclude(menu__menu_cannoteat__pk__in=cannoteat_list).values_list(
         'menu__id', 'menu__second_class_name', 'points', 'menu__menu_first_name__id', 'menu__menu_first_name__first_class_name',
         'menu__menu_type', 'menu__menu_soup', 'menu__is_spicy', 'menu__is_cold', 'menu__menu_second_image')
-
+    
     score = []
     for menu in all_menu:
         if menu[1] == '추천안함':
@@ -870,17 +838,27 @@ def change_with(request, *args, **kwargs):
         return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     team_with.change_teammate_with()
-    if team_with.is_with == 1:
+    
+    # 팀원이 위드잇 설정된 경우
+    if team_with.is_with == True:
         teammate_cannoteat = teammate.menu_cannoteat.all()
         for cannoteat in teammate_cannoteat:
-            user.menu_cannoteat.add(cannoteat)
-            user.save()
-
+            team.menu_cannoteat.add(cannoteat)
+    # 팀원이 위드잇 취소된 경우
     else:
-        teammate_cannoteat = teammate.menu_cannoteat.all()
-        for cannoteat in teammate_cannoteat:
-            user.menu_cannoteat.remove(cannoteat)
-            user.save()
+        # 팀 비선호재료 초기화
+        team.menu_cannoteat.clear()
+        # 위드잇하는 팀원 목록
+        for teammate in team.teammates.all():
+            try:
+                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+            except UserTeamProfile.DoesNotExist:
+                continue
+            for cne in team_profile.user.menu_cannoteat.all():
+                team.menu_cannoteat.add(cne)
+        # 사용자의 비선호재료 다시 추가
+        for cne in user.menu_cannoteat.all():
+            team.menu_cannoteat.add(cne)
 
     rank_lst = []
     for teammate in team.teammates.all():
@@ -1114,7 +1092,34 @@ def delete_nonmember(request, *args, **kwargs):
     except NonMember.DoesNotExist:
         return JsonResponse({'msg': '비회원이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    nonmember.delete()
+    try:
+        team = Team.objects.filter(nonmembers__pk__in=[nonmember_id])
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    nonmember_team = team[0]
+    
+    # 삭제하려는 비회원이 팀의 비선호재료에 영향을 줬을 경우
+    if nonmember.is_with == True:
+        # 팀 비선호재료 초기화
+        nonmember_team.menu_cannoteat.clear()
+        # 비회원 삭제
+        nonmember.delete()
+        # 위드잇하는 비회원 목록
+        nonmembers = nonmember_team.nonmembers.filter(is_with=True)
+        # 팀 비선호재료 다시 설정
+        for nmember in nonmembers:
+            nonmember_cannoteat = nmember.menu_cannoteat.all()
+            for cannoteat in nonmember_cannoteat:
+                nonmember_team.menu_cannoteat.add(cannoteat)
+        # 사용자의 비선호재료 다시 추가
+        for cne in nonmember_team.user.menu_cannoteat.all():
+            nonmember_team.menu_cannoteat.add(cne)
+    
+    else:
+        # 비회원 삭제
+        nonmember.delete()
+    
     return JsonResponse({'msg': '비회원이 삭제되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 비회원 즐겨찾기 설정
@@ -1146,17 +1151,36 @@ def change_nonmember_with(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    try:
+        team = Team.objects.filter(nonmembers__pk__in=[nonmember_id])
+    except NonMember.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    nonmember_team = team[0]
+    
     nonmember.change_nonmember_with()
-    if nonmember.is_with == 1:
+    # 비회원이 위드잇 설정된 경우
+    if nonmember.is_with == True:
+        # 비회원 비선호재료 목록
         nonmember_cannoteat = nonmember.menu_cannoteat.all()
+        # 비회원 비선호재료 추가
         for cannoteat in nonmember_cannoteat:
-            user.menu_cannoteat.add(cannoteat)
-            user.save()
+            nonmember_team.menu_cannoteat.add(cannoteat)
+    # 비회원이 위드잇 취소된 경우
     else:
-        nonmember_cannoteat = nonmember.menu_cannoteat.all()
-        for cannoteat in nonmember_cannoteat:
-            user.menu_cannoteat.remove(cannoteat)
-            user.save()
+        # 팀 비선호재료 초기화
+        nonmember_team.menu_cannoteat.clear()
+        # 위드잇하는 비회원 목록
+        nonmembers = nonmember_team.nonmembers.filter(is_with=True)
+        # 팀 비선호재료 다시 설정
+        for nmember in nonmembers:
+            nonmember_cannoteat = nmember.menu_cannoteat.all()
+            for cannoteat in nonmember_cannoteat:
+                nonmember_team.menu_cannoteat.add(cannoteat)
+        # 사용자의 비선호재료 다시 추가
+        for cne in user.menu_cannoteat.all():
+            nonmember_team.menu_cannoteat.add(cne)
+            
     return JsonResponse({'msg': '위드잇 설정 완료하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 비회원 직급 설정
