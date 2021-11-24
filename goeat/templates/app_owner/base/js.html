@@ -1,0 +1,109 @@
+{% load static %}
+{% load hosts %}
+
+<script>
+  const showpage = 'showpage_container';
+
+  // 예약관리
+  async function reserve() {
+    let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('reserve', result);
+    }
+  }
+
+
+
+
+
+
+  /* ================= spa function ================= */
+
+  const DomCallback = function (url, params) {
+
+    showLoading();
+
+    params['csrfmiddlewaretoken'] = '{{ csrf_token }}'
+
+    return new Promise((result) => {
+
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: params,
+        success: (data) => {
+          result({
+            'result': true,
+            'msg': '',
+            'data': data
+          });
+        },
+        error: (data) => {
+
+          alert('서버와 접속이 원활하지 않습니다.');
+
+          result({
+            'result': false,
+            'msg': '',
+            'data': data
+          });
+        }
+      });
+    });
+  }
+
+  function show(id, result) {
+    try {
+      $('.content_box').append(`<div class="${showpage}" id="${id}"></div>`);
+      $(`#${id}`).html(result.data);
+
+      setTimeout(() => {
+        $(`.${showpage}`).addClass('on');
+        hideLoading();
+      }, 10)
+    }
+    catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+
+  }
+
+  function hide(id) {
+    try {
+      $(`#${id}`).remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+  function allHide() {
+    try {
+      $(`.${showpage}`).remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+  function lastHide() {
+    try {
+      $(`.${showpage}`).eq(-1).remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+  function showLoading() {
+    // $('body').append(`
+    //   <div class="loading_bg">
+    //     <img src="/static/app_www/base/images/loading.gif">
+    //   </div>
+    // `)
+    console.log('showLoading');
+  }
+
+  function hideLoading() {
+    // $('.loading_bg').remove();
+    console.log('hideLoading');
+  }
+</script>

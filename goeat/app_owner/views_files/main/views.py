@@ -5,6 +5,7 @@ from django.urls import reverse
 
 class Views_Controls(View):
     def get(self, request):
+        print('main')
 
         context = {
 

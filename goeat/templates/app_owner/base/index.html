@@ -1,43 +1,73 @@
-{% load hosts %}
 {% load static %}
+{% load hosts %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {% include 'app_owner/base/meta.html' %}
-    {% include 'app_owner/base/head.html' %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고잇</title>
 
-    {% block css %}
+  <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}">
 
-    {% endblock css %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {% block css %}
 
-    {% block top_js %}
+  {% endblock css %}
 
-    {% endblock top_js %}
 </head>
 
 <body>
-    <div id="wrap">
-
-        {% block content %}
-
-        {% endblock content %}
-
-
-        <div class="bottom_logo_wrap">
-            <div class="bottom_logo">
-                <a href="{% host_url 'main' host 'owner' %}">
-                    <img src="{% static 'app_owner/base/images/logo.png' %}" alt="">
-                </a>
-            </div>
+  <nav class="nav">
+    <img class="nav_logo" src="{% static 'app_owner/base/images/logo_w.png' %}" alt="">
+    <div class="nav_header">
+      <span>
+        실시간 예약 리스트 등록
+      </span>
+      <div class="toggle on">
+        <div class="toggle_switch">
         </div>
+      </div>
     </div>
+    <div class="nav_control">
+      <img src="{% static 'app_owner/base/images/window_min.svg' %}" alt="">
+      <img src="{% static 'app_owner/base/images/window_zoom.svg' %}" alt="">
+      <img src="{% static 'app_owner/base/images/window_close.svg' %}" alt="">
+    </div>
+  </nav>
+
+  <div class="main_container">
+    <ul class="side_nav">
+      <li class="side_nav_item on" onclick="reserve()">
+        예약<br />
+        관리
+      </li>
+      <li class="side_nav_item">
+        스탬프<br />
+        관리
+      </li>
+      <li class="side_nav_item">
+        쿠폰<br />
+        관리
+      </li>
+      <li class="side_nav_item">
+        설정
+      </li>
+    </ul>
+    <div class="content_box">
+    </div>
+  </div>
 
 
 
-    {% block bottom_js %}
 
-    {% endblock bottom_js %}
+  {% include 'app_owner/base/js.html' %}
+  {% block js %}
+
+  {% endblock js %}
+
 </body>
 
 </html>
