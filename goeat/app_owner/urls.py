@@ -7,4 +7,8 @@ urlpatterns = [
     path('stamp/', include('app_owner.views_files.stamp.urls')),
     path('coupon/', include('app_owner.views_files.coupon.urls')),
     path('setting/', include('app_owner.views_files.setting.urls')),
+    path('reserve/reject/',
+         include('app_owner.views_files.reserve.reject.urls')),
+    path('stamp/apply', include('app_owner.views_files.stamp.apply.urls')),
+    path('stamp/saving', include('app_owner.views_files.stamp.saving.urls')),
 ]

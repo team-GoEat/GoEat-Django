@@ -285,6 +285,7 @@ table {
   width: 100%;
   height: calc(100vh - 60px);
   display: flex;
+  position: relative;
 }
 
 .content_box {
@@ -331,6 +332,7 @@ table {
   padding: 2px;
   position: relative;
   cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .toggle .toggle_switch {
@@ -339,18 +341,15 @@ table {
   width: 28px;
   height: 28px;
   border-radius: 15px;
-  transition: 0.3s;
   left: 2px;
-  right: auto;
   top: 50%;
-  transform: translateY(-50%);
-  transition: 0.3s;
+  transform: translate(0, -50%);
+  transition: transform 0.3s;
 }
-.toggle.on {
+.nav_header .toggle.on {
   background-color: #fff;
 }
-.toggle.on .toggle_switch {
+.nav_header .toggle.on .toggle_switch {
   background-color: #ff0034;
-  left: auto;
-  right: 2px;
+  transform: translate(32px, -50%);
 }

@@ -35,8 +35,9 @@
   height: 20px;
   background-color: #ccc;
 }
-.toggle.on .toggle_switch {
+.reserve_set .toggle.on .toggle_switch {
   background-color: #ff0034;
+  transform: translate(18px, -50%);
 }
 
 .reserve_note {

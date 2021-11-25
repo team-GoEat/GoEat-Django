@@ -1,5 +1,6 @@
-.modal_bg {
-  position: fixed;
+.modal_container {
+  position: absolute;
+  z-index: 10;
   left: 0;
   right: 0;
   top: 0;
@@ -7,15 +8,20 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
   align-items: center;
   justify-content: center;
+  display: none;
+}
+
+.modal_container.on {
+  display: flex;
 }
 
 .modal {
   min-width: 380px;
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 60px;
 }
 
 .modal_header {
@@ -25,6 +31,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
+}
+
+.modal_close {
+  cursor: pointer;
 }
 
 .modal_title {

@@ -3,11 +3,7 @@
 
 <script>
   const showpage = 'showpage_container';
-
-  $('.side_nav_item').click(function () {
-    $('.side_nav_item').removeClass('on');
-    $(this).addClass('on');
-  })
+  let isRealTimeReserve = false;
 
   // 로그인
   async function login() {
@@ -50,12 +46,55 @@
     if (result.result) {
       allHide();
       show('setting', result);
+      onToggleReserve()
     }
   }
 
 
+  /* ================= modal ================= */
+
+  async function reserveReject() {
+    let result = await DomCallback("{% host_url 'reserve_reject' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('예약 거절 사유 선택', result);
+    }
+  }
+
+  async function stampApply() {
+    let result = await DomCallback("{% host_url 'stamp_apply' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('스탬프 적립 신청 내역', result);
+    }
+  }
+
+  async function stampSaving() {
+    let result = await DomCallback("{% host_url 'stamp_saving' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('스탬프 적립하기', result);
+    }
+  }
+
+  /* ================= toggle function ================= */
+
+  function onClickToggle(boolean) {
+    if (boolean === undefined) {
+      if (isRealTimeReserve) {
+        isRealTimeReserve = false;
+      } else {
+        isRealTimeReserve = true;
+      }
+    } else {
+      isRealTimeReserve = boolean;
+    }
+
+    onToggleReserve();
+  }
 
 
+  function onToggleReserve() {
+    if (isRealTimeReserve) return $('.toggle').addClass('on')
+    return $('.toggle').removeClass('on')
+  }
 
 
   /* ================= spa function ================= */
@@ -102,6 +141,8 @@
         $(`.${showpage}`).addClass('on');
         hideLoading();
       }, 10)
+
+      onActiveNav(id)
     }
     catch (error) {
       alert('서버와 연결이 끊어졌습니다.');
@@ -133,6 +174,22 @@
     }
   }
 
+
+  function modalShow(title, result) {
+    try {
+      $('.modal_content').html(result.data);
+      $('.modal_container').addClass('on');
+      $('.modal_title').html(title);
+    }
+    catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+  function modalClose() {
+    $('.modal_container').removeClass('on');
+  }
+
+
   function showLoading() {
     // $('body').append(`
     //   <div class="loading_bg">
@@ -145,5 +202,10 @@
   function hideLoading() {
     // $('.loading_bg').remove();
     console.log('hideLoading');
+  }
+
+  function onActiveNav(navId) {
+    $('.side_nav_item').removeClass('on');
+    $(`#${navId}_nav`).addClass('on');
   }
 </script>

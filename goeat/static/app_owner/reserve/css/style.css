@@ -205,12 +205,12 @@
 .reserve_list .layout_note .tel {
   font-size: 15px;
   display: inline-block;
-  text-align: center;
+  text-align: right;
   width: 100%;
 }
 .reserve_list .layout_note .button_box {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 .reserve_list .layout_note .button_box .btn {
