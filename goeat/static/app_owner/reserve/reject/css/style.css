@@ -1,47 +1,41 @@
-.request_list {
+.reject_content {
   padding: 20px;
-}
-.request_item {
-  width: 700px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 15px;
-  background-color: #fdebec;
-  border: 1px solid #ff0034;
-  border-radius: 8px;
+  width: 380px;
 }
 
-.request_item:not(:last-child) {
+.reject_content button {
+  height: 35px;
+  width: 100%;
+  font-size: 20px;
+}
+
+.radio_wrap {
+  width: 100%;
+}
+.radio_wrap .radio {
+  display: block;
   margin-bottom: 20px;
 }
 
-.request_item .user {
-  text-align: center;
-  font-size: 20px;
-}
-
-.request_item .user .title {
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-.request_item .user .desc {
-  font-weight: 700;
-}
-
-.other_time {
-  font-size: 20px;
-}
-
-.button_wrap {
+.radio_style {
+  width: 100%;
+  background-color: #fff;
+  color: #ff0034;
+  border: 1px solid #ff0034;
+  border-radius: 12px;
+  height: 58px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 5px;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 28px;
+  font-weight: 600;
 }
-.button_wrap button {
-  width: calc(50% - 2.5px);
-  height: 25px;
-  font-size: 12px;
+
+.radio_wrap input {
+  display: none;
+}
+.radio_wrap input:checked + .radio_style {
+  background-color: #ff0034;
+  color: #fff;
 }

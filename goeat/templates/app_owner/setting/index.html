@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{% static 'app_owner/setting/css/style.css' %}">
 
 <div class="setting_box">
-  <div class="left_content">
+  <div class="left_content scroll_style">
     <h2 class="section_title">
       가게 정보 관리
     </h2>
@@ -33,7 +33,7 @@
             <p class="time_title">
               시작
             </p>
-            <p class="time_text">
+            <p class="time_text" onclick="settingTime()">
               10:00
             </p>
           </div>
@@ -198,19 +198,19 @@
       공지사항
     </p>
     <ul class="notice_list">
-      <li class="notice_item">
+      <li class="notice_item" onclick="settingNotice()">
         <span>
           고잇 공지사항 안내
         </span>
         <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
       </li>
-      <li class="notice_item">
+      <li class="notice_item" onclick="settingNotice()">
         <span>
           고잇 공지사항 안내
         </span>
         <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
       </li>
-      <li class="notice_item">
+      <li class="notice_item" onclick="settingNotice()">
         <span>
           고잇 공지사항 안내
         </span>

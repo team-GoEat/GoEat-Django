@@ -65,13 +65,18 @@
 .add_wrap .button_wrap button {
   width: 46%;
   height: 58px;
-  padding: 10px;
+  padding: 10px; 
   font-size: 20px;
   font-weight: 600;
 }
 
 .table_wrap {
   margin-bottom: 25px;
+}
+
+.table_wrap:nth-child(2){
+  padding-bottom: 25px;
+  border-bottom: 1px solid #ccc;
 }
 
 .table_title {
@@ -91,7 +96,7 @@
 }
 
 .table_list {
-  font-size: 12px;
+  font-size: 14px;
   color: #ff0034;
 }
 .table_layout {
@@ -106,6 +111,7 @@
 }
 .table_layout > div:nth-child(1) {
   width: 30%;
+  font-size: 13px;
 }
 .table_layout > div:nth-child(2) {
   width: 20%;

@@ -11,4 +11,7 @@ urlpatterns = [
          include('app_owner.views_files.reserve.reject.urls')),
     path('stamp/apply', include('app_owner.views_files.stamp.apply.urls')),
     path('stamp/saving', include('app_owner.views_files.stamp.saving.urls')),
+    path('stting/time', include('app_owner.views_files.setting.time.urls')),
+    path('stting/notice',
+         include('app_owner.views_files.setting.notice.urls')),
 ]

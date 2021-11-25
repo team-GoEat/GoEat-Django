@@ -74,6 +74,20 @@
     }
   }
 
+  async function settingTime() {
+    let result = await DomCallback("{% host_url 'setting_time' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('시간 변경', result);
+    }
+  }
+
+  async function settingNotice() {
+    let result = await DomCallback("{% host_url 'setting_notice' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('고잇 공지사항', result);
+    }
+  }
+
   /* ================= toggle function ================= */
 
   function onClickToggle(boolean) {
