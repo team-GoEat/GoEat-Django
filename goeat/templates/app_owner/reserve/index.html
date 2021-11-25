@@ -1,6 +1,277 @@
 {% load static %}
 {% load hosts %}
 
+<link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}">
 <link rel="stylesheet" href="{% static 'app_owner/reserve/css/style.css' %}">
 
-하이
+<div class="reserve_box">
+  <h2 class="section_title">
+    예약 내역
+  </h2>
+  <div class="top_area">
+    <div class="info_box">
+      <div class="date_wrap">
+        <span class="date_title">
+          날짜 :
+        </span>
+        <p class="date_text">
+          <span class="start_date">
+            2021.10.10
+          </span>
+          <span>
+            ~
+          </span>
+          <span class="end_date">
+            2021.10.30
+          </span>
+        </p>
+        <button class="btn_fill">
+          날짜변경
+        </button>
+      </div>
+      <div class="info">
+        <span class="info_title">
+          예약정보 :
+        </span>
+        <div class="info_desc">
+          <p class="desc_wrap">
+            <span>
+              예약 신청 : 100회
+            </span>
+            <span>
+              예약 거절 : 100회
+            </span>
+            <span>
+              손님 도착 : 100회
+            </span>
+          </p>
+          <p class="desc_wrap">
+            <span>
+              예약 승인 : 100회
+            </span>
+            <span>
+              예약 무응답 : 100회
+            </span>
+            <span>
+              예약 취소 : 100회
+            </span>
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <div class="note_box">
+      <div class="note">
+        3분안에 예약 승인을 안누르면 자동으로<br />
+        예약 거절이 되고 실시간 예약 등록이 꺼집니다.
+      </div>
+    </div>
+  </div>
+  <div class="reserve_table">
+    <div class="table_header layout">
+      <div class="layout_order">
+        <span>
+          순번
+        </span>
+      </div>
+      <div class="layout_time">
+        <span>
+          도착 시간
+        </span>
+      </div>
+      <div class="layout_number">
+        <span>
+          식사 인원
+        </span>
+      </div>
+      <div class="layout_status">
+        <span>
+          상태
+        </span>
+      </div>
+      <div class="layout_note">
+        <div class="reroad_wrap">
+          <span>
+            손님이 도착하면<br /> 손님 도착을 꼭 눌러주세요!
+          </span>
+          <img class="refresh_icon" src="{% static 'app_owner/base/images/refresh.svg' %}" alt="">
+        </div>
+
+      </div>
+    </div>
+    <ul class="table_content scroll_style">
+      <li class="reserve_list layout ">
+        <div class="layout_order">
+          <div class="order_wrap">
+            <span>1</span>
+          </div>
+        </div>
+        <div class="layout_time">
+          <p class="date">2021.10.30</p>
+          <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text">
+              11:45
+            </span>
+          </div>
+        </div>
+        <div class="layout_number">
+          <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text">50명</span>
+          </div>
+          <p class="grade">
+            <span>매너 등급</span>
+            <span class="grade_text good">젠틀</span>
+          </p>
+        </div>
+        <div class="layout_status">
+          <span>
+            승인 대기
+          </span>
+        </div>
+        <div class="layout_note">
+          <!-- <span class="tel">
+                050-2923-1111
+              </span> -->
+          <div class="button_box">
+            <div class="btn approve">
+              <span>손님이 도착하면 눌러주세요</span>
+              <button>예약 승인</button>
+            </div>
+            <div class="btn reject">
+              <span>
+                050-2923-1111
+              </span>
+              <button>예약 거절</button>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="reserve_list layout ">
+        <div class="layout_order">
+          <div class="order_wrap">
+            <span>1</span>
+          </div>
+        </div>
+        <div class="layout_time">
+          <p class="date">2021.10.30</p>
+          <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text">
+              11:45
+            </span>
+          </div>
+        </div>
+        <div class="layout_number">
+          <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text">50명</span>
+          </div>
+          <p class="grade">
+            <span>매너 등급</span>
+            <span class="grade_text bad">비매너</span>
+          </p>
+        </div>
+        <div class="layout_status">
+          <span>
+            승인 대기
+          </span>
+        </div>
+        <div class="layout_note">
+          <!-- <span class="tel">
+                050-2923-1111
+              </span> -->
+          <div class="button_box">
+            <div class="btn approve">
+              <span>손님이 도착하면 눌러주세요</span>
+              <button>예약 승인</button>
+            </div>
+            <div class="btn reject">
+              <span>
+                050-2923-1111
+              </span>
+              <button>예약 거절</button>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="reserve_list layout end">
+        <div class="layout_order">
+          <div class="order_wrap">
+            <span>O</span>
+          </div>
+        </div>
+        <div class="layout_time">
+          <p class="date">2021.10.30</p>
+          <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text">
+              11:45
+            </span>
+          </div>
+        </div>
+        <div class="layout_number">
+          <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text">50명</span>
+          </div>
+          <p class="grade">
+            <span>매너 등급</span>
+            <span class="grade_text">보통</span>
+          </p>
+        </div>
+        <div class="layout_status">
+          <span>
+            승인 대기
+          </span>
+        </div>
+        <div class="layout_note">
+          <span class="tel">
+            050-2923-1111
+          </span>
+        </div>
+      </li>
+      <li class="reserve_list layout end">
+        <div class="layout_order">
+          <div class="order_wrap">
+            <span>X</span>
+          </div>
+        </div>
+        <div class="layout_time">
+          <p class="date">2021.10.30</p>
+          <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text disable">
+              11:45
+            </span>
+          </div>
+        </div>
+        <div class="layout_number">
+          <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text disable">50명</span>
+          </div>
+          <p class="grade">
+            <span>매너 등급</span>
+            <span class="grade_text">보통</span>
+          </p>
+        </div>
+        <div class="layout_status">
+          <span>
+            기타 사정 거절
+          </span>
+        </div>
+        <div class="layout_note">
+          <span class="tel">
+            050-2923-1111
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

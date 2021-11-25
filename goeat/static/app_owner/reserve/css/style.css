@@ -1,0 +1,249 @@
+.reserve_box {
+  height: 100%;
+  padding-top: 20px;
+}
+
+.content_box {
+  padding-left: 40px;
+}
+/* .section_title {
+  margin-top: 20px;
+} */
+.top_area {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 22px;
+  margin-bottom: 20px;
+}
+
+.info {
+  display: flex;
+  margin-top: 10px;
+}
+.info_title {
+  margin-right: 5px;
+}
+.info_desc {
+  display: flex;
+}
+.desc_wrap:first-child {
+  margin-right: 10px;
+}
+
+.desc_wrap span {
+  display: block;
+}
+
+.note {
+  padding: 15px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid #ff0034;
+  border-radius: 8px;
+  line-height: 1.3;
+}
+
+/* ////////////////////// */
+
+.reserve_table {
+  width: 100%;
+  height: calc(100% - 160px);
+}
+
+.reserve_table .table_content {
+  overflow-y: scroll;
+  height: calc(100% - 35px);
+  padding-right: 10px;
+}
+
+.reserve_table .layout {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+.reserve_table .layout > div {
+  padding: 0 5px;
+}
+.reserve_table .layout .layout_order {
+  width: 12%;
+  display: flex;
+  justify-content: center;
+}
+.reserve_table .layout .layout_time {
+  width: 20%;
+  text-align: center;
+}
+.reserve_table .layout .layout_number {
+  width: 19%;
+  text-align: center;
+}
+
+.reserve_table .layout .layout_status {
+  width: 19%;
+  text-align: center;
+}
+.reserve_table .layout .layout_note {
+  width: 30%;
+  padding-right: 10px;
+}
+.reserve_table .layout .layout_note .reroad_wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.reserve_table .layout .layout_note .reroad_wrap span {
+  font-size: 12px;
+  text-align: right;
+}
+.reserve_table .layout .layout_note .refresh_icon {
+  width: 17px;
+  height: 17px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.reserve_table .table_header {
+  font-size: 22px;
+  margin-bottom: 5px;
+  padding-right: 22px;
+}
+
+.reserve_list {
+  background-color: #fdebec;
+  border-radius: 15px;
+  height: 96px;
+  margin-bottom: 10px;
+}
+/* .reserve_list:not(:last-child) {
+  margin-bottom: 10px;
+} */
+
+.reserve_list.end {
+  opacity: 0.5;
+}
+.reserve_list .layout_order .order_wrap {
+  width: 66px;
+  height: 66px;
+  border-radius: 33px;
+  border: 2px solid #ff0034;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reserve_list .layout_order .order_wrap span {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: #ff0034;
+}
+
+.reserve_list .layout_time p {
+  text-align: center;
+}
+.reserve_list .layout_time .date {
+  font-size: 20px;
+}
+.reserve_list .layout_time .time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reserve_list .layout_time .time .time_icon {
+  width: 16px;
+  height: 18px;
+  margin-right: 3px;
+}
+
+.reserve_list .layout_time .time .time_text {
+  font-size: 30px;
+  font-weight: 600;
+}
+.layout_time .time .time_text.disable {
+  text-decoration: line-through;
+}
+
+.reserve_list .layout_number .count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.reserve_list .layout_number .count .person_icon {
+  width: 22px;
+  height: 16px;
+  margin-right: 5px;
+}
+.reserve_list .layout_number .count .person_text {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.person_text.disable {
+  text-decoration: line-through;
+}
+
+.reserve_list .layout_number .grade {
+  text-align: center;
+  font-size: 17px;
+}
+
+.grade_text.good {
+  color: #4ae25b;
+}
+
+.grade_text.bad {
+  color: #ff0034;
+}
+
+.reserve_list .layout_status {
+  font-size: 25px;
+}
+
+.reserve_list .layout_note .tel {
+  font-size: 15px;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+.reserve_list .layout_note .button_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.reserve_list .layout_note .button_box .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.reserve_list .layout_note .button_box .btn:first-child {
+  margin-right: 12px;
+}
+.reserve_list .layout_note .button_box .btn span {
+  font-size: 10px;
+  text-align: center;
+}
+.reserve_list .layout_note .button_box .btn button {
+  width: 90px;
+  height: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.reserve_list .layout_note .button_box .approve span {
+  font-weight: 600;
+}
+.reserve_list .layout_note .button_box .approve button {
+  background-color: #ff0034;
+  color: #fff;
+}
+.reserve_list .layout_note .button_box .reject button {
+  background-color: #fff;
+  color: #ff0034;
+}

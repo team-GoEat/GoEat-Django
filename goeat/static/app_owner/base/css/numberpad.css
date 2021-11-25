@@ -1,0 +1,242 @@
+.number_pad {
+  width: 220px;
+  height: 290px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.number_pad button {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #ff0034;
+  background-color: #fff;
+  margin-right: 5px;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 35px;
+  color: #ff0034;
+}
+.number_pad button:nth-child(3n) {
+  margin-right: 0;
+}
+.number_pad button:nth-child(n + 9) {
+  margin-bottom: 0;
+}
+
+/* /////////////////////// */
+
+.number_modal {
+  width: 680px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+}
+
+.numer_content {
+  width: calc(100% - 220px);
+  padding-right: 10px;
+}
+
+.number_layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.number_header {
+  height: 105px;
+  background-color: #fdebec;
+  border: 1px solid #ff0034;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.number_header > div {
+  width: 50%;
+}
+
+.number_desc {
+  text-align: center;
+}
+
+.number_layout .button_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.number_layout .button_wrap button {
+  width: 90px;
+  height: 35px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.number_layout .button_wrap button:nth-child(2) {
+  margin-left: 5px;
+}
+
+/* //////////////////////////// */
+
+.search_result {
+  font-size: 20px;
+}
+
+.search_result .title {
+  font-weight: 600;
+}
+.search_result .value {
+  font-weight: 400;
+}
+
+.search_not {
+  font-size: 18px;
+  color: #ff0034;
+}
+
+/* ///////////////////////////////// */
+.number_header .phon_input,
+.select_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+}
+
+.number_header .phon_input p {
+  text-align: center;
+  font-size: 20px;
+  padding-bottom: 5px;
+}
+
+.number_header .phon_input input,
+.coupon_select {
+  width: 90%;
+  max-width: 180px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #ff0034;
+  text-align: center;
+  font-size: 18px;
+  color: #ff0034;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.coupon_select input {
+  text-align: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  width: 100%;
+  height: 100%;
+}
+
+.coupon_select {
+  position: relative;
+}
+
+.coupon_select .select_option {
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ff0034;
+  box-sizing: content-box;
+  overflow: hidden;
+}
+.coupon_select .select_option.on {
+  display: block;
+}
+
+.coupon_select_input {
+  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+}
+
+.coupon_select .select_option li {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+
+.coupon_select .select_option li:hover {
+  background-color: #fdebec;
+}
+
+.number_header .counter {
+  justify-content: center;
+}
+
+/* /////////////////////////////////// */
+
+.select_wrap p {
+  text-align: center;
+  font-size: 20px;
+  padding-bottom: 5px;
+}
+
+/* ////////////////////////////////////// */
+
+.time_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.time_box {
+  width: 80%;
+  max-width: 240px;
+  height: auto;
+}
+.time_change {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #ff0034;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.time_change .time_input {
+  text-align: center;
+  color: #ff0034;
+  font-weight: 600;
+  font-size: 30px;
+  width: calc(50% - 5px);
+  height: 100%;
+  background: none;
+}
+.time_change span {
+  font-size: 35px;
+  color: #ff0034;
+  font-weight: 600;
+}
+.time_notice {
+  text-align: left;
+  padding-left: 7px;
+  border-left: 2px solid #ff0034;
+  font-size: 15px;
+  margin: 18px 0;
+}
+
+.time_box button {
+  width: 100%;
+  height: 30px;
+}

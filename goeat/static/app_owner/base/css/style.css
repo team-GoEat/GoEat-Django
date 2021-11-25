@@ -2,7 +2,7 @@
   font-family: "AppleGothic";
   font-style: normal;
   font-weight: 800;
-  src: url("/static/app_owner/base/static/app_owner/base/font/AppleSDGothicNeoEB.woff") format("woff");
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoEB.woff") format("woff");
 }
 @font-face {
   font-family: "AppleGothic";
@@ -241,6 +241,11 @@ table {
   border: 1px solid #ff0034;
 }
 
+.showpage_container {
+  height: 100%;
+  width: 100%;
+}
+
 /* /////////////////////////////////////////////////////////////// */
 
 .nav {
@@ -326,7 +331,6 @@ table {
   padding: 2px;
   position: relative;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 .toggle .toggle_switch {
@@ -340,6 +344,7 @@ table {
   right: auto;
   top: 50%;
   transform: translateY(-50%);
+  transition: 0.3s;
 }
 .toggle.on {
   background-color: #fff;

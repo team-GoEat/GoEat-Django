@@ -1,0 +1,126 @@
+{% load static %}
+{% load hosts %}
+
+<link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/stamp/css/style.css' %}">
+
+<div class="stamp_box">
+  <div class="left_content">
+    <h2 class="section_title">
+      스탬프 적립 내역
+    </h2>
+    <div class="date_wrap">
+      <span class="date_title">
+        날짜 :
+      </span>
+      <p class="date_text">
+        <span class="start_date">
+          2021.10.10
+        </span>
+        <span>
+          ~
+        </span>
+        <span class="end_date">
+          2021.10.30
+        </span>
+      </p>
+      <button class="btn_fill">
+        날짜변경
+      </button>
+    </div>
+
+    <div class="payment">
+      <div class="pay_wrap">
+        <span class="pay_title">
+          달 정산 내용 :
+        </span>
+        <div class="pay_desc">
+          <p class="pay_month">
+            10월
+          </p>
+          <p>
+            총 적립: 1000개
+          </p>
+          <p>
+            100,000원 출금 예정
+          </p>
+        </div>
+      </div>
+      <div class="pay_wrap">
+        <span class="pay_title">
+          기간 정산 내용 :
+        </span>
+        <div class="pay_desc">
+          <p class="pay_date">
+            2021.10.10 ~ 2021.10.30
+          </p>
+          <p>
+            총 적립 : 1000개
+          </p>
+          <p>
+            100,000원 출금 예정
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="saving">
+      <p class="saving_info">
+        <span>
+          스탬프 적립
+        </span>
+        <span>
+          최소주문금액 : 100,000원
+        </span>
+      </p>
+      <div class="button_wrap">
+        <button class="btn_fill">
+          스탬프 적립<br />
+          신청 보기
+        </button>
+        <button class="btn_border">
+          휴대폰 번호로<br />
+          적립하기
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="right_content record_box">
+    <div class="record_header record_layout">
+      <div class="record_date">
+        날짜/시간
+      </div>
+      <div class="record_count">
+        적립 갯수
+      </div>
+      <div class="record_info">
+        휴대폰 뒷4자리/아이디
+      </div>
+    </div>
+    <ul class="record_list">
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>

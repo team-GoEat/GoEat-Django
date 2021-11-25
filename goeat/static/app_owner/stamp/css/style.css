@@ -1,0 +1,61 @@
+.stamp_box {
+  display: flex;
+  height: 100%;
+}
+
+.left_content {
+  padding-left: 40px;
+  padding-right: 30px;
+  width: 50%;
+}
+.right_content {
+  padding-left: 30px;
+}
+.payment {
+  margin-top: 20px;
+}
+
+.pay_wrap {
+  display: flex;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+.pay_title {
+  display: inline-block;
+  width: 140px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.pay_desc p {
+  font-size: 17px;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+.pay_desc p.pay_month {
+  font-size: 20px;
+}
+
+.saving .saving_info {
+  margin-bottom: 15px;
+}
+
+.saving .saving_info span {
+  display: block;
+  font-size: 27px;
+  font-weight: 600;
+}
+
+.saving .button_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saving .button_wrap button {
+  width: 46%;
+  height: 186px;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}

@@ -4,12 +4,52 @@
 <script>
   const showpage = 'showpage_container';
 
+  $('.side_nav_item').click(function () {
+    $('.side_nav_item').removeClass('on');
+    $(this).addClass('on');
+  })
+
+  // 로그인
+  async function login() {
+    let result = await DomCallback("{% host_url 'login' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('login', result);
+    }
+  }
   // 예약관리
   async function reserve() {
     let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
     if (result.result) {
       allHide();
       show('reserve', result);
+    }
+  }
+
+  // 스탬프관리
+  async function stamp() {
+    let result = await DomCallback("{% host_url 'stamp' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('stamp', result);
+    }
+  }
+
+  // 쿠폰관리
+  async function coupon() {
+    let result = await DomCallback("{% host_url 'coupon' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('coupon', result);
+    }
+  }
+
+  // 가게관리
+  async function setting() {
+    let result = await DomCallback("{% host_url 'setting' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('setting', result);
     }
   }
 

@@ -1,0 +1,16 @@
+.counter {
+  display: flex;
+  align-items: center;
+}
+.counter .counter_text {
+  font-size: 23px;
+  font-weight: 600;
+  margin: 0 8px 5px 8px;
+}
+
+.counter button {
+  background-color: transparent;
+}
+.left_button {
+  transform: rotate(180deg);
+}

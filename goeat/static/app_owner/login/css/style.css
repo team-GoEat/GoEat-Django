@@ -1,0 +1,178 @@
+.login_section {
+    margin: 0 auto;
+    padding-top: 120px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .login_section .title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
+  }
+  
+  .login_content {
+    width: 370px;
+  }
+  
+  .login_content .login_title {
+    margin-bottom: 38px;
+  }
+  
+  .login_content .input_wrap {
+    margin-bottom: 10px;
+  }
+  
+  .login_content .input_wrap p {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  .login_content .input_wrap .input {
+    width: 100%;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 12px;
+    padding: 0 12px;
+    font-size: 18px;
+  }
+  
+  .login_content .login_button {
+    width: 100%;
+    display: block;
+    height: 43px;
+    border-radius: 12px;
+    background-color: #ff0034;
+    color: #fff;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .login_content .check_wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .check_wrap input[type="checkbox"] {
+    display: none;
+  }
+  
+  .style_check .check_icon {
+    opacity: 0;
+  }
+  .style_check .check_icon path {
+    fill: #ff0034;
+  }
+  
+  .check_wrap input[type="checkbox"] + .style_check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ff0034;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .check_wrap input[type="checkbox"]:checked + .style_check .check_icon {
+    opacity: 1;
+  }
+  
+  .login_content .check_wrap span {
+    margin-left: 4px;
+    font-size: 20px;
+    font-weight: 600;
+    vertical-align: bottom;
+    cursor: pointer;
+  }
+  
+  .login_content .login_fail {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 20px;
+  }
+  
+  .open_content .open_info {
+    margin: 40px 0;
+    text-align: center;
+    font-size: 20px;
+  }
+  .open_content .button_wrap {
+    width: 370px;
+    margin: 0 auto;
+  }
+  
+  .open_content .button_wrap button:first-child {
+    margin-bottom: 12px;
+  }
+  
+  .open_content .button_wrap button {
+    width: 100%;
+    height: 43px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+  .open_content .btn_border {
+    border-width: 2px;
+  }
+  
+  .login_section .logo {
+    width: 113px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .popup {
+    position: absolute;
+    right: 10px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 1px solid #ff0034;
+    border-radius: 8px;
+  }
+  
+  .popup:after,
+  .popup:before {
+    top: 100%;
+    left: 90%;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  .popup:after {
+    border-color: transparent;
+    border-top-color: #fff;
+    border-width: 8px;
+    margin-left: -8px;
+  }
+  .popup:before {
+    border-color: transparent;
+    border-top-color: #ff0034;
+    border-width: 9px;
+    margin-left: -9px;
+  }
+  
+  .popup_icon {
+    font-size: 30px;
+    margin-right: 12px;
+    font-weight: 800;
+    color: #ff0034;
+  }
+  
+  .popup_text {
+    font-size: 13px;
+  }
+  

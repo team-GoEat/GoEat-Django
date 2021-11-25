@@ -1,0 +1,239 @@
+.setting_box {
+  display: flex;
+  height: 100%;
+}
+
+.left_content {
+  padding-left: 40px;
+  padding-right: 30px;
+  width: 50%;
+}
+.right_content {
+  padding-left: 30px;
+}
+
+.reserve_set {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.reserve_set .title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.reserve_set .toggle {
+  border: 1px solid #ccc;
+  width: 44px;
+  height: 24px;
+  background-color: #fff;
+}
+.reserve_set .toggle .toggle_switch {
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+}
+.toggle.on .toggle_switch {
+  background-color: #ff0034;
+}
+
+.reserve_note {
+  padding-left: 7px;
+  border-left: 2px solid #ff0034;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.time_set_wrap {
+  padding: 16px 0 30px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.time_set_item:first-child {
+  margin-bottom: 28px;
+}
+.time_set_item .time_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.time_set_item .time_header .title {
+  font-size: 18px;
+}
+.time_set {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.time_set .time {
+  width: calc(50% - 45px);
+}
+
+.time_set .time {
+  font-size: 12px;
+}
+.time_set .time .time_title {
+  margin-bottom: 3px;
+}
+.time_set .time .time_text {
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #ff0034;
+  line-height: 30px;
+}
+
+.time_set button {
+  width: 60px;
+  height: 30px;
+}
+
+.offday {
+  margin-top: 25px;
+}
+.offday_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.offday_header .title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.offday_header button {
+  width: 60px;
+  height: 30px;
+}
+
+.offday_set {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.week_button {
+  width: 30%;
+}
+.week_button:not(:last-child) {
+  width: 30%;
+  margin-bottom: 10px;
+}
+.week_button input {
+  display: none;
+}
+.week_style {
+  width: 100%;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #666;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  cursor: pointer;
+}
+.check_icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  border: 1px solid #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check_icon path {
+  fill: #666;
+}
+.week_text {
+  font-size: 14px;
+  color: #666;
+}
+.week_button input[type="checkbox"]:checked + .week_style {
+  border-color: #ff0034;
+}
+.week_button input[type="checkbox"]:checked + .week_style .check_icon {
+  border-color: #ff0034;
+  background-color: #ff0034;
+}
+.week_button input[type="checkbox"]:checked + .week_style .week_text {
+  color: #ff0034;
+}
+.week_button input[type="checkbox"]:checked + .week_style .check_icon path {
+  fill: #fff;
+}
+
+.check_wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+}
+
+.check_wrap span {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.time_header .check_wrap input[type="checkbox"] {
+  display: none;
+}
+
+.time_header .style_check .time_check_icon {
+  opacity: 0;
+}
+
+.time_header .style_check .time_check_icon path {
+  fill: #ff0034;
+}
+
+.time_header .check_wrap input[type="checkbox"] + .style_check {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #ff0034;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time_header
+  .check_wrap
+  input[type="checkbox"]:checked
+  + .style_check
+  .time_check_icon {
+  opacity: 1;
+}
+
+.notice_title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.notice_list {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.notice_item {
+  padding: 12px 15px 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.notice_item:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+.notice_item span {
+  font-size: 17px;
+}
