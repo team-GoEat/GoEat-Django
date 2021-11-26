@@ -1,0 +1,44 @@
+{% load static %}
+{% load hosts %}
+
+
+<link rel="stylesheet" href="{% static 'app_owner/base/css/numberpad.css' %}">
+
+<div class="number_modal">
+  <div class="numer_content">
+    <div class="number_layout">
+      <div class="time_container">
+        <div class="time_box">
+          <div class="time_change">
+            <input class="time_input" type="text" maxlength="2" readonly>
+            <span>
+              :
+            </span>
+            <input class="time_input" type="text" maxlength="2" readonly>
+          </div>
+          <p class="time_notice">
+            원하는 시간을 입력해 주세요.<br />
+            예) 1000 입력 -> 10:00
+          </p>
+          <button class="btn_fill">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="number_pad">
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+    <button>.</button>
+    <button>0</button>
+    <button>
+      <img src="{% static 'app_owner/base/images/delete.svg' %}" alt="">
+    </button>
+  </div>
+</div>

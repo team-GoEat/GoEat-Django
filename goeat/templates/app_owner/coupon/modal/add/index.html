@@ -1,0 +1,163 @@
+{% load static %}
+{% load hosts %}
+
+<link rel="stylesheet" href="{% static 'app_owner/base/css/numberpad.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/coupon/modal/add/css/style.css' %}">
+
+<div class="number_modal">
+  <div class="numer_content">
+    <div class="number_layout">
+      <div class="couponadd_notice">
+        <p>
+          <span class="title">
+            유효기간 :
+          </span>
+          <span>
+            발급날짜부터 6개월 동안 사용 가능
+          </span>
+        </p>
+        <p>
+          쿠폰 삭제 시 이미 발급받은 쿠폰은 이용가능
+        </p>
+      </div>
+      <div class="couponadd_box">
+        <div class="couponadd_header">
+          <div class="order">
+
+          </div>
+          <div class="text_box">
+            <div class="input_wrap">
+              <p class="input_title">사이드 메뉴</p>
+              <input class="text" type="text">
+            </div>
+            <div class="input_wrap">
+              <p class="input_title">
+                스탬프 갯수
+                <span class="sub_text">
+                  (1 ~ 10개)
+                </span>
+              </p>
+              <input class="text" type="text">
+            </div>
+            <div class="input_wrap">
+              <p class="input_title">발급일자</p>
+              <input class="text" type="text">
+            </div>
+          </div>
+          <div class="button_wrap">
+            <button class="content_btn btn_fill">추가</button>
+          </div>
+        </div>
+        <div class="list_wrap">
+          <ul class="couponadd_list scroll_style">
+            <li class="item">
+              <div class="order">
+                <span class="order_number">
+                  1
+                </span>
+              </div>
+              <div class="text_box">
+                <p class="text">
+                  감자튀김
+                </p>
+                <p class="text">
+                  3
+                </p>
+                <p class="text">
+                  21.10.10
+                </p>
+              </div>
+              <div class="button_wrap">
+                <button class="content_btn btn_fill">삭제</button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="order">
+                <span class="order_number">
+                  1
+                </span>
+              </div>
+              <div class="text_box">
+                <p class="text">
+                  감자튀김
+                </p>
+                <p class="text">
+                  3
+                </p>
+                <p class="text">
+                  21.10.10
+                </p>
+              </div>
+              <div class="button_wrap">
+                <button class="content_btn btn_fill">삭제</button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="order">
+                <span class="order_number">
+                  1
+                </span>
+              </div>
+              <div class="text_box">
+                <p class="text">
+                  감자튀김
+                </p>
+                <p class="text">
+                  3
+                </p>
+                <p class="text">
+                  21.10.10
+                </p>
+              </div>
+              <div class="button_wrap">
+                <button class="content_btn btn_fill">삭제</button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="order">
+                <span class="order_number">
+                  1
+                </span>
+              </div>
+              <div class="text_box">
+                <p class="text">
+                  감자튀김
+                </p>
+                <p class="text">
+                  3
+                </p>
+                <p class="text">
+                  21.10.10
+                </p>
+              </div>
+              <div class="button_wrap">
+                <button class="content_btn btn_fill">삭제</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="couponadd_footer">
+          <button class="btn_fill">
+            저장
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="number_pad">
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+    <button>.</button>
+    <button>0</button>
+    <button>
+      <img src="{% static 'app_owner/base/images/delete.svg' %}" alt="">
+    </button>
+  </div>
+</div>

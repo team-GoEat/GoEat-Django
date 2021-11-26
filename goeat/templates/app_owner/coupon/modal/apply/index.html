@@ -1,0 +1,36 @@
+{% load static %}
+{% load hosts %}
+
+<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/coupon/modal/apply/css/style.css' %}">
+
+<ul class="coupon_list">
+  <li class="coupon_item">
+    <div class="user">
+      <p class="title">
+        010-2111-1111
+      </p>
+      <p class="desc">
+        닉네임(#AAAA)
+      </p>
+    </div>
+    <div class="coupon_info">
+      <p class="coupon_name">
+        1,000원 할인쿠폰
+      </p>
+      <p class="coupon_code">
+        AASDFSOCNSKHD
+      </p>
+      <p class="coupon_expiry">
+        유효기간: 21.10.26 ~ 22.04.26
+      </p>
+    </div>
+    <div class="other">
+      <span class="other_time">2021.10.21 AM 11:59</span>
+      <div class="button_wrap">
+        <button class="btn_fill">적립하기</button>
+        <button class="btn_border">적립하기</button>
+      </div>
+    </div>
+  </li>
+</ul>

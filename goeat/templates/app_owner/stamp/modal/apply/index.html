@@ -1,0 +1,86 @@
+{% load static %}
+{% load hosts %}
+
+<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/stamp/modal/apply/css/style.css' %}">
+
+<ul class="request_list">
+  <li class="request_item">
+    <div class="user">
+      <p class="title">
+        휴대폰 번호 뒷자리 / 아이디
+      </p>
+      <p class="desc">
+        1234 / MFNJ
+      </p>
+    </div>
+    <div class="counter">
+      <button>
+        <img src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+      <p class="counter_text"><span class="counter_value">1</span>개 적립</p>
+      <button>
+        <img class="left_button" src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+    </div>
+    <div class="other">
+      <span class="other_time">2021.10.21 AM 11:59</span>
+      <div class="button_wrap">
+        <button class="btn_fill" onclick="stampSaving()">적립하기</button>
+        <button class="btn_border">취소하기</button>
+      </div>
+    </div>
+  </li>
+  <li class="request_item">
+    <div class="user">
+      <p class="title">
+        휴대폰 번호 뒷자리 / 아이디
+      </p>
+      <p class="desc">
+        1234 / MFNJ
+      </p>
+    </div>
+    <div class="counter">
+      <button>
+        <img src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+      <p class="counter_text"><span class="counter_value">1</span>개 적립</p>
+      <button>
+        <img class="left_button" src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+    </div>
+    <div class="other">
+      <span class="other_time">2021.10.21 AM 11:59</span>
+      <div class="button_wrap">
+        <button class="btn_fill">적립하기</button>
+        <button class="btn_border">취소하기</button>
+      </div>
+    </div>
+  </li>
+  <li class="request_item">
+    <div class="user">
+      <p class="title">
+        휴대폰 번호 뒷자리 / 아이디
+      </p>
+      <p class="desc">
+        1234 / MFNJ
+      </p>
+    </div>
+    <div class="counter">
+      <button>
+        <img src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+      <p class="counter_text"><span class="counter_value">1</span>개 적립</p>
+      <button>
+        <img class="left_button" src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+      </button>
+    </div>
+    <div class="other">
+      <span class="other_time">2021.10.21 AM 11:59</span>
+      <div class="button_wrap">
+        <button class="btn_fill">적립하기</button>
+        <button class="btn_border">취소하기</button>
+      </div>
+    </div>
+  </li>
+</ul>

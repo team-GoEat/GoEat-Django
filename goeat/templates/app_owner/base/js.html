@@ -74,6 +74,27 @@
     }
   }
 
+  async function couponApply() {
+    let result = await DomCallback("{% host_url 'coupon_apply' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('쿠폰 적립 신청 내역', result);
+    }
+  }
+
+  async function couponUse() {
+    let result = await DomCallback("{% host_url 'coupon_use' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('쿠폰 사용 요청', result);
+    }
+  }
+
+  async function couponAdd() {
+    let result = await DomCallback("{% host_url 'coupon_add' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('사이드 메뉴 쿠폰', result);
+    }
+  }
+
   async function settingTime() {
     let result = await DomCallback("{% host_url 'setting_time' host 'owner' %}", {});
     if (result.result) {
