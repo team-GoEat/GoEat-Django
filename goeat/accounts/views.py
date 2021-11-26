@@ -203,7 +203,7 @@ def search_user(request, *args, **kwargs):
 """
 @api_view(['POST'])
 def test(request, *args, **kwargs):
-    user_id = 'S1H8'
+    user_id = '6I54'
 
     try:
         user = User.objects.get(goeat_id=user_id)
@@ -215,6 +215,8 @@ def test(request, *args, **kwargs):
     except Team.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    print(user)
+    
     return Response(status=200)
 
 def sort_first_class(lst):
