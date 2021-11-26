@@ -110,11 +110,34 @@ def account_withdraw(request, *args, **kwargs):
         token = RefreshToken(refresh_token)
         token.blacklist()
 
-        if user:
+        try:
+            teams = Team.objects.filter(teammates__in=[user])
+        except Team.DoesNotExist:
+            return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
             
-            
-            user.delete()
-            return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        for team in teams:
+            # 팀 비선호재료 초기화
+            team.menu_cannoteat.clear()
+            # 위드잇하는 팀원 목록
+            for teammate in team.teammates.all():
+                if teammate == user:
+                    continue
+                try:
+                    team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+                except UserTeamProfile.DoesNotExist:
+                    continue
+                for cne in team_profile.user.menu_cannoteat.all():
+                    team.menu_cannoteat.add(cne)
+                    
+            # 사용자의 비선호재료 다시 추가
+            for cne in team.user.menu_cannoteat.all():
+                team.menu_cannoteat.add(cne)
+        
+        #사용자 삭제
+        user.delete()
+        
+        return JsonResponse({'msg': '탈퇴되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+        
     except Exception as e:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -203,20 +226,38 @@ def search_user(request, *args, **kwargs):
 """
 @api_view(['POST'])
 def test(request, *args, **kwargs):
-    user_id = '6I54'
+    user_id = 'CQUT'
 
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        team = Team.objects.get(user=user)
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    print(user)
     
+    try:
+        teams = Team.objects.filter(teammates__in=[user])
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    for team in teams:
+        # 팀 비선호재료 초기화
+        team.menu_cannoteat.clear()
+        # 위드잇하는 팀원 목록
+        for teammate in team.teammates.all():
+            if teammate == user:
+                continue
+            try:
+                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+            except UserTeamProfile.DoesNotExist:
+                continue
+            for cne in team_profile.user.menu_cannoteat.all():
+                team.menu_cannoteat.add(cne)
+                
+        # 사용자의 비선호재료 다시 추가
+        for cne in team.user.menu_cannoteat.all():
+            team.menu_cannoteat.add(cne)
+            
+    user.delete()
+        
     return Response(status=200)
 
 def sort_first_class(lst):
