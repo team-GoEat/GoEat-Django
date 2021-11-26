@@ -228,3 +228,4 @@ NameError: name 'lst' is not defined
 2021-11-25 17:20:18,869 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-25 17:20:21,184 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
 2021-11-26 14:50:07,091 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-26 16:31:49,031 [INFO] django.utils.autoreload: Watching for file changes with StatReloader

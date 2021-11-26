@@ -39,3 +39,25 @@ class OpenSourceLicense(models.Model):
     license_title = models.CharField(max_length=30, default='license_title')
     # 라이선스 내용
     license_content = models.TextField(blank=True, null=True)
+    
+    
+"""
+#############################################################################################
+
+                                        예약
+
+#############################################################################################
+"""
+# 예약 규정 팝업
+class ReservePopUp(models.Model):
+    # 팝업 제목
+    popup_title = models.CharField(max_length=30, default='예약 규정')
+    # 팝업 내용
+    popup_content = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.popup_title
+    
+    @property
+    def short_popup_content(self):
+        return truncatechars(self.popup_content, 40)

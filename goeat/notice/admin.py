@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notice, faq, OpenSourceLicense
+from .models import Notice, faq, OpenSourceLicense, ReservePopUp
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ['id', 'notice_title', 'short_notice_content', 'notice_date']
@@ -21,7 +21,14 @@ class OpenSourceLicenseAdmin(admin.ModelAdmin):
 
     class Meta:
         model = OpenSourceLicense
+        
+class ReservePopUpAdmin(admin.ModelAdmin):
+    list_display = ['id', 'popup_title', 'short_popup_content']
+    
+    class Meta:
+        model = ReservePopUp
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(faq, FaqAdmin)
 admin.site.register(OpenSourceLicense, OpenSourceLicenseAdmin)
+admin.site.register(ReservePopUp, ReservePopUpAdmin)

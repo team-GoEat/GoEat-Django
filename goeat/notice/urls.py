@@ -14,4 +14,7 @@ urlpatterns = [
     
     # 개인정보처리방침
     path('policy/', views.privacy_policy, name='privacy_policy'),
+    
+    # 예약규정 팝업
+    path('reserve/popup/', views.get_reserve_popup, name='get_reserve_popup'),
 ]

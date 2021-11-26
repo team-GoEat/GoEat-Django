@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Notice, faq, OpenSourceLicense
+from .models import Notice, faq, OpenSourceLicense, ReservePopUp
 
 """
 #############################################################################################
@@ -25,3 +25,9 @@ class OpenSourceLicenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpenSourceLicense
         fields = ('id', 'license_title', 'license_content')
+        
+# 예약규정 팝업 Serializer
+class ReservePopUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReservePopUp
+        fields = ('popup_content', )
