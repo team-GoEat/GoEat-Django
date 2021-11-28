@@ -11,6 +11,6 @@
 .counter button {
   background-color: transparent;
 }
-.left_button {
+.right_arrow {
   transform: rotate(180deg);
 }

@@ -6,7 +6,9 @@
 .left_content {
   padding-left: 40px;
   padding-right: 30px;
+  padding-bottom: 20px;
   width: 50%;
+  overflow-y:auto;
 }
 .right_content {
   padding-left: 30px;

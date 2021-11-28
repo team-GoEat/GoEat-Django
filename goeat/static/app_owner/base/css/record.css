@@ -17,10 +17,16 @@
   height: 20px;
   font-size: 15px;
 }
-.record_header,
-.record_list {
+.record_header {
   padding-right: 40px;
 }
+
+
+.record_list {
+  padding-right: 28px;
+  height: calc(100% - 20px);
+  overflow-y: auto;
+} 
 
 .record_item {
   font-size: 13px;

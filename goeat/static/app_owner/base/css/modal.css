@@ -21,7 +21,7 @@
   min-width: 380px;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 60px;
+  max-height: calc(100vh - 100px);
 }
 
 .modal_header {
@@ -44,5 +44,6 @@
 
 .modal_content {
   min-height: 100px;
+  height: 100%;
   background-color: #fff;
 }

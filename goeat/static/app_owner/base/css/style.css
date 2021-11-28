@@ -260,6 +260,10 @@ table {
   display: flex;
   align-items: center;
 }
+
+.nav_header.disable {
+  display: none;
+}
 .nav_header span {
   font-size: 30px;
   font-weight: 600;
@@ -292,12 +296,18 @@ table {
   width: calc(100% - 145px);
   height: 100%;
 }
+.content_box.on {
+  width: 100%;
+}
 
 .side_nav {
   width: 145px;
   height: 100%;
   border-right: 1px solid #ccc;
 }
+.side_nav.disable {
+  display: none;
+} 
 
 .side_nav_item {
   display: flex;
@@ -328,7 +338,7 @@ table {
   width: 64px;
   height: 34px;
   border-radius: 17px;
-  background-color: #ccc;
+  background-color: #fff;
   padding: 2px;
   position: relative;
   cursor: pointer;
@@ -337,7 +347,7 @@ table {
 
 .toggle .toggle_switch {
   position: absolute;
-  background-color: #fff;
+  background-color: #ccc;
   width: 28px;
   height: 28px;
   border-radius: 15px;

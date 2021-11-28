@@ -10,11 +10,11 @@
       <div class="time_container">
         <div class="time_box">
           <div class="time_change">
-            <input class="time_input" type="text" maxlength="2" readonly>
+            <input class="time_input" id="hours_input" value="" type="text" maxlength="2">
             <span>
               :
             </span>
-            <input class="time_input" type="text" maxlength="2" readonly>
+            <input class="time_input" id="minutes_input" value="" type="text" maxlength="2" readonly>
           </div>
           <p class="time_notice">
             원하는 시간을 입력해 주세요.<br />
@@ -42,3 +42,5 @@
     </button>
   </div>
 </div>
+<script src="{% static 'app_owner/base/js/numberpad.js' %}"></script>
+{% include 'app_owner/setting/modal/time/js.html' %}

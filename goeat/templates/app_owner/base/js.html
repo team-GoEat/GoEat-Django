@@ -11,6 +11,7 @@
     if (result.result) {
       allHide();
       show('login', result);
+      hideNav();
     }
   }
   // 예약관리
@@ -176,8 +177,7 @@
         $(`.${showpage}`).addClass('on');
         hideLoading();
       }, 10)
-
-      onActiveNav(id)
+      onActiveNav(id);
     }
     catch (error) {
       alert('서버와 연결이 끊어졌습니다.');
@@ -242,5 +242,17 @@
   function onActiveNav(navId) {
     $('.side_nav_item').removeClass('on');
     $(`#${navId}_nav`).addClass('on');
+  }
+
+  function hideNav() {
+    $('.side_nav').addClass('disable');
+    $('.nav_header').addClass('disable');
+    $('.content_box').addClass('on');
+  }
+
+  function showNav() {
+    $('.side_nav').removeClass('disable');
+    $('.nav_header').removeClass('disable');
+    $('.content_box').removeClass('on');
   }
 </script>

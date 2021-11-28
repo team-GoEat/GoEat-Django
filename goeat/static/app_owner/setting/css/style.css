@@ -28,12 +28,10 @@
   border: 1px solid #ccc;
   width: 44px;
   height: 24px;
-  background-color: #fff;
 }
 .reserve_set .toggle .toggle_switch {
   width: 20px;
   height: 20px;
-  background-color: #ccc;
 }
 .reserve_set .toggle.on .toggle_switch {
   background-color: #ff0034;

@@ -2,6 +2,7 @@
 {% load hosts %}
 
 <link rel="stylesheet" href="{% static 'app_owner/base/css/numberpad.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}">
 
 <div class="number_modal">
   <div class="numer_content">
@@ -11,15 +12,15 @@
           <p>
             휴대폰 번호
           </p>
-          <input type="text" value="010-3135-2172" readonly>
+          <input id="stamp_phon" type="text" value="" readonly>
         </div>
         <div class="counter">
-          <button>
+          <button class="count_down">
             <img src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
           </button>
-          <p class="counter_text"><span class="counter_value">1</span>개 적립</p>
-          <button>
-            <img class="left_button" src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
+          <p class="counter_text"><span class="counter_value"></span>개 적립</p>
+          <button class="count_up">
+            <img class="right_arrow" src="{% static 'app_owner/base/images/arrowcircle.svg' %}" alt="">
           </button>
         </div>
       </div>
@@ -75,3 +76,4 @@
     </button>
   </div>
 </div>
+{% include 'app_owner/stamp/modal/saving/js.html' %}

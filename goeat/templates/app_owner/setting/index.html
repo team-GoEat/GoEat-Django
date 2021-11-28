@@ -33,15 +33,15 @@
             <p class="time_title">
               시작
             </p>
-            <p class="time_text" onclick="settingTime()">
-              10:00
+            <p class="time_text" id="open_start_time" onclick="settingTime()">
+              12:00
             </p>
           </div>
           <div class="time">
             <p class="time_title">
               종료
             </p>
-            <p class="time_text">
+            <p class="time_text" id="open_end_time">
               10:00
             </p>
           </div>
@@ -219,3 +219,4 @@
     </ul>
   </div>
 </div>
+{% include 'app_owner/setting/js.html' %}
