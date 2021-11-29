@@ -49,5 +49,59 @@
     }
   }
 
+  // 요일 체크박스
+  var offDayState = ["월요일", "화요일"];
+  var weekDayArray = [
+    {
+      eng: "monday",
+      kor: "월요일"
+    },
+    {
+      eng: "tuesday",
+      kor: "화요일"
+    },
+    {
+      eng: "wednesday",
+      kor: "수요일"
+    },
+    {
+      eng: "thursday",
+      kor: "목요일"
+    },
+    {
+      eng: "friday",
+      kor: "금요일"
+    },
+    {
+      eng: "saturday",
+      kor: "토요일"
+    },
+    {
+      eng: "sunday",
+      kor: "일요일"
+    },
+  ];
+
+  weekBtnRander();
+
+  function weekBtnRander() {
+    const weekDayBox = document.querySelector(".offday_set");
+    weekDayBox.innerHTML = weekDayArray.map(v => `
+      <div class="week_button">
+        <input id=${v.eng} name=${v.kor} type="checkbox" ${offDayState.some(offvalue => offvalue === v.kor) ? "checked" : ""}>
+        <label for=${v.eng} class="week_style">
+          <div class="check_icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="6.366" viewBox="0 0 8 6.366">
+              <path d="M15.924,10.9a.734.734,0,1,1,1.048,1.028l-3.907,4.883a.734.734,0,0,1-1.057.02L9.42,14.237A.734.734,0,1,1,10.457,13.2l2.049,2.048,3.4-4.33.02-.021Z" transform="translate(-9.182 -10.676)" fill-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="week_text">
+            ${v.kor}
+          </span>
+        </label>
+      </div>
+    `).join("");
+  }
+
 
 </script>

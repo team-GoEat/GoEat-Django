@@ -89,12 +89,19 @@
     }
   }
 
-  async function couponAdd() {
-    let result = await DomCallback("{% host_url 'coupon_add' host 'owner' %}", {});
+  async function couponSidemenu() {
+    let result = await DomCallback("{% host_url 'coupon_sidemenu' host 'owner' %}", {});
     if (result.result) {
-      modalShow('사이드 메뉴 쿠폰', result);
+      modalShow("사이드 메뉴", result);
     }
   }
+  async function couponDiscount() {
+    let result = await DomCallback("{% host_url 'coupon_discount' host 'owner' %}", {});
+    if (result.result) {
+      modalShow("할인 쿠폰", result);
+    }
+  }
+
 
   async function settingTime() {
     let result = await DomCallback("{% host_url 'setting_time' host 'owner' %}", {});
@@ -196,7 +203,8 @@
   function allHide() {
     try {
       $(`.${showpage}`).remove();
-      $('.gj-picker').remove();
+      $('.gj-modal').remove();
+      // $('.gj-picker').remove();
     } catch (error) {
       alert('서버와 연결이 끊어졌습니다.');
     }
@@ -257,6 +265,39 @@
     $('.nav_header').removeClass('disable');
     $('.content_box').removeClass('on');
   }
+
+
+  var docV = document.documentElement;
+  // 전체화면 설정
+  function openFullScreenMode() {
+    if (docV.requestFullscreen)
+      docV.requestFullscreen();
+    else if (docV.webkitRequestFullscreen) // Chrome, Safari (webkit)
+      docV.webkitRequestFullscreen();
+    else if (docV.mozRequestFullScreen) // Firefox
+      docV.mozRequestFullScreen();
+    else if (docV.msRequestFullscreen) // IE or Edge
+      docV.msRequestFullscreen();
+  }
+
+  // 전체화면 해제
+  function closeFullScreenMode() {
+    if (document.exitFullscreen)
+      document.exitFullscreen();
+    else if (document.webkitExitFullscreen) // Chrome, Safari (webkit)
+      document.webkitExitFullscreen();
+    else if (document.mozCancelFullScreen) // Firefox
+      document.mozCancelFullScreen();
+    else if (document.msExitFullscreen) // IE or Edge
+      document.msExitFullscreen();
+  }
+
+  function winClose() {
+    top.window.open('about:blank', '_self').close();
+    top.window.opener = self;
+    top.self.close();
+  }
+
 
 
 </script>

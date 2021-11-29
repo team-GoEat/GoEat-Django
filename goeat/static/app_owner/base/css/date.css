@@ -42,3 +42,16 @@
 .gj-picker-md table tr td.today div {
   color: #ff0034;
 }
+.gj-picker-md table tr th div, .gj-picker-md table tr td div {
+  font-size: 16px;
+  font-weight: 500;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+}
+
+[type="year"].gj-picker-md table tr td div, [type="decade"].gj-picker-md table tr td div, [type="century"].gj-picker-md table tr td div {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+}

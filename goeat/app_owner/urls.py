@@ -26,8 +26,10 @@ urlpatterns = [
          include('app_owner.views_files.coupon.modal.apply.urls')),
     path('coupon/modal/use',
          include('app_owner.views_files.coupon.modal.use.urls')),
-    path('coupon/modal/add',
-         include('app_owner.views_files.coupon.modal.add.urls')),
+    path('coupon/modal/sidemenu',
+         include('app_owner.views_files.coupon.modal.sidemenu.urls')),
+    path('coupon/modal/discount',
+         include('app_owner.views_files.coupon.modal.discount.urls')),
 
     # === 설정  ===
     path('setting/', include('app_owner.views_files.setting.urls')),
