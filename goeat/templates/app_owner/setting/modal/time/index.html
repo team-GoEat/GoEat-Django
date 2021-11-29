@@ -10,7 +10,7 @@
       <div class="time_container">
         <div class="time_box">
           <div class="time_change">
-            <input class="time_input" id="hours_input" value="" type="text" maxlength="2">
+            <input class="time_input" id="hours_input" value="" type="text" maxlength="2" readonly>
             <span>
               :
             </span>
@@ -20,7 +20,7 @@
             원하는 시간을 입력해 주세요.<br />
             예) 1000 입력 -> 10:00
           </p>
-          <button class="btn_fill">확인</button>
+          <button class="btn_fill" onclick="onClickComplete()">확인</button>
         </div>
       </div>
     </div>
@@ -42,5 +42,4 @@
     </button>
   </div>
 </div>
-<script src="{% static 'app_owner/base/js/numberpad.js' %}"></script>
-{% include 'app_owner/setting/modal/time/js.html' %}
+{% include 'app_owner/setting/js.html' %}

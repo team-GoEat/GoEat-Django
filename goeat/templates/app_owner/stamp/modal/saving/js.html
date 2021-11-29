@@ -1,8 +1,8 @@
 <script>
   //휴대폰 번호 
-  let stampPhoneNumber = "";
-  let stampNumberPad = document.querySelector(".number_pad");
-  let stampPhoneInput = document.querySelector('#stamp_phon');
+  var stampPhoneNumber = "";
+  var stampNumberPad = document.querySelector(".number_pad");
+  var stampPhoneInput = document.querySelector('#stamp_phon');
 
   stampNumberPad.addEventListener('click', (e) => {
     if (!e.target.innerText) return onClickDelete();
@@ -22,10 +22,10 @@
   }
 
   //카운터
-  let stampCounterValue = 1;
-  let stampCounter = document.querySelector(".counter_value");
-  let stampCountDownBtn = document.querySelector(".count_down");
-  let stampCountUpBtn = document.querySelector(".count_up");
+  var stampCounterValue = 1;
+  var stampCounter = document.querySelector(".counter_value");
+  var stampCountDownBtn = document.querySelector(".count_down");
+  var stampCountUpBtn = document.querySelector(".count_up");
 
 
   counterPrint();

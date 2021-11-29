@@ -1,0 +1,32 @@
+<script>
+
+  $('.start_datepicker').datepicker({
+    format: 'yyyy.mm.dd',
+    value: getTodayFormat(),
+    showRightIcon: false,
+  });
+  $('.end_datepicker').datepicker({
+    format: 'yyyy.mm.dd',
+    value: getTodayFormat(),
+    showRightIcon: false,
+  });
+
+  // $('#start_datepicker').datepicker({
+  // modal: true,
+  // maxDate: function () {
+  //   var date = new Date();
+  //   date.setDate(date.getDate());
+  //   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  // }
+  // });
+
+  function getTodayFormat() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = ("0" + (1 + date.getMonth())).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+
+    return (`${year}.${month}.${day}`);
+  }
+
+</script>

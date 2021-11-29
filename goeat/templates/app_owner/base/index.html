@@ -10,6 +10,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>고잇</title>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+  <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'app_owner/base/css/modal.css' %}">
 
@@ -71,12 +74,13 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% include 'app_owner/base/js.html' %}
-    {% block js %}
 
-    {% endblock js %}
+  {% include 'app_owner/base/js.html' %}
+  {% block js %}
+
+  {% endblock js %}
 
 </body>
 

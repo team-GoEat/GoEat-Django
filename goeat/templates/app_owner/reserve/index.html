@@ -14,16 +14,12 @@
         <span class="date_title">
           날짜 :
         </span>
-        <p class="date_text">
-          <span class="start_date">
-            2021.10.10
-          </span>
+        <p class="datepicker_box">
+          <input class="start_datepicker" readonly />
           <span>
             ~
           </span>
-          <span class="end_date">
-            2021.10.30
-          </span>
+          <input class="end_datepicker" readonly />
         </p>
         <button class="btn_fill">
           날짜변경
@@ -276,4 +272,5 @@
   </div>
 </div>
 
+{% include 'app_owner/base/date.html' %}
 {% include 'app_owner/reserve/js.html' %}

@@ -2,7 +2,9 @@
   display: flex;
   height: 100%;
 }
-
+.right_content {
+  overflow-y: auto;
+}
 .reserve_set {
   display: flex;
   align-items: center;
@@ -230,4 +232,11 @@
 }
 .notice_item span {
   font-size: 17px;
+}
+
+.brake_time_set {
+  display: none;
+}
+.brake_time_set.on {
+  display: flex;
 }

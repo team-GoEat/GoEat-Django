@@ -196,10 +196,12 @@
   function allHide() {
     try {
       $(`.${showpage}`).remove();
+      $('.gj-picker').remove();
     } catch (error) {
       alert('서버와 연결이 끊어졌습니다.');
     }
   }
+
 
   function lastHide() {
     try {
@@ -255,4 +257,6 @@
     $('.nav_header').removeClass('disable');
     $('.content_box').removeClass('on');
   }
+
+
 </script>

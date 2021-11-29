@@ -1,30 +1,53 @@
 <script>
+  var timeNumber = "";
+  var timeTextElement = undefined;
+  var timeNumberPad = document.querySelector(".number_pad");
+  var timeInputAll = document.querySelectorAll(".time_input");
 
-  // var hoursInput = document.querySelector("#hours_input");
-  // var minutesInput = document.querySelector("#minutes_input");
-  // var numberPadButton = document.querySelectorAll('.number_pad button')
-  // var numberPad = document.querySelector(".number_pad");
-  // var hoursText = [];
-  // var minutesText = [];
+  timeNumberPad?.addEventListener('click', (e) => {
+    if (!e.target.innerText) return onClickDelete();
 
-  // async function onClickTimeChange(el) {
-  //   console.log(
-  //     el.innerText.split(":")[0]
-  //   )
-  //   try {
-  //     await settingTime();
-  //     hoursText = el.innerText.split(":")[0].map(v => v)
-  //     minutesText = el.innerText.split(":")[1].map(v => v)
-  //     hoursInput = hoursText.join("");
-  //     hoursInput = minutesText.join("");
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
+    onClickNumber(e.target.innerText);
+  })
 
-  // numberPadButton.forEach(el => el.addEventListener('click', (e) => {
-  //   numberPadText = [...numberPadText, e.target.innerText];
-  //   hoursInput.value = hoursText.join("");
-  // }))
+  function onClickNumber(value) {
+    if (timeNumber.length === 4) return;
+    timeNumber = timeNumber.concat(value).replace(/[^0-9]/g, "");
+    printTime();
+  }
+
+  function onClickDelete() {
+    timeNumber = timeNumber.substr(0, timeNumber.length - 1);
+    printTime();
+  }
+
+  function printTime() {
+    timeInputAll[0].value = timeNumber.substr(0, 2);
+    timeInputAll[1].value = timeNumber.substr(2, 3);
+  }
+
+  function onClickComplete() {
+    timeTextElement.innerText = timeNumber.substr(0, 2) + ":" + timeNumber.substr(2, 3)
+    modalClose();
+  }
+
+  async function onClickTimeText(el) {
+    await settingTime();
+    timeNumber = el.innerText.replace(":", "");
+    timeTextElement = el;
+    printTime()
+  }
+
+
+  //브레이크 타임 체크박스
+  function onChangeBrakeCheck(e) {
+    const brakeTimeSet = document.querySelector(".brake_time_set")
+    if (e.checked) {
+      brakeTimeSet.classList.remove("on")
+    } else {
+      brakeTimeSet.classList.add("on")
+    }
+  }
+
 
 </script>

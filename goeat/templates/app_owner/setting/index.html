@@ -33,7 +33,7 @@
             <p class="time_title">
               시작
             </p>
-            <p class="time_text" id="open_start_time" onclick="settingTime()">
+            <p class="time_text" id="open_start_time" onclick="onClickTimeText(this)">
               12:00
             </p>
           </div>
@@ -41,7 +41,7 @@
             <p class="time_title">
               종료
             </p>
-            <p class="time_text" id="open_end_time">
+            <p class="time_text" id="open_end_time" onclick="onClickTimeText(this)">
               10:00
             </p>
           </div>
@@ -56,7 +56,7 @@
             브레이크 타임
           </span>
           <label class="check_wrap">
-            <input type="checkbox">
+            <input type="checkbox" onchange="onChangeBrakeCheck(this)">
             <div class="style_check">
               <svg class="time_check_icon" xmlns="http://www.w3.org/2000/svg" width="8" height="6.366" viewBox="0 0 8 6.366">
                 <path d="M15.924,10.9a.734.734,0,1,1,1.048,1.028l-3.907,4.883a.734.734,0,0,1-1.057.02L9.42,14.237A.734.734,0,1,1,10.457,13.2l2.049,2.048,3.4-4.33.02-.021Z" transform="translate(-9.182 -10.676)" fill-rule="evenodd" />
@@ -67,12 +67,12 @@
             </span>
           </label>
         </div>
-        <div class="time_set">
+        <div class="time_set brake_time_set on">
           <div class="time">
             <p class="time_title">
               시작
             </p>
-            <p class="time_text">
+            <p class="time_text" id="brake_start_time" onclick="onClickTimeText(this)">
               10:00
             </p>
           </div>
@@ -80,7 +80,7 @@
             <p class="time_title">
               종료
             </p>
-            <p class="time_text">
+            <p class="time_text" id="brake_end_time" onclick="onClickTimeText(this)">
               10:00
             </p>
           </div>
@@ -193,7 +193,7 @@
       </div>
     </div>
   </div>
-  <div class="right_content">
+  <div class="right_content scroll_style">
     <p class="notice_title">
       공지사항
     </p>
@@ -216,6 +216,73 @@
         </span>
         <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
       </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+      <li class="notice_item" onclick="settingNotice()">
+        <span>
+          고잇 공지사항 안내
+        </span>
+        <img src="{% static 'app_owner/base/images/arrow_right.svg' %}" alt="">
+      </li>
+
     </ul>
   </div>
 </div>
