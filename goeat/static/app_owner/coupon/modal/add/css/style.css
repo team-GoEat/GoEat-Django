@@ -54,11 +54,11 @@
   padding-right: 22px;
 }
 
-.couponadd_header .text {
+.couponadd_header .couponadd_input {
   width: 100%;
 }
 
-.text_box .text {
+.text_box .couponadd_input, .text_box .text {
   height: 25px;
   background-color: #fff;
   border: 1px solid #ff0034;

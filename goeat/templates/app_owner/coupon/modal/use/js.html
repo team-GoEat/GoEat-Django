@@ -1,9 +1,8 @@
-<script type="module">
-  import { inputPhoneNumber } from '/static/app_owner/base/js/utility.js';
+<script>
   //휴대폰 번호 
-  let couponPhoneNumber = "";
-  let couponNumberPad = document.querySelector(".number_pad");
-  let couponPhoneInput = document.querySelector('#coupon_phon');
+  var couponPhoneNumber = "";
+  var couponNumberPad = document.querySelector(".number_pad");
+  var couponPhoneInput = document.querySelector('#coupon_phon');
 
   couponNumberPad.addEventListener('click', (e) => {
     if (!e.target.innerText) return onClickDelete();
@@ -12,7 +11,6 @@
   })
 
   function onClickNumber(value) {
-    console.log(couponPhoneNumber);
     if (couponPhoneNumber.length === 11) return;
     couponPhoneNumber = couponPhoneNumber.concat(value);
     couponPhoneInput.value = inputPhoneNumber(couponPhoneNumber);
@@ -23,16 +21,13 @@
     couponPhoneInput.value = inputPhoneNumber(couponPhoneNumber);
   }
 
-  const selectBox = document.querySelector(".coupon_select_box");
   const selectInput = document.querySelector(".coupon_select_input");
   const options = document.querySelector(".select_option");
   const option = document.querySelectorAll(".select_option li");
 
-
-  selectBox.addEventListener('click', () => {
+  function onClickSelectBox() {
     options.classList.toggle("on");
-  })
-
+  }
 
   option.forEach(el => {
     el.addEventListener('click', e => {

@@ -28,7 +28,7 @@
           <div class="text_box">
             <div class="input_wrap">
               <p class="input_title">사이드 메뉴</p>
-              <input class="text" type="text">
+              <input class="couponadd_input" id="side_menu" type="text" data-name="사이드메뉴">
             </div>
             <div class="input_wrap">
               <p class="input_title">
@@ -37,103 +37,20 @@
                   (1 ~ 10개)
                 </span>
               </p>
-              <input class="text" type="text">
+              <input class="couponadd_input" id="stamp_count" type="text" data-name="스탬프갯수" readonly>
             </div>
             <div class="input_wrap">
               <p class="input_title">발급일자</p>
-              <input class="text" type="text">
+              <input class="couponadd_input" id="issue_date" type="text" data-name="발급일자" readonly>
             </div>
           </div>
           <div class="button_wrap">
-            <button class="content_btn btn_fill">추가</button>
+            <button class="content_btn btn_fill" onclick="onAddCouponItem()">추가</button>
           </div>
         </div>
         <div class="list_wrap">
           <ul class="couponadd_list scroll_style">
-            <li class="item">
-              <div class="order">
-                <span class="order_number">
-                  1
-                </span>
-              </div>
-              <div class="text_box">
-                <p class="text">
-                  감자튀김
-                </p>
-                <p class="text">
-                  3
-                </p>
-                <p class="text">
-                  21.10.10
-                </p>
-              </div>
-              <div class="button_wrap">
-                <button class="content_btn btn_fill">삭제</button>
-              </div>
-            </li>
-            <li class="item">
-              <div class="order">
-                <span class="order_number">
-                  1
-                </span>
-              </div>
-              <div class="text_box">
-                <p class="text">
-                  감자튀김
-                </p>
-                <p class="text">
-                  3
-                </p>
-                <p class="text">
-                  21.10.10
-                </p>
-              </div>
-              <div class="button_wrap">
-                <button class="content_btn btn_fill">삭제</button>
-              </div>
-            </li>
-            <li class="item">
-              <div class="order">
-                <span class="order_number">
-                  1
-                </span>
-              </div>
-              <div class="text_box">
-                <p class="text">
-                  감자튀김
-                </p>
-                <p class="text">
-                  3
-                </p>
-                <p class="text">
-                  21.10.10
-                </p>
-              </div>
-              <div class="button_wrap">
-                <button class="content_btn btn_fill">삭제</button>
-              </div>
-            </li>
-            <li class="item">
-              <div class="order">
-                <span class="order_number">
-                  1
-                </span>
-              </div>
-              <div class="text_box">
-                <p class="text">
-                  감자튀김
-                </p>
-                <p class="text">
-                  3
-                </p>
-                <p class="text">
-                  21.10.10
-                </p>
-              </div>
-              <div class="button_wrap">
-                <button class="content_btn btn_fill">삭제</button>
-              </div>
-            </li>
+
           </ul>
         </div>
         <div class="couponadd_footer">
@@ -161,3 +78,5 @@
     </button>
   </div>
 </div>
+<script src="{% static 'app_owner/base/js/utility.js' %}"></script>
+{% include 'app_owner/coupon/modal/add/js.html' %}

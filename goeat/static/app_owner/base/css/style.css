@@ -217,6 +217,13 @@ table {
 
 .left_content {
   border-right: 1px solid #ccc;
+  overflow-y: auto;
+  padding-left: 40px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+.right_content {
+  padding-left: 30px;
 }
 
 .left_content,
