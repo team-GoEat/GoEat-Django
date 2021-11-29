@@ -236,17 +236,15 @@
 
 
   function showLoading() {
-    // $('body').append(`
-    //   <div class="loading_bg">
-    //     <img src="/static/app_www/base/images/loading.gif">
-    //   </div>
-    // `)
-    console.log('showLoading');
+    $('body').append(`
+      <div class="loading_bg">
+        <div class="spinner"></div>
+      </div>
+    `)
   }
 
   function hideLoading() {
-    // $('.loading_bg').remove();
-    console.log('hideLoading');
+    $('.loading_bg').remove();
   }
 
   function onActiveNav(navId) {
