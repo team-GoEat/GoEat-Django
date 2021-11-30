@@ -1420,6 +1420,9 @@ def menu_like(request, *args, **kwargs):
         except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+        if menu in user.menu_hate.all():
+            user.menu_hate.remove(menu)
+            
         user.menu_like.add(menu)
         logger.info('%-20s 좋아요 -> %-5s %s' % (user, menu_id, menu))
         return JsonResponse({'msg': '좋아하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -1470,6 +1473,9 @@ def menu_hate(request, *args, **kwargs):
         except MenuSecondClass.DoesNotExist:
             return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+        if menu in user.menu_like.all():
+            user.menu_like.remove(menu)
+        
         user.menu_hate.add(menu)
         logger.info('%-20s 싫어요 -> %-5s %s' % (user, menu_id, menu))
         return JsonResponse({'msg': '싫어하는 메뉴에 추가되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
