@@ -1,14 +1,14 @@
 <script>
   //휴대폰 번호 
   var stampPhoneNumber = "";
-  var stampNumberPad = document.querySelector(".number_pad");
   var stampPhoneInput = document.querySelector('#stamp_phon');
+  var stampNumberPad = document.querySelectorAll(".number_pad button");
 
-  stampNumberPad.addEventListener('click', (e) => {
+  stampNumberPad.forEach(el => el.addEventListener('click', e => {
     if (!e.target.innerText) return onClickDelete();
 
     onClickNumber(e.target.innerText);
-  })
+  }));
 
   function onClickNumber(value) {
     if (stampPhoneNumber.length === 11) return;

@@ -1,14 +1,14 @@
 <script>
   var timeNumber = "";
   var timeTextElement = undefined;
-  var timeNumberPad = document.querySelector(".number_pad");
   var timeInputAll = document.querySelectorAll(".time_input");
+  var timeNumberPad = document.querySelectorAll(".number_pad button");
 
-  timeNumberPad?.addEventListener('click', (e) => {
+  timeNumberPad.forEach(el => el.addEventListener('click', e => {
     if (!e.target.innerText) return onClickDelete();
 
     onClickNumber(e.target.innerText);
-  })
+  }));
 
   function onClickNumber(value) {
     if (timeNumber.length === 4) return;
