@@ -1,0 +1,57 @@
+.date_wrap {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}
+.date_title {
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.date_wrap .datepicker_box {
+  margin: 0 8px 0 5px;
+}
+
+.datepicker_box {
+  display: flex;
+  align-items: center;
+}
+.datepicker_box input {
+  font-size: 20px;
+  height: 24px;
+  text-align: center;
+  width: 110px;
+}
+
+.date_wrap button {
+  font-size: 13px;
+  min-width: 60px;
+  padding: 3px 6px;
+}
+
+.gj-textbox-md {
+  border-bottom: none !important;
+}
+.gj-picker-md {
+  padding: 0 10px 20px 10px;
+}
+.gj-picker-md table tr td.selected.gj-cursor-pointer div {
+  background: #ff0034;
+  color: #fff;
+}
+.gj-picker-md table tr td.today div {
+  color: #ff0034;
+}
+.gj-picker-md table tr th div, .gj-picker-md table tr td div {
+  font-size: 16px;
+  font-weight: 500;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+}
+
+[type="year"].gj-picker-md table tr td div, [type="decade"].gj-picker-md table tr td div, [type="century"].gj-picker-md table tr td div {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+}

@@ -1,0 +1,73 @@
+<script>
+  var stampApplyState = [
+    {
+      phone: 1234,
+      id: "MFNJ",
+      date: "2021.10.21 AM 11:59",
+      saving_cnt: 1
+    },
+    {
+      phone: 1234,
+      id: "MFNJ",
+      date: "2021.10.21 AM 11:59",
+      saving_cnt: 2
+    },
+    {
+      phone: 1234,
+      id: "MFNJ",
+      date: "2021.10.21 AM 11:59",
+      saving_cnt: 3
+    },
+    {
+      phone: 1234,
+      id: "MFNJ",
+      date: "2021.10.21 AM 11:59",
+      saving_cnt: 4
+    },
+  ];
+  requestListRander();
+
+  function requestListRander() {
+    const requestList = document.querySelector(".request_list")
+    requestList.innerHTML = stampApplyState.map((v, i) => `
+      <li class="request_item">
+      <div class="user">
+        <p class="title">
+          휴대폰 번호 뒷자리 / 아이디
+        </p>
+        <p class="desc">
+          ${v.phone} / ${v.id}
+        </p>
+      </div>
+      <div class="counter">
+        <button onclick="onClickCountDown(${i})">
+          <img src="static/app_owner/base/images/arrowcircle.svg" alt="">
+        </button>
+        <p class="counter_text"><span class="counter_value">${v.saving_cnt}</span>개 적립</p>
+        <button onclick="onClickCountUp(${i})">
+          <img class="right_arrow" src="static/app_owner/base/images/arrowcircle.svg" alt="">
+        </button>
+      </div>
+      <div class="other">
+        <span class="other_time">${v.date}</span>
+        <div class="button_wrap">
+          <button class="btn_fill" onclick="stampSaving()">적립하기</button>
+          <button class="btn_border">취소하기</button>
+        </div>
+      </div>
+    </li>
+    `).join("");
+  }
+
+
+  function onClickCountUp(index) {
+    stampApplyState[index].saving_cnt += 1;
+    requestListRander();
+  }
+  function onClickCountDown(index) {
+    if (stampApplyState[index].saving_cnt === 0) return;
+    stampApplyState[index].saving_cnt -= 1;
+    requestListRander();
+  }
+
+</script>

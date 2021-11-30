@@ -1,0 +1,47 @@
+<script>
+  //휴대폰 번호 
+  var stampPhoneNumber = "";
+  var stampNumberPad = document.querySelector(".number_pad");
+  var stampPhoneInput = document.querySelector('#stamp_phon');
+
+  stampNumberPad.addEventListener('click', (e) => {
+    if (!e.target.innerText) return onClickDelete();
+
+    onClickNumber(e.target.innerText);
+  })
+
+  function onClickNumber(value) {
+    if (stampPhoneNumber.length === 11) return;
+    stampPhoneNumber = stampPhoneNumber.concat(value);
+    stampPhoneInput.value = inputPhoneNumber(stampPhoneNumber);
+  }
+
+  function onClickDelete() {
+    stampPhoneNumber = stampPhoneNumber.substr(0, stampPhoneNumber.length - 1);
+    stampPhoneInput.value = inputPhoneNumber(stampPhoneNumber);
+  }
+
+  //카운터
+  var stampCounterValue = 1;
+  var stampCounter = document.querySelector(".counter_value");
+  var stampCountDownBtn = document.querySelector(".count_down");
+  var stampCountUpBtn = document.querySelector(".count_up");
+
+
+  counterPrint();
+
+  stampCountDownBtn.addEventListener('click', () => {
+    if (stampCounterValue <= 0) return;
+    stampCounterValue -= 1;
+    counterPrint();
+  })
+  stampCountUpBtn.addEventListener('click', () => {
+    stampCounterValue += 1;
+    counterPrint();
+  })
+
+  function counterPrint() {
+    stampCounter.innerText = stampCounterValue;
+  }
+
+</script>

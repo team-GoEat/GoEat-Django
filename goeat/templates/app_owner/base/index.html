@@ -1,43 +1,87 @@
-{% load hosts %}
 {% load static %}
+{% load hosts %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {% include 'app_owner/base/meta.html' %}
-    {% include 'app_owner/base/head.html' %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고잇</title>
 
-    {% block css %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+  <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'app_owner/base/css/modal.css' %}">
 
-    {% endblock css %}
+  {% block css %}
 
-    {% block top_js %}
+  {% endblock css %}
 
-    {% endblock top_js %}
 </head>
 
-<body>
-    <div id="wrap">
-
-        {% block content %}
-
-        {% endblock content %}
-
-
-        <div class="bottom_logo_wrap">
-            <div class="bottom_logo">
-                <a href="{% host_url 'main' host 'owner' %}">
-                    <img src="{% static 'app_owner/base/images/logo.png' %}" alt="">
-                </a>
-            </div>
+<body onload="login()">
+  <nav class="nav">
+    <img class="nav_logo" src="{% static 'app_owner/base/images/logo_w.png' %}" alt="">
+    <div class="nav_header">
+      <span>
+        실시간 예약 리스트 등록
+      </span>
+      <div class="toggle" onclick="onClickToggle()">
+        <div class="toggle_switch">
         </div>
+      </div>
     </div>
+    <div class="nav_control">
+      <img src="{% static 'app_owner/base/images/window_min.svg' %}" alt="" onclick="closeFullScreenMode()">
+      <img src="{% static 'app_owner/base/images/window_zoom.svg' %}" alt="" onclick="openFullScreenMode()">
+      <img src="{% static 'app_owner/base/images/window_close.svg' %}" alt="" onclick="winClose()">
+    </div>
+  </nav>
+
+  <div class="main_container">
+    <ul class="side_nav">
+      <li class="side_nav_item" id="reserve_nav" onclick="reserve()">
+        예약<br />
+        관리
+      </li>
+      <li class="side_nav_item" id="stamp_nav" onclick="stamp()">
+        스탬프<br />
+        관리
+      </li>
+      <li class="side_nav_item" id="coupon_nav" onclick="coupon()">
+        쿠폰<br />
+        관리
+      </li>
+      <li class="side_nav_item" id="setting_nav" onclick="setting()">
+        설정
+      </li>
+    </ul>
+    <div class="content_box">
+    </div>
+    <div class="modal_container">
+      <div class="modal">
+        <div class="modal_header">
+          <span class="modal_title">
+
+          </span>
+          <img class="modal_close" src="{% static 'app_owner/base/images/window_close.svg' %}" alt="" onclick="modalClose()">
+        </div>
+        <div class="modal_content">
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 
+  {% include 'app_owner/base/js.html' %}
+  {% block js %}
 
-    {% block bottom_js %}
+  {% endblock js %}
 
-    {% endblock bottom_js %}
 </body>
 
 </html>

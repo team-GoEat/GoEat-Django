@@ -1,0 +1,123 @@
+.number_layout {
+  padding: 5px 0;
+}
+
+.couponadd_notice {
+  padding-left: 8px;
+  border-left: 3px solid #ff0034;
+  font-size: 15px;
+  color: #404040;
+  margin-bottom: 10px;
+}
+.couponadd_notice .title {
+  color: #000;
+}
+.couponadd_box {
+  width: 100%;
+  border: 1px solid #ff0034;
+  background-color: #fdebec;
+  border-radius: 8px;
+  padding: 10px 5px 10px 20px;
+}
+
+.couponadd_header,
+.couponadd_list .item,
+.text_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.couponadd_box .order {
+  width: 22px;
+}
+.couponadd_box .text_box {
+  width: calc(100% - 22px - 50px);
+}
+.couponadd_box .button_wrap {
+  width: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+.couponadd_box .button_wrap .content_btn {
+  height: 25px;
+  width: 38px;
+  font-size: 11px;
+}
+
+.text_box > div,
+.text_box > p {
+  width: 30%;
+  text-align: center;
+}
+.couponadd_header {
+  padding-right: 10px;
+  /* padding-right: 22px; */
+}
+
+.couponadd_header .couponadd_input {
+  width: 100%;
+}
+
+.text_box .couponadd_input, .text_box .text {
+  height: 25px;
+  background-color: #fff;
+  border: 1px solid #ff0034;
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.couponadd_header {
+  margin-bottom: 15px;
+}
+
+.couponadd_header .input_title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.couponadd_header .sub_text {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.list_wrap {
+  padding: 15px 0;
+  border-top: 1px solid #ff0034;
+  border-bottom: 1px solid #ff0034;
+}
+
+.couponadd_list {
+  height: 85px;
+  overflow: auto;
+}
+.couponadd_list .item {
+  padding-right: 10px;
+}
+.couponadd_list .item:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.couponadd_list .order_number {
+  line-height: 25px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff0034;
+}
+
+.couponadd_footer {
+  width: 100%;
+  margin-top: 6px;
+  text-align: right;
+}
+.couponadd_footer button {
+  width: 38px;
+  height: 25px;
+}

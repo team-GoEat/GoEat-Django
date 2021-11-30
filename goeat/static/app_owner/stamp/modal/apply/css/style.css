@@ -1,0 +1,50 @@
+.request_list {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+  max-height: 500px;
+}
+.request_item {
+  width: 700px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  background-color: #fdebec;
+  border: 1px solid #ff0034;
+  border-radius: 8px;
+}
+
+.request_item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.request_item .user {
+  text-align: center;
+  font-size: 20px;
+}
+
+.request_item .user .title {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.request_item .user .desc {
+  font-weight: 700;
+}
+
+.other_time {
+  font-size: 20px;
+}
+
+.button_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+.button_wrap button {
+  width: calc(50% - 2.5px);
+  height: 25px;
+  font-size: 12px;
+}

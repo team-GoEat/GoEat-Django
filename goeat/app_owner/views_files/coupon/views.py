@@ -3,11 +3,10 @@ from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.urls import reverse
 
+
 class Views_Controls(View):
-    def get(self, request):
+    def post(self, request):
+        print('coupon')
+        context = {}
 
-        context = {
-
-        }
-
-        return render(request, 'app_owner/stamp/index.html', context)
+        return render(request, 'app_owner/coupon/index.html', context)

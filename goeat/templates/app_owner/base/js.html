@@ -1,0 +1,301 @@
+{% load static %}
+{% load hosts %}
+
+<script>
+  const showpage = 'showpage_container';
+  let isRealTimeReserve = false;
+
+  // 로그인
+  async function login() {
+    let result = await DomCallback("{% host_url 'login' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('login', result);
+      hideNav();
+    }
+  }
+  // 예약관리
+  async function reserve() {
+    let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('reserve', result);
+    }
+  }
+
+  // 스탬프관리
+  async function stamp() {
+    let result = await DomCallback("{% host_url 'stamp' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('stamp', result);
+    }
+  }
+
+  // 쿠폰관리
+  async function coupon() {
+    let result = await DomCallback("{% host_url 'coupon' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('coupon', result);
+    }
+  }
+
+  // 가게관리
+  async function setting() {
+    let result = await DomCallback("{% host_url 'setting' host 'owner' %}", {});
+    if (result.result) {
+      allHide();
+      show('setting', result);
+      onToggleReserve()
+    }
+  }
+
+
+  /* ================= modal ================= */
+
+  async function reserveReject() {
+    let result = await DomCallback("{% host_url 'reserve_reject' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('예약 거절 사유 선택', result);
+    }
+  }
+
+  async function stampApply() {
+    let result = await DomCallback("{% host_url 'stamp_apply' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('스탬프 적립 신청 내역', result);
+    }
+  }
+
+  async function stampSaving() {
+    let result = await DomCallback("{% host_url 'stamp_saving' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('스탬프 적립하기', result);
+    }
+  }
+
+  async function couponApply() {
+    let result = await DomCallback("{% host_url 'coupon_apply' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('쿠폰 적립 신청 내역', result);
+    }
+  }
+
+  async function couponUse() {
+    let result = await DomCallback("{% host_url 'coupon_use' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('쿠폰 사용 요청', result);
+    }
+  }
+
+  async function couponSidemenu() {
+    let result = await DomCallback("{% host_url 'coupon_sidemenu' host 'owner' %}", {});
+    if (result.result) {
+      modalShow("사이드 메뉴", result);
+    }
+  }
+  async function couponDiscount() {
+    let result = await DomCallback("{% host_url 'coupon_discount' host 'owner' %}", {});
+    if (result.result) {
+      modalShow("할인 쿠폰", result);
+    }
+  }
+
+
+  async function settingTime() {
+    let result = await DomCallback("{% host_url 'setting_time' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('시간 변경', result);
+    }
+  }
+
+  async function settingNotice() {
+    let result = await DomCallback("{% host_url 'setting_notice' host 'owner' %}", {});
+    if (result.result) {
+      modalShow('고잇 공지사항', result);
+    }
+  }
+
+  /* ================= toggle function ================= */
+
+  function onClickToggle(boolean) {
+    if (boolean === undefined) {
+      if (isRealTimeReserve) {
+        isRealTimeReserve = false;
+      } else {
+        isRealTimeReserve = true;
+      }
+    } else {
+      isRealTimeReserve = boolean;
+    }
+
+    onToggleReserve();
+  }
+
+
+  function onToggleReserve() {
+    if (isRealTimeReserve) return $('.toggle').addClass('on')
+    return $('.toggle').removeClass('on')
+  }
+
+
+  /* ================= spa function ================= */
+
+  const DomCallback = function (url, params) {
+
+    showLoading();
+
+    params['csrfmiddlewaretoken'] = '{{ csrf_token }}'
+
+    return new Promise((result) => {
+
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: params,
+        success: (data) => {
+          result({
+            'result': true,
+            'msg': '',
+            'data': data
+          });
+        },
+        error: (data) => {
+
+          alert('서버와 접속이 원활하지 않습니다.');
+
+          result({
+            'result': false,
+            'msg': '',
+            'data': data
+          });
+        }
+      });
+    });
+  }
+
+  function show(id, result) {
+    try {
+      $('.content_box').append(`<div class="${showpage}" id="${id}"></div>`);
+      $(`#${id}`).html(result.data);
+
+      setTimeout(() => {
+        $(`.${showpage}`).addClass('on');
+        hideLoading();
+      }, 10)
+      onActiveNav(id);
+    }
+    catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+
+  }
+
+  function hide(id) {
+    try {
+      $(`#${id}`).remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+  function allHide() {
+    try {
+      $(`.${showpage}`).remove();
+      $('.gj-modal').remove();
+      // $('.gj-picker').remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+
+  function lastHide() {
+    try {
+      $(`.${showpage}`).eq(-1).remove();
+    } catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+
+
+  function modalShow(title, result) {
+    try {
+      $('.modal_content').html(result.data);
+      $('.modal_container').addClass('on');
+      $('.modal_title').html(title);
+    }
+    catch (error) {
+      alert('서버와 연결이 끊어졌습니다.');
+    }
+  }
+  function modalClose() {
+    $('.modal_container').removeClass('on');
+  }
+
+
+  function showLoading() {
+    $('body').append(`
+      <div class="loading_bg">
+        <div class="spinner"></div>
+      </div>
+    `)
+  }
+
+  function hideLoading() {
+    $('.loading_bg').remove();
+  }
+
+  function onActiveNav(navId) {
+    $('.side_nav_item').removeClass('on');
+    $(`#${navId}_nav`).addClass('on');
+  }
+
+  function hideNav() {
+    $('.side_nav').addClass('disable');
+    $('.nav_header').addClass('disable');
+    $('.content_box').addClass('on');
+  }
+
+  function showNav() {
+    $('.side_nav').removeClass('disable');
+    $('.nav_header').removeClass('disable');
+    $('.content_box').removeClass('on');
+  }
+
+
+  var docV = document.documentElement;
+  // 전체화면 설정
+  function openFullScreenMode() {
+    if (docV.requestFullscreen)
+      docV.requestFullscreen();
+    else if (docV.webkitRequestFullscreen) // Chrome, Safari (webkit)
+      docV.webkitRequestFullscreen();
+    else if (docV.mozRequestFullScreen) // Firefox
+      docV.mozRequestFullScreen();
+    else if (docV.msRequestFullscreen) // IE or Edge
+      docV.msRequestFullscreen();
+  }
+
+  // 전체화면 해제
+  function closeFullScreenMode() {
+    if (document.exitFullscreen)
+      document.exitFullscreen();
+    else if (document.webkitExitFullscreen) // Chrome, Safari (webkit)
+      document.webkitExitFullscreen();
+    else if (document.mozCancelFullScreen) // Firefox
+      document.mozCancelFullScreen();
+    else if (document.msExitFullscreen) // IE or Edge
+      document.msExitFullscreen();
+  }
+
+  function winClose() {
+    top.window.open('about:blank', '_self').close();
+    top.window.opener = self;
+    top.self.close();
+  }
+
+
+
+</script>

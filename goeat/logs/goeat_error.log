@@ -225,7 +225,50 @@ NameError: name 'lst' is not defined
 2021-11-12 14:30:19,241 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-12 17:21:37,764 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-12 17:43:09,849 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+<<<<<<< HEAD
 2021-11-25 17:20:18,869 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-25 17:20:21,184 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\°íÀÕ\GOEAT\goeat\goeat\settings.py changed, reloading.
 2021-11-26 14:50:07,091 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-26 16:31:49,031 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+=======
+2021-11-24 16:31:56,853 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:38:40,053 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:38:46,137 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:41:17,077 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:50:51,565 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:50:51,567 [WARNING] django.request: Bad Request: /
+2021-11-24 16:50:51,835 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:50:51,835 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:51:16,237 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:16,237 [WARNING] django.request: Bad Request: /admin
+2021-11-24 16:51:16,767 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:16,768 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:51:25,302 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:25,302 [WARNING] django.request: Bad Request: /notice
+2021-11-24 16:51:25,669 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:25,670 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:51:50,116 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:50,117 [WARNING] django.request: Bad Request: /
+2021-11-24 16:51:50,586 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:50,586 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:51:57,565 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:57,566 [WARNING] django.request: Bad Request: /
+2021-11-24 16:51:57,638 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:51:57,638 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:53:30,918 [INFO] django.utils.autoreload: /Users/baggeonhui/Desktop/projects/goeat/GoEat-Django/goeat/goeat/settings.py changed, reloading.
+2021-11-24 16:53:31,376 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:53:56,232 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:53:56,234 [WARNING] django.request: Bad Request: /
+2021-11-24 16:53:56,294 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:53:56,294 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:53:57,441 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:53:57,441 [WARNING] django.request: Bad Request: /
+2021-11-24 16:53:57,475 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:53:57,476 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:54:05,280 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-24 16:54:05,966 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:54:05,968 [WARNING] django.request: Bad Request: /
+2021-11-24 16:54:06,000 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'owner.test.me:8000'. You may need to add 'owner.test.me' to ALLOWED_HOSTS.
+2021-11-24 16:54:06,003 [WARNING] django.request: Bad Request: /favicon.ico
+2021-11-24 16:54:22,195 [INFO] django.utils.autoreload: /Users/baggeonhui/Desktop/projects/goeat/GoEat-Django/goeat/goeat/settings.py changed, reloading.
+>>>>>>> 4704c9d8af11b0a22ade16ed270390960d353453

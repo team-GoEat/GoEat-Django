@@ -1,0 +1,31 @@
+{% load static %}
+{% load hosts %}
+
+<link rel="stylesheet" href="{% static 'app_owner/reserve/modal/reject/css/style.css' %}">
+
+<div class="reject_content">
+  <div class="radio_wrap">
+    <label class="radio">
+      <input name="reject" type="radio">
+      <p class="radio_style">
+        테이블 만석
+      </p>
+    </label>
+    <label class="radio">
+      <input name="reject" type="radio">
+      <p class="radio_style">
+        재료 소진
+      </p>
+    </label>
+    <label class="radio">
+      <input name="reject" type="radio">
+      <p class="radio_style">
+        기타 사정
+      </p>
+    </label>
+  </div>
+
+  <button class="btn_fill">
+    확인
+  </button>
+</div>

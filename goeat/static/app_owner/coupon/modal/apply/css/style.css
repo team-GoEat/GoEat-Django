@@ -1,0 +1,66 @@
+.coupon_list {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+  max-height: 500px;
+}
+.coupon_item {
+  width: 700px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  background-color: #fdebec;
+  border: 1px solid #ff0034;
+  border-radius: 8px;
+}
+
+.coupon_item:not(:last-child){
+  margin-bottom: 20px;
+}
+
+.coupon_item .user .title {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+.coupon_item .user .desc {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.coupon_info {
+  text-align: right;
+  width: 48%;
+}
+.coupon_name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.coupon_code,
+.coupon_expiry {
+  font-size: 14px;
+  color: #666;
+  font-weight: 600;
+}
+
+.coupon_code {
+  margin: 2px 0 5px;
+}
+
+.other_time {
+  font-size: 20px;
+}
+
+.button_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+.button_wrap button {
+  width: calc(50% - 2.5px);
+  height: 25px;
+  font-size: 12px;
+}

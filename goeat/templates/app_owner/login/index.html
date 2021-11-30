@@ -1,46 +1,70 @@
-{% extends 'app_owner/base/index.html' %}
-{% load hosts %}
 {% load static %}
+{% load hosts %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'app_owner/login/css/login.css' %}">
-{% endblock css %}
+<!-- <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}"> -->
+<link rel="stylesheet" href="{% static 'app_owner/login/css/style.css' %}">
 
-{% block content %}
-
-<div class="login">
-    <div class="login_logo_wrap">
-        <div class="login_logo_img">
-            <img src="{% static 'app_owner/base/images/logo.png' %}" alt="">
-        </div>
+<div class="login_section">
+  <div class="login_content on">
+    <h1 class="title login_title">사장님 로그인</h1>
+    <div class="input_wrap">
+      <p>
+        아이디
+      </p>
+      <input class="input" type="text">
     </div>
-    <div class="login_title">
-        <h2>사장님 로그인</h2>
+    <div class="input_wrap">
+      <p>
+        비밀번호
+      </p>
+      <input class="input" type="password">
     </div>
+    <button class="login_button" onclick="onClickLogin()">
+      로그인
+    </button>
+    <label class="check_wrap">
+      <input type="checkbox">
+      <div class="style_check">
+        <svg class="check_icon" xmlns="http://www.w3.org/2000/svg" width="13.174" height="10.483" viewBox="0 0 13.174 10.483">
+          <path d="M20.285,11.038a1.209,1.209,0,1,1,1.726,1.693l-6.434,8.042a1.209,1.209,0,0,1-1.74.032L9.574,16.54a1.209,1.209,0,1,1,1.708-1.708l3.375,3.373,5.6-7.131a.38.38,0,0,1,.032-.035Z" transform="translate(-9.182 -10.676)" fill="#ff0034" fill-rule="evenodd" />
+        </svg>
+      </div>
+      <span>
+        자동 로그인
+      </span>
+    </label>
 
-    <form action="" method="POST">
-        <div class="form_inner">
-            <div class="user_info">
-                <div class="id">
-                    <label for="">아이디</label>
-                    <input type="text">
-                </div>
-                <div class="pw">
-                    <label for="">비밀번호</label>
-                    <input type="text">
-                </div>
-            </div>
-            <div class="submit">
-                <button type="button"><span></span> 로그인</button>
-            </div>
-        </div>
-        <div class="auto_login">
-            <div class="auto_btn_wrap">
-                <input type="checkbox" id="auto_login" checked>
-                <label for="auto_login"><em></em>자동 로그인</label>
-            </div>
-        </div>
-    </form>
+    <!-- <p class="login_fail">
+      로그인에 실패하였습니다.<br />
+      아이디 / 비밀번호 찾기는 고잇 팀(<span class="red_text">070-4006-7014</span>)에 문의해 주세요.
+    </p> -->
+  </div>
+
+  <div class="open_content">
+    <h1 class="title">
+      오늘 (<span class="today"></span>)<br />
+      <span class="red_text">실시간 예약</span>을 오픈할까요?
+    </h1>
+
+    <p class="open_info">
+      예약 가능 시간<br />
+      AM 11:00 ~ PM 2:00
+    </p>
+
+    <div class="button_wrap">
+      <button class="btn_fill" onclick="onClickOpen(true)">오픈하기</button>
+      <button class="btn_border" onclick="onClickOpen(false)">아니오</button>
+    </div>
+  </div>
+
+  <img class="logo" src="{% static 'app_owner/base/images/logo.png' %}" alt="">
+</div>
+<div class="popup">
+  <span class="popup_icon">!</span>
+  <p class="popup_text">
+    프로그램 사용에 문제가 있으신가요?<br />
+    고잇 팀 <span class="red_text">(070-4006-7014)</span>에 문의해 주세요.
+  </p>
 </div>
 
-{% endblock content %}
+{% include 'app_owner/login/js.html' %}

@@ -1,0 +1,405 @@
+@font-face {
+  font-family: "AppleGothic";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoEB.woff") format("woff");
+}
+@font-face {
+  font-family: "AppleGothic";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoB.woff") format("woff");
+}
+@font-face {
+  font-family: "AppleGothic";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoSB.woff") format("woff");
+}
+@font-face {
+  font-family: "AppleGothic";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoM.woff") format("woff");
+}
+@font-face {
+  font-family: "AppleGothic";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/static/app_owner/base/font/AppleSDGothicNeoR.woff") format("woff");
+}
+/* :root {
+  --black: #000;
+  --white: #fff;
+  --green: #4ae25b;
+  --red: #ff0034;
+  --pink: #fdebec;
+  --gray100: #eee;
+  --gray200: #ccc;
+  --gray300: #b9b9b9;
+  --gray400: #666;
+  --gray500: #404040;
+} */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+input {
+  font-family: "AppleGothic";
+  border: none;
+}
+input:focus {
+  outline: none;
+}
+input:focus::placeholder {
+  opacity: 0;
+}
+
+body {
+  font-family: "AppleGothic";
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  min-width: 1024px;
+  max-width: 1920px;
+  margin: 0 auto;
+  color: #000;
+  position: relative;
+  margin: 0 auto;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+button {
+  border: none;
+  box-sizing: border-box;
+  font-family: "AppleGothic";
+  font-weight: 500;
+  cursor: pointer;
+}
+* {
+  font-family: "AppleGothic";
+  box-sizing: border-box;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.red_text {
+  color: #ff0034;
+}
+
+.btn_fill {
+  background-color: #ff0034;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.btn_border {
+  background-color: #fff;
+  border: 1px solid #ff0034;
+  color: #ff0034;
+  border-radius: 8px;
+}
+
+.left_content {
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  padding-left: 40px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+.right_content {
+  padding-left: 30px;
+}
+
+.left_content,
+.right_content {
+  width: 50%;
+  height: 100%;
+  padding-top: 20px;
+}
+
+.scroll_style::-webkit-scrollbar {
+  width: 12px;
+}
+.scroll_style::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #ff0034;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+}
+.scroll_style::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 7.5px;
+  border: 1px solid #ff0034;
+}
+
+.showpage_container {
+  height: 100%;
+  width: 100%;
+}
+
+/* /////////////////////////////////////////////////////////////// */
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-color: #ff0034;
+  padding: 0 15px;
+}
+.nav_header {
+  display: flex;
+  align-items: center;
+}
+
+.nav_header.disable {
+  display: none;
+}
+.nav_header span {
+  font-size: 30px;
+  font-weight: 600;
+  color: #fff;
+  margin-right: 15px;
+}
+
+.nav_control {
+  display: flex;
+  align-items: center;
+}
+.nav_control img {
+  cursor: pointer;
+}
+
+.nav_control img:not(:last-child) {
+  margin-right: 15px;
+}
+
+/* /////////////////////////////////////////////////////////////// */
+
+.main_container {
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  position: relative;
+}
+
+.content_box {
+  width: calc(100% - 145px);
+  height: 100%;
+}
+.content_box.on {
+  width: 100%;
+}
+
+.side_nav {
+  width: 145px;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+.side_nav.disable {
+  display: none;
+} 
+
+.side_nav_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 25%;
+  text-align: center;
+  font-size: 30px;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.side_nav_item.on {
+  background-color: #ff0034;
+  color: #fff;
+}
+
+.section_title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* /////////////////////////////////////////////////////////////// */
+
+.toggle {
+  width: 64px;
+  height: 34px;
+  border-radius: 17px;
+  background-color: #fff;
+  padding: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.toggle .toggle_switch {
+  position: absolute;
+  background-color: #ccc;
+  width: 28px;
+  height: 28px;
+  border-radius: 15px;
+  left: 2px;
+  top: 50%;
+  transform: translate(0, -50%);
+  transition: transform 0.3s;
+}
+.nav_header .toggle.on {
+  background-color: #fff;
+}
+.nav_header .toggle.on .toggle_switch {
+  background-color: #ff0034;
+  transform: translate(32px, -50%);
+}
+
+.loading_bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+
+.loading_bg .spinner {
+  position: absolute;
+  top: 20px;
+  left: 140px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}

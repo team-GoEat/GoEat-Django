@@ -1,0 +1,39 @@
+.record_layout {
+  display: flex;
+  text-align: center;
+}
+
+.record_layout .record_date {
+  width: 37.5%;
+}
+.record_layout .record_count {
+  width: 25%;
+}
+.record_layout .record_info {
+  width: 37.5%;
+}
+
+.record_header {
+  height: 20px;
+  font-size: 15px;
+}
+.record_header {
+  padding-right: 40px;
+}
+
+
+.record_list {
+  padding-right: 28px;
+  height: calc(100% - 25px);
+  overflow-y: auto;
+} 
+
+.record_item {
+  font-size: 13px;
+  padding: 20px 0 5px;
+  border-bottom: 1px solid #ccc;
+}
+
+.record_item .record_count {
+  color: #ff0034;
+}

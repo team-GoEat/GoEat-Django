@@ -1,204 +1,319 @@
-{% extends 'app_owner/base/index.html' %}
-
-{% load hosts %}
 {% load static %}
+{% load hosts %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'app_owner/coupon/css/coupon.css' %}">
-{% endblock css %}
+<link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/coupon/css/style.css' %}">
 
-{% block content %}
-
-<div class="coupon">
-    <div class="coupon_title">
-        <h2>쿠폰 사용 내역</h2>
+<div class="coupon_box">
+  <div class="left_content scroll_style">
+    <h2 class="section_title">
+      쿠폰 적립 내역
+    </h2>
+    <div class="date_wrap">
+      <span class="date_title">
+        날짜 :
+      </span>
+      <p class="datepicker_box">
+        <input class="start_datepicker" readonly />
+        <span>
+          ~
+        </span>
+        <input class="end_datepicker" readonly />
+      </p>
+      <button class="btn_fill">
+        날짜변경
+      </button>
+    </div>
+    <div class="used_wrap">
+      <span class="used_title">
+        쿠폰 사용 수 :
+      </span>
+      <div class="used_desc">
+        <p class="used_date">
+          2021.10.10 ~ 2021.10.30
+        </p>
+        <p>
+          총 사용 갯수 : 1000개
+        </p>
+      </div>
+    </div>
+    <div class="view_wrap">
+      <button class="btn_fill" onclick="couponApply()">
+        쿠폰 사용 신청 보기
+      </button>
+      <button class="btn_border" onclick="couponUse()">
+        휴대폰 번호로 사용하기
+      </button>
+    </div>
+    <div class="add_wrap">
+      <p class="title">
+        쿠폰 내용 등록하기
+      </p>
+      <div class="button_wrap">
+        <button class="btn_fill" onclick="couponSidemenu()">
+          사이드 메뉴
+        </button>
+        <button class="btn_border" onclick="couponDiscount()">
+          할인쿠폰
+        </button>
+      </div>
     </div>
 
-    <div class="coupon_title_content">
-        <div class="title_txt">
-            <p>이번 달 총 사용: <span>00개</span></p>
+    <div class="coupon_table">
+      <div class="table_wrap">
+        <p class="table_title">
+          현재 등록된 쿠폰
+        </p>
+        <div class="table_hader table_layout">
+          <div>
+            사이드 메뉴
+          </div>
+          <div>
+            스탬프 갯수
+          </div>
+          <div>
+            유효 기간
+          </div>
         </div>
-        <div class="times_content times_select">
-            <div class="week_area" onclick="week(this)">
-                <p>2021.07.28</p>
+        <ul class="table_list">
+          <li class="table_item table_layout">
+            <div>
+              콜라
             </div>
-            <div class="week_list">
-                <ul>
-                    <li>
-                        <p>2021.07.27</p>
-                    </li>
-                    <li>
-                        <p>2021.07.26</p>
-                    </li>
-                    <li>
-                        <p>2021.07.25</p>
-                    </li>
-                    <li>
-                        <p>2021.07.24</p>
-                    </li>
-                    <li>
-                        <p>2021.07.23</p>
-                    </li>
-                    <li>
-                        <p>2021.07.22</p>
-                    </li>
-                    <li>
-                        <p>2021.07.21</p>
-                    </li>
-                    <li>
-                        <p>2021.07.20</p>
-                    </li>
-                    <li>
-                        <p>2021.07.19</p>
-                    </li>
-                </ul>
+            <div>
+              3
             </div>
-        </div>
-    </div>
-
-    <div class="coupon_list">
-        <ul>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
-            <li>
-                <div class="days">
-                    <p>1,000원 할인</p>
-                </div>
-                <div class="phon">
-                    <p>2021.07.28 AM 12:29</p>
-                    <span>010-****-1234</span>
-                </div>
-            </li>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+          <li class="table_item table_layout">
+            <div>
+              감자튀김
+            </div>
+            <div>
+              5
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
         </ul>
+      </div>
+      <div class="table_wrap">
+        <p class="table_title">
+          할인 쿠폰
+        </p>
+        <div class="table_hader table_layout">
+          <div>
+            할인 금액
+          </div>
+          <div>
+            스탬프 갯수
+          </div>
+          <div>
+            유효 기간
+          </div>
+        </div>
+        <ul class="table_list">
+          <li class="table_item table_layout">
+            <div>
+              1,000
+            </div>
+            <div>
+              3
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+          <li class="table_item table_layout">
+            <div>
+              3,000
+            </div>
+            <div>
+              5
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="table_wrap">
+        <p class="table_title">
+          지난 등록된 쿠폰
+        </p>
+        <div class="table_hader table_layout">
+          <div>
+            사이드 메뉴
+          </div>
+          <div>
+            스탬프 갯수
+          </div>
+          <div>
+            유효 기간
+          </div>
+        </div>
+        <ul class="table_list">
+          <li class="table_item table_layout">
+            <div>
+              콜라
+            </div>
+            <div>
+              3
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+          <li class="table_item table_layout">
+            <div>
+              감자튀김
+            </div>
+            <div>
+              5
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="table_wrap">
+        <p class="table_title">
+          할인 쿠폰
+        </p>
+        <div class="table_hader table_layout">
+          <div>
+            할인 금액
+          </div>
+          <div>
+            스탬프 갯수
+          </div>
+          <div>
+            유효 기간
+          </div>
+        </div>
+        <ul class="table_list">
+          <li class="table_item table_layout">
+            <div>
+              1,000
+            </div>
+            <div>
+              3
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+          <li class="table_item table_layout">
+            <div>
+              3,000
+            </div>
+            <div>
+              5
+            </div>
+            <div>
+              21.10.26 ~ 22.04.26
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
+  <div class="right_content record_box">
+    <div class="record_header record_layout">
+      <div class="record_date">
+        날짜/시간
+      </div>
+      <div class="record_count">
+        적립 갯수
+      </div>
+      <div class="record_info">
+        휴대폰 뒷4자리/아이디
+      </div>
+    </div>
+    <ul class="record_list scroll_style">
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+      <li class="record_item record_layout">
+        <p class="record_date">
+          2021.07.28 AM 12:29
+        </p>
+        <p class="record_count">
+          99개 적립
+        </p>
+        <p class="record_info">
+          1234 (#AABB)
+        </p>
+      </li>
+    </ul>
+  </div>
 </div>
-
-
-</div>
-
-{% block bottom_js %}
-<script>
-    function week(el) {
-        var Sib = $(el).siblings('.week_list')[0];
-
-        if (!($(Sib).hasClass('active'))) {
-            $(Sib).addClass('active');
-        }
-    }
-
-    $('.week_list li p').click(function () {
-        var listText = $(this).text();
-
-        $('.week_area p').text(listText);
-        $('.week_list').removeClass('active');
-    })
-</script>
-{% endblock bottom_js %}
-
-{% endblock content %}
+{% include 'app_owner/base/date.html' %}
