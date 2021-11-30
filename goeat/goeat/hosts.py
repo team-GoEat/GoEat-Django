@@ -5,4 +5,6 @@ host_patterns = patterns('',
 
     # 유저페이지
     host(r'owner', 'app_owner.urls', name='owner'),
+    
+    host(r'www', 'goeat.urls', name='www'),
 )       
