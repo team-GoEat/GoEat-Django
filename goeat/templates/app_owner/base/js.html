@@ -225,6 +225,7 @@
       $('.modal_content').html(result.data);
       $('.modal_container').addClass('on');
       $('.modal_title').html(title);
+      hideLoading();
     }
     catch (error) {
       alert('서버와 연결이 끊어졌습니다.');

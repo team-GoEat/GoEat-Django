@@ -81,18 +81,18 @@
   ////////////////////////////////////////////////////////////
 
 
-  var couponAddNumberPad = document.querySelector(".number_pad");
   var couponInput = document.querySelector(".couponadd_input");
+  var couponAddNumberPad = document.querySelectorAll(".number_pad button");
 
-  couponInputAll.forEach(v => v.addEventListener('click', el => {
-    couponInput = el.target;
-  }))
-
-  couponAddNumberPad.addEventListener('click', (e) => {
+  couponAddNumberPad.forEach(el => el.addEventListener('click', e => {
     if (!e.target.innerText) return onClickDelete();
 
     onClickNumber(e.target.innerText);
-  })
+  }));
+
+  couponInputAll.forEach(v => v.addEventListener('click', el => {
+    couponInput = el.target;
+  }));
 
   function onClickNumber(value) {
 

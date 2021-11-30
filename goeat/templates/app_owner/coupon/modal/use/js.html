@@ -1,14 +1,14 @@
 <script>
   //휴대폰 번호 
   var couponPhoneNumber = "";
-  var couponNumberPad = document.querySelector(".number_pad");
   var couponPhoneInput = document.querySelector('#coupon_phon');
+  var couponNumberPad = document.querySelectorAll(".number_pad button");
 
-  couponNumberPad.addEventListener('click', (e) => {
+  couponNumberPad.forEach(el => el.addEventListener('click', e => {
     if (!e.target.innerText) return onClickDelete();
 
     onClickNumber(e.target.innerText);
-  })
+  }));
 
   function onClickNumber(value) {
     if (couponPhoneNumber.length === 11) return;
