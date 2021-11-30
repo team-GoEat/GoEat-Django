@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 
     #django-rest-framework
     'rest_framework',
-    'django_hosts',
+    # 'django_hosts',
     'app_owner',
     'rest_framework_simplejwt.token_blacklist',
     # django-allauth
@@ -104,7 +104,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
-    'django_hosts.middleware.HostsRequestMiddleware',
+    # 'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,20 +112,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_hosts.middleware.HostsResponseMiddleware',
+    # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ####### HOSTS SETTING ( 변경 금지 )
 
-# ROOT_URLCONF = 'goeat.urls'
-ROOT_HOSTCONF = 'goeat.hosts'
-ROOT_URLCONF = 'app_owner.urls'
-DEFAULT_HOST = 'owner'
+ROOT_URLCONF = 'goeat.urls'
+# ROOT_HOSTCONF = 'goeat.hosts'
+# ROOT_URLCONF = 'app_owner.urls'
+# DEFAULT_HOST = 'owner'
 
-if DEBUG:
-    PARENT_HOST = 'test.me:8000'
-else:
-    PARENT_HOST = '{ live_url }'
+# if DEBUG:
+#     PARENT_HOST = 'test.me:8000'
+# else:
+#     PARENT_HOST = '{ live_url }'
 
 SITE_ID = 1
 
