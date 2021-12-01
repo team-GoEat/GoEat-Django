@@ -275,3 +275,12 @@ NameError: name 'lst' is not defined
 2021-11-30 11:56:45,037 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-30 13:30:18,225 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-30 14:20:14,172 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-30 15:13:37,551 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-30 15:13:41,493 [WARNING] django.request: Not Found: /static/admin/img/icon-deletelink.svg
+2021-11-30 15:14:56,388 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-11-30 15:14:58,530 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-30 15:15:01,327 [WARNING] django.request: Not Found: /admin/
+2021-11-30 15:15:22,573 [WARNING] django.request: Not Found: /admin/
+2021-11-30 15:28:36,522 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-11-30 15:28:38,587 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-11-30 15:28:50,700 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.

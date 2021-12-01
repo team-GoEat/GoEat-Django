@@ -337,7 +337,7 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
 
 #############################################################################################
 """
-# 메뉴 카테고리 ID로 음식점 목록
+# 메뉴 카테고리 ID로 음식점 리스트 받기
 @api_view(['GET'])
 def get_restaurant_by_menu_type(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
@@ -372,7 +372,7 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
 
     return Response(data, status=200)
 
-# 메뉴 카테고리 ID로 음식점 목록 (비회원)
+# 메뉴 카테고리 ID로 음식점 리스트 받기 (비회원)
 @api_view(['GET'])
 def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
@@ -400,11 +400,11 @@ def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                    메뉴ID로 식당 도출
+                                    메뉴ID로 음식점 목록
 
 #############################################################################################
 """
-# 메뉴 ID로 음식점 검색
+# 메뉴 ID로 음식점 리스트 받기
 @api_view(['GET'])
 def get_restaurant_by_menuid(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
@@ -415,6 +415,8 @@ def get_restaurant_by_menuid(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    fav_res = user.fav_res.all()
+    
     data = []
 
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
@@ -439,14 +441,15 @@ def get_restaurant_by_menuid(request, *args, **kwargs):
                 'is_fav': False
             }
 
-            for fav_res in user.fav_res.all():
-                if fav_res.id == r.id:
-                    temp['is_fav']=True
+            # 즐겨찾기 되어있는지 체크
+            if r in fav_res:
+                temp['is_fav'] = True
+            
             data.append(temp)
         
     return Response(data, status=200)
 
-# 메뉴 ID로 음식점 검색 (비회원)
+# 메뉴 ID로 음식점 리스트 받기 (비회원)
 @api_view(['GET'])
 def get_restaurant_by_menuid_notlogin(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
@@ -574,10 +577,247 @@ def get_service_by_res(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                        음식점 예약
+                                    음식점 예약 관련
 
 #############################################################################################
 """
+# 전체 실시간 예약 리스트 보기
+@api_view(['GET'])
+def get_all_resreservation_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    data = []
+
+    all_res = ResReservation.objects.filter(is_reservable=True)
+    
+    for res in all_res:
+        r = res.restaurant
+        temp = {
+            'res_id': r.id,
+            'res_name': r.res_name,
+            'x_cor': r.x_cor,
+            'y_cor': r.y_cor,
+            'is_fav': False
+        }
+
+        for fav_res in user.fav_res.all():
+            if fav_res.id == r.id:
+                temp['is_fav']=True
+        data.append(temp)
+        
+    return Response(data, status=200)
+
+# (비회원) 전체 실시간 예약 리스트 보기
+@api_view(['GET'])
+def get_all_resreservation_list_notlogin(request, *args, **kwargs):
+
+    data = []
+
+    all_res = ResReservation.objects.filter(is_reservable=True)
+    
+    for res in all_res:
+        r = res.restaurant
+        temp = {
+            'res_id': r.id,
+            'res_name': r.res_name,
+            'x_cor': r.x_cor,
+            'y_cor': r.y_cor,
+            'is_fav': False
+        }
+        data.append(temp)
+        
+    return Response(data, status=200)
+
+# 메뉴ID로 음식점 실시간 예약 리스트 받기
+@api_view(['GET'])
+def get_resreservation_by_menuid(request, *args, **kwargs):
+    menu_id = kwargs.get('menu_id')
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    fav_res = user.fav_res.all()
+    
+    data = {
+        'all': [],
+        'is_reservable': []
+    }
+
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
+    res_id_list = []
+
+    for m in menu:
+        res = Restaurant.objects.filter(res_menu=m)
+        for r in res:
+            if r.id in res_id_list:
+                continue
+            else:
+                res_id_list.append(r.id)
+            
+            temp = {
+                'menu_name': m.menu_name,
+                'menu_price': m.menu_price,
+                'res_id': r.id,
+                'res_name': r.res_name,
+                'res_address': r.res_address,
+                'x_cor': r.x_cor,
+                'y_cor': r.y_cor,
+                'is_fav': False
+            }
+
+            # 즐겨찾기 되어있는지 체크
+            if r in fav_res:
+                temp['is_fav']=True
+                    
+            # 예약 가능한지 체크
+            try:
+                resRes = ResReservation.objects.get(restaurant=r)
+                if resRes.is_reservable == True:
+                    data['is_reservable'].append(temp)
+                else:
+                    data['all'].append(temp)
+            except ResReservation.DoesNotExist:
+                data['all'].append(temp)
+        
+    return Response(data, status=200)
+
+# 메뉴ID로 음식점 실시간 예약 리스트 받기 (비회원)
+@api_view(['GET'])
+def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
+    menu_id = kwargs.get('menu_id')
+
+    data = {
+        'all': [],
+        'is_reservable': []
+    }
+
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
+    res_id_list = []
+
+    for m in menu:
+        res = Restaurant.objects.filter(res_menu=m)
+        
+        for r in res:
+            if r.id in res_id_list:
+                continue
+            else:
+                res_id_list.append(r.id)
+                temp = {
+                    'menu_name': m.menu_name,
+                    'menu_price': m.menu_price,
+                    'res_id': r.id,
+                    'res_name': r.res_name,
+                    'res_address': r.res_address,
+                    'x_cor': r.x_cor,
+                    'y_cor': r.y_cor,
+                    'is_fav': False
+                }
+                
+                # 예약 가능한지 체크
+                try:
+                    resRes = ResReservation.objects.get(restaurant=r)
+                    if resRes.is_reservable == True:
+                        data['is_reservable'].append(temp)
+                    else:
+                        data['all'].append(temp)
+                except ResReservation.DoesNotExist:
+                    data['all'].append(temp)
+
+    return Response(data, status=200)
+
+# 카테고리ID로 음식점 실시간 예약 리스트 받기
+@api_view(['GET'])
+def get_resreservation_by_menutype(request, *args, **kwargs):
+    menu_type_id = kwargs.get('menu_type_id')
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    try:
+        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    fav_res = user.fav_res.all()
+    
+    data = {
+        'all': [],
+        'is_reservable': []
+    }
+
+    for r in restaurants:
+        temp = {
+            'res_id': r.id,
+            'res_name': r.res_name,
+            'res_address': r.res_address,
+            'x_cor': r.x_cor,
+            'y_cor': r.y_cor,
+            'is_fav': False
+        }
+
+        if r in fav_res:
+            temp['is_fav']=True
+                
+        # 예약 가능한지 체크
+        # try:
+        #     resRes = ResReservation.objects.filter(restaurant=r)
+        #     if resRes[0].is_reservable == True:
+        #         data['is_reservable'].append(temp)
+        #     else:
+        #         data['all'].append(temp)
+        # except:
+        #     data['all'].append(temp)
+        data['all'].append(temp)
+
+    return Response(data, status=200)
+
+# 카테고리ID로 음식점 실시간 예약 리스트 받기 (비회원)
+@api_view(['GET'])
+def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
+    menu_type_id = kwargs.get('menu_type_id')
+
+    try:
+        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    data = {
+        'all': [],
+        'is_reservable': []
+    }
+
+    for r in restaurants:
+        temp = {
+            'res_id': r.id,
+            'res_name': r.res_name,
+            'res_address': r.res_address,
+            'x_cor': r.x_cor,
+            'y_cor': r.y_cor
+        }
+        
+        # 예약 가능한지 체크
+        try:
+            resRes = ResReservation.objects.filter(restaurant=r)
+            if resRes[0].is_reservable == True:
+                data['is_reservable'].append(temp)
+            else:
+                data['all'].append(temp)
+        except:
+            data['all'].append(temp)
+
+    return Response(data, status=200)
+
 # 식당 예약 여부 바꾸기
 @api_view(['PUT'])
 def res_change_reserve(request, *args, **kwargs):
