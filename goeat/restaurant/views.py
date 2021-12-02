@@ -645,6 +645,7 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     fav_res = user.fav_res.all()
+    resRes = ResReservation.objects.filter(is_reservable=True)
     
     data = {
         'all': [],
@@ -678,13 +679,11 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
                 temp['is_fav']=True
                     
             # 예약 가능한지 체크
-            try:
-                resRes = ResReservation.objects.get(restaurant=r)
-                if resRes.is_reservable == True:
+            for rr in resRes:
+                if rr.restaurant == r:
                     data['is_reservable'].append(temp)
-                else:
-                    data['all'].append(temp)
-            except ResReservation.DoesNotExist:
+                    break
+            else:
                 data['all'].append(temp)
         
     return Response(data, status=200)
@@ -700,6 +699,7 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     }
 
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
+    resRes = ResReservation.objects.filter(is_reservable=True)
     res_id_list = []
 
     for m in menu:
@@ -722,13 +722,11 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
                 }
                 
                 # 예약 가능한지 체크
-                try:
-                    resRes = ResReservation.objects.get(restaurant=r)
-                    if resRes.is_reservable == True:
+                for rr in resRes:
+                    if rr.restaurant == r:
                         data['is_reservable'].append(temp)
-                    else:
-                        data['all'].append(temp)
-                except ResReservation.DoesNotExist:
+                        break
+                else:
                     data['all'].append(temp)
 
     return Response(data, status=200)
@@ -750,7 +748,8 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     fav_res = user.fav_res.all()
-    
+    resRes = ResReservation.objects.filter(is_reservable=True)
+
     data = {
         'all': [],
         'is_reservable': []
@@ -770,15 +769,12 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
             temp['is_fav']=True
                 
         # 예약 가능한지 체크
-        # try:
-        #     resRes = ResReservation.objects.filter(restaurant=r)
-        #     if resRes[0].is_reservable == True:
-        #         data['is_reservable'].append(temp)
-        #     else:
-        #         data['all'].append(temp)
-        # except:
-        #     data['all'].append(temp)
-        data['all'].append(temp)
+        for rr in resRes:
+            if rr.restaurant == r:
+                data['is_reservable'].append(temp)
+                break
+        else:
+            data['all'].append(temp)
 
     return Response(data, status=200)
 
@@ -792,6 +788,8 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
+    resRes = ResReservation.objects.filter(is_reservable=True)
+    
     data = {
         'all': [],
         'is_reservable': []
@@ -803,17 +801,16 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
             'res_name': r.res_name,
             'res_address': r.res_address,
             'x_cor': r.x_cor,
-            'y_cor': r.y_cor
+            'y_cor': r.y_cor,
+            'is_fav': False
         }
         
         # 예약 가능한지 체크
-        try:
-            resRes = ResReservation.objects.filter(restaurant=r)
-            if resRes[0].is_reservable == True:
+        for rr in resRes:
+            if rr.restaurant == r:
                 data['is_reservable'].append(temp)
-            else:
-                data['all'].append(temp)
-        except:
+                break
+        else:
             data['all'].append(temp)
 
     return Response(data, status=200)
