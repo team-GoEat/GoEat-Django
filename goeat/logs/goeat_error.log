@@ -284,3 +284,7 @@ NameError: name 'lst' is not defined
 2021-11-30 15:28:36,522 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
 2021-11-30 15:28:38,587 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2021-11-30 15:28:50,700 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-12-02 15:31:21,752 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-12-02 15:33:50,301 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-12-02 15:33:50,303 [WARNING] django.request: Bad Request: /admin
+2021-12-02 15:34:02,601 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
