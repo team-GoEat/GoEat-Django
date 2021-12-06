@@ -41,7 +41,7 @@ for key, value in secrets.items():
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -121,13 +121,14 @@ MIDDLEWARE = [
 ROOT_HOSTCONF = 'goeat.hosts'
 ROOT_URLCONF = 'app_owner.urls'
 # DEFAULT_HOST = 'owner'
-DEFAULT_HOST = 'www'
+DEFAULT_HOST = 'owner'
 
+print(DEBUG)
 if DEBUG:
-    # PARENT_HOST = 'test.me:8000'
-    PARENT_HOST = '127.0.0.1:8000'
+    PARENT_HOST = 'test.me:8000'
+    # PARENT_HOST = '127.0.0.1:8000'
 else:
-    PARENT_HOST = '{ live_url }'
+    PARENT_HOST = 'goeat.kr'
 
 SITE_ID = 1
 

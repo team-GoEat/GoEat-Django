@@ -288,3 +288,12 @@ NameError: name 'lst' is not defined
 2021-12-02 15:33:50,301 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
 2021-12-02 15:33:50,303 [WARNING] django.request: Bad Request: /admin
 2021-12-02 15:34:02,601 [INFO] django.utils.autoreload: C:\Users\jyang\Desktop\∞Ì¿’\GOEAT\goeat\goeat\settings.py changed, reloading.
+2021-12-05 17:54:49,085 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-12-05 17:55:02,667 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-12-05 17:58:05,629 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'www.test.me:8000'. You may need to add 'www.test.me' to ALLOWED_HOSTS.
+2021-12-05 17:58:05,631 [WARNING] django.request: Bad Request: /
+2021-12-05 17:58:06,200 [ERROR] django.security.DisallowedHost: Invalid HTTP_HOST header: 'www.test.me:8000'. You may need to add 'www.test.me' to ALLOWED_HOSTS.
+2021-12-05 17:58:06,200 [WARNING] django.request: Bad Request: /favicon.ico
+2021-12-05 17:58:16,448 [INFO] django.utils.autoreload: /Users/ijinhwan/Desktop/projects/goeat/GoEat-Django/goeat/goeat/settings.py changed, reloading.
+2021-12-05 17:58:16,902 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2021-12-05 17:58:27,502 [INFO] django.utils.autoreload: /Users/ijinhwan/Desktop/projects/goeat/GoEat-Django/goeat/goeat/settings.py changed, reloading.
