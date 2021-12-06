@@ -167,7 +167,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGGING = {
+if not DEBUG:
+    LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
