@@ -409,9 +409,9 @@ class ResReservationRequest(models.Model):
     # 예약한 시간
     res_start_time = models.DateTimeField(auto_now_add=True)
     # 예약 약속한 시간
-    res_expect_time = models.DateTimeField(editable=True)
+    res_expect_time = models.DateTimeField(editable=False)
     # 예약한 시간 + 7일 (예약 내역에서 안보여야함)
-    res_deadline_time = models.DateTimeField(editable=True)
+    res_deadline_time = models.DateTimeField(editable=False)
     # 예약 요청 상태 (승낙은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
     is_active = models.BooleanField(blank=True, null=False, default=True)
     # 예약 승낙 여부 (승낙하면 True)
