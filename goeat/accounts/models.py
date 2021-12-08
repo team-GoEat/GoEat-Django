@@ -409,17 +409,25 @@ class ResReservationRequest(models.Model):
     # 예약한 시간
     res_start_time = models.DateTimeField(auto_now_add=True)
     # 예약 약속한 시간
-    res_expect_time = models.DateTimeField(editable = False)
+    res_expect_time = models.DateTimeField(editable=True)
+    # 예약한 시간 + 7일 (예약 내역에서 안보여야함)
+    res_deadline_time = models.DateTimeField(editable=True)
     # 예약 요청 상태 (승낙은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
     is_active = models.BooleanField(blank=True, null=False, default=True)
     # 예약 승낙 여부 (승낙하면 True)
     is_accepted = models.BooleanField(blank=True, null=False, default=False)
 
     # res_expect_time = res_start_time + additional_time
+    # res_deadline_time = res_start_time + 7 days
     def save(self, *args, **kwargs):
         if not self.res_start_time:
             self.res_start_time = timezone.now()
         self.res_expect_time = self.res_start_time + datetime.timedelta(minutes = self.additional_time)
+        
+        deadline_time = self.res_start_time + datetime.timedelta(days=7)
+        new_deadline_time = deadline_time.replace(hour=11, minute=59, second=59)
+        self.res_deadline_time = new_deadline_time
+        
         super(ResReservationRequest, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -443,9 +451,6 @@ class ResReservationRequest(models.Model):
         self.res_state = '방문 완료'
         self.is_active = False
         self.save()
-
-    # 7일 지나면 삭제
-    # celery 사용?
 
 
 """

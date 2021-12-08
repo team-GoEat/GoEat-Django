@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.db.models import F, Q, Prefetch, Sum
 from django.db import transaction
@@ -1586,9 +1587,12 @@ def user_reserve_res(request, *args, **kwargs):
 @api_view(['GET'])
 def user_reserve_list(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
-
-    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
+    now = datetime.now()
+    
+    # 일주일후 23:59:59 이후의 예약 내역은 안보여짐 
+    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_deadline_time__gte=now)
     serializer = UserReservationSerializer(resRes, many=True)
+    
     return Response(serializer.data, status=200)
     
 # @api_view(['PUT'])
