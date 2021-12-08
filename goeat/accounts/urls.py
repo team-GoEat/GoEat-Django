@@ -86,8 +86,10 @@ urlpatterns = [
 
     # 음식점 예약하기 POST
     path('reserve/<str:user_id>/', views.user_reserve_res, name='user_reserve_res'),
-    # 유저 식당 내역 리스트 GET
+    # 유저 음식점 내역 리스트 GET
     path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),
+    # 유저 제일 최근 음식점 내역 내용 GET
+    path('reserve/recent/<str:user_id>/', views.get_user_recent_reserve, name='get_user_recent_reserve'),
     # 음식점 취소/거절 PUT
     path('reserve/change/<str:user_id>/', views.change_reserve_res, name='change_reserve_res'),
 

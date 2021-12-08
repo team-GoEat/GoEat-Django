@@ -253,9 +253,10 @@ class CouponSerializer(serializers.ModelSerializer):
 class UserReservationSerializer(serializers.ModelSerializer):
     res_id = serializers.IntegerField(source='receiver.id')
     res_name = serializers.CharField(source='receiver.res_name')
-    res_address = serializers.CharField(source='receiver.res_address')
     res_telenum = serializers.CharField(source='receiver.res_telenum')
+    reserve_date = serializers.CharField(source='get_reserve_date')
 
     class Meta:
         model = ResReservationRequest
-        fields = ('res_id', 'res_name', 'additional_person', 'res_expect_time', 'res_address', 'res_telenum', 'is_active', 'is_accepted')
+        fields = ('res_id', 'res_name', 'res_state', 'additional_person', 'reserve_date', 
+                  'res_expect_time', 'res_deadline_time', 'res_telenum', 'is_active', 'is_accepted')

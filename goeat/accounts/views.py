@@ -1587,14 +1587,25 @@ def user_reserve_res(request, *args, **kwargs):
 @api_view(['GET'])
 def user_reserve_list(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
-    now = datetime.now()
     
-    # 일주일후 23:59:59 이후의 예약 내역은 안보여짐 
-    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_deadline_time__gte=now)
+    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
     serializer = UserReservationSerializer(resRes, many=True)
+    return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+def get_user_recent_reserve(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    
+    try:
+        resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)[0]
+    # 예약을 단 한번도 하지 않았을때
+    except:
+        return Response([], status=200)
+    
+    serializer = UserReservationSerializer(resRes)
     
     return Response(serializer.data, status=200)
-    
+
 # @api_view(['PUT'])
 def change_reserve_res(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
