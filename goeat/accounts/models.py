@@ -417,15 +417,9 @@ class ResReservationRequest(models.Model):
     # 예약 승낙 여부 (승낙하면 True)
     is_accepted = models.BooleanField(blank=True, null=False, default=False)
 
-    # res_expect_time = 0
-    # res_deadline_time = res_expect_time + additional_time
     def save(self, *args, **kwargs):
         if not self.res_start_time:
             self.res_start_time = timezone.now()
-        
-        print(self.res_expect_time)
-        # self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time)
-        
         super(ResReservationRequest, self).save(*args, **kwargs)
 
     # ex) 2021-12-08
@@ -440,10 +434,22 @@ class ResReservationRequest(models.Model):
     # 예약 승인
     def accept(self):
         self.is_accepted = True
+        self.res_state = '예약 확정'
+        self.res_expect_time = timezone.now()
+        self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time)
         self.save()
 
     # 예약 요청 거절
-    def decline_and_cancel(self, msg):
+    # msg = 예약 거절(테이블 만석), (재료 소진), (기타 사정), (매너 등급), (무응답)
+    def reject(self, msg):
+        self.res_state = msg
+        self.is_active = False
+        self.is_accepted = False
+        self.save()
+        
+    # 예약 요청 취소
+    # msg = 예약 취소(고객 요청), (음식점 사정), (고객 노쇼)
+    def cancel(self, msg):
         self.res_state = msg
         self.is_active = False
         self.save()

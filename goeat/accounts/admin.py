@@ -54,7 +54,7 @@ class CouponAdmin(admin.ModelAdmin):
 
 class ResReservationRequestAdmin(admin.ModelAdmin):
     list_filter = ['sender', 'is_active']
-    list_display = ['sender', 'receiver', 'res_state', 'res_start_time', 'res_deadline_time', 'is_active', 'is_accepted']
+    list_display = ['sender', 'receiver', 'res_state', 'res_start_time', 'res_expect_time', 'res_deadline_time', 'is_active', 'is_accepted']
     search_fields = ['sender__goeat_id', 'sender__username', 'receiver__id', 'receiver__res_name']
 
     class Meta:

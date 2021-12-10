@@ -1583,7 +1583,7 @@ def user_reserve_res(request, *args, **kwargs):
 
         return JsonResponse({'msg': '예약하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
-# 음식점 예약 내역보기
+# 음식점 예약 내역 보기
 @api_view(['GET'])
 def user_reserve_list(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
@@ -1592,6 +1592,7 @@ def user_reserve_list(request, *args, **kwargs):
     serializer = UserReservationSerializer(resRes, many=True)
     return Response(serializer.data, status=200)
 
+# 최산 음식점 예약 내역 보기
 @api_view(['GET'])
 def get_user_recent_reserve(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
@@ -1606,8 +1607,24 @@ def get_user_recent_reserve(request, *args, **kwargs):
     
     return Response(serializer.data, status=200)
 
-# @api_view(['PUT'])
-def change_reserve_res(request, *args, **kwargs):
+# 음식점 예약 승인
+@api_view(['PUT'])
+def res_accept_reserve(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    res_id = request.POST.get('res_id')
+
+    try:
+        user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
+    except ResReservationRequest.DoesNotExist:
+        return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_res.accept()
+    
+    return Response({'예약이 완료되었습니다!'}, status=200)
+
+# 음식점 예약 거절
+@api_view(['PUT'])
+def res_reject_reserve(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     res_id = request.POST.get('res_id')
     msg = request.POST.get('msg')
@@ -1617,7 +1634,21 @@ def change_reserve_res(request, *args, **kwargs):
     except ResReservationRequest.DoesNotExist:
         return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    user_res.reject(msg)
+    
+    return Response({'예약을 거절하였습니다!'}, status=200)
 
+# 음식점 예약 취소
+@api_view(['PUT'])
+def res_cancel_reserve(request, *args, **kwargs):
+    pass
+
+# 음식점 예약 방문완료
+@api_view(['PUT'])
+def res_finish_reserve(request, *args, **kwargs):
+    pass
+    
+    
 """
 #############################################################################################
 

@@ -90,8 +90,15 @@ urlpatterns = [
     path('reserve/list/<str:user_id>/', views.user_reserve_list, name='user_reserve_list'),
     # 유저 제일 최근 음식점 내역 내용 GET
     path('reserve/recent/<str:user_id>/', views.get_user_recent_reserve, name='get_user_recent_reserve'),
-    # 음식점 취소/거절 PUT
-    path('reserve/change/<str:user_id>/', views.change_reserve_res, name='change_reserve_res'),
+
+    # 음식점 예약 승인 PUT
+    path('reserve/accept/<str:user_id>/', views.res_accept_reserve, name='res_accept_reserve'),
+    # 음식점 예약 거절 PUT
+    path('reserve/reject/<str:user_id>/', views.res_reject_reserve, name='res_reject_reserve'),
+    # 음식점 예약 취소 PUT
+    path('reserve/cancel/<str:user_id>/', views.res_cancel_reserve, name='res_cancel_reserve'),
+    # 음식점 예약 방문완료 PUT
+    path('reserve/finish/<str:user_id>/', views.res_finish_reserve, name='res_finish_reserve'),
 
     # 비로그인 추천 메뉴 목록
     path('usertaste/', views.usertaste_menu, name='usertaste_menu'),
