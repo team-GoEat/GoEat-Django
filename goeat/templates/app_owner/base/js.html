@@ -6,14 +6,14 @@
   let isRealTimeReserve = false;
 
   // 로그인
-  async function login() {
-    let result = await DomCallback("{% host_url 'login' host 'owner' %}", {});
-    if (result.result) {
-      allHide();
-      show('login', result);
-      hideNav();
-    }
-  }
+  // async function login() {
+  //   let result = await DomCallback("{% host_url 'login' host 'owner' %}", {});
+  //   if (result.result) {
+  //     allHide();
+  //     show('login', result);
+  //     hideNav();
+  //   }
+  // }
   // 예약관리
   async function reserve() {
     let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
