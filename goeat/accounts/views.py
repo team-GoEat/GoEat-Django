@@ -1641,12 +1641,33 @@ def res_reject_reserve(request, *args, **kwargs):
 # 음식점 예약 취소
 @api_view(['PUT'])
 def res_cancel_reserve(request, *args, **kwargs):
-    pass
+    user_id = kwargs.get('user_id')
+    res_id = request.POST.get('res_id')
+    msg = request.POST.get('msg')
+
+    try:
+        user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
+    except ResReservationRequest.DoesNotExist:
+        return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_res.cancel(msg)
+    
+    return Response({'예약을 취소하였습니다!'}, status=200)
 
 # 음식점 예약 방문완료
 @api_view(['PUT'])
 def res_finish_reserve(request, *args, **kwargs):
-    pass
+    user_id = kwargs.get('user_id')
+    res_id = request.POST.get('res_id')
+
+    try:
+        user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
+    except ResReservationRequest.DoesNotExist:
+        return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_res.arrived()
+    
+    return Response({'예약이 완료되었습니다!'}, status=200)
     
     
 """

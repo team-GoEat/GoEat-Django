@@ -148,10 +148,13 @@ def get_restaurant_from_home(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    is_reservable = False
+    
     try:
         resRes = ResReservation.objects.get(restaurant=res)
+        is_reservable = resRes.is_reservable
     except ResReservation.DoesNotExist:
-        return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        pass
 
     data = {
         'res_name': res.res_name,
@@ -164,7 +167,7 @@ def get_restaurant_from_home(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': resRes.is_reservable,
+        'is_reservable': is_reservable,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -201,10 +204,13 @@ def get_restaurant_from_home_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    is_reservable = False
+    
     try:
         resRes = ResReservation.objects.get(restaurant=res)
+        is_reservable = resRes.is_reservable
     except ResReservation.DoesNotExist:
-        return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        pass
 
     data = {
         'res_name': res.res_name,
@@ -217,7 +223,7 @@ def get_restaurant_from_home_notlogin(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': resRes.is_reservable,
+        'is_reservable': is_reservable,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -256,10 +262,13 @@ def get_restaurant_from_cat(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    is_reservable = False
+    
     try:
         resRes = ResReservation.objects.get(restaurant=res)
+        is_reservable = resRes.is_reservable
     except ResReservation.DoesNotExist:
-        return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        pass
     
     data = {
         'res_name': res.res_name,
@@ -272,7 +281,7 @@ def get_restaurant_from_cat(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': resRes.is_reservable,
+        'is_reservable': is_reservable,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -312,10 +321,13 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    is_reservable = False
+    
     try:
         resRes = ResReservation.objects.get(restaurant=res)
+        is_reservable = resRes.is_reservable
     except ResReservation.DoesNotExist:
-        return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        pass
 
     data = {
         'res_name': res.res_name,
@@ -328,7 +340,7 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': resRes.is_reservable,
+        'is_reservable': is_reservable,
         'is_fav': False
     }
     for menu in res.res_menu.all():
