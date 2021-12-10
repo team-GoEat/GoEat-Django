@@ -1,8 +1,9 @@
 {% load static %}
 {% load hosts %}
+{% load version %}
 
-<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}">
-<link rel="stylesheet" href="{% static 'app_owner/stamp/modal/apply/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}?version={{ 'version'|version }}">
+<link rel="stylesheet" href="{% static 'app_owner/stamp/modal/apply/css/style.css' %}?version={{ 'version'|version }}">
 
 <ul class="request_list scroll_style">
 

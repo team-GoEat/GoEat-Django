@@ -1,8 +1,9 @@
 {% load static %}
 {% load hosts %}
+{% load version %}
 
 <!-- <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}"> -->
-<link rel="stylesheet" href="{% static 'app_owner/login/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/login/css/style.css' %}?version={{ 'version'|version }}">
 
 <div class="login_section">
   <div class="login_content on">

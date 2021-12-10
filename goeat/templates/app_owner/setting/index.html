@@ -1,7 +1,8 @@
 {% load static %}
 {% load hosts %}
+{% load version %}
 
-<link rel="stylesheet" href="{% static 'app_owner/setting/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/setting/css/style.css' %}?version={{ 'version'|version }}">
 
 <div class="setting_box">
   <div class="left_content scroll_style">

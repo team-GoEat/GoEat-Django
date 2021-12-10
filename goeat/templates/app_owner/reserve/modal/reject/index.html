@@ -1,7 +1,8 @@
 {% load static %}
 {% load hosts %}
+{% load version %}
 
-<link rel="stylesheet" href="{% static 'app_owner/reserve/modal/reject/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/reserve/modal/reject/css/style.css' %}?version={{ 'version'|version }}">
 
 <div class="reject_content">
   <div class="radio_wrap">

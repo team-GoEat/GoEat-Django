@@ -1,9 +1,10 @@
 {% load static %}
 {% load hosts %}
+{% load version %}
 
-<link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}">
-<link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}">
-<link rel="stylesheet" href="{% static 'app_owner/coupon/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}?version={{ 'version'|version }}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}?version={{ 'version'|version }}">
+<link rel="stylesheet" href="{% static 'app_owner/coupon/css/style.css' %}?version={{ 'version'|version }}">
 
 <div class="coupon_box">
   <div class="left_content scroll_style">

@@ -1,8 +1,8 @@
 {% load static %}
 {% load hosts %}
 
-<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}">
-<link rel="stylesheet" href="{% static 'app_owner/coupon/modal/apply/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' ?version={{ 'version'|version }}">
+<link rel="stylesheet" href="{% static 'app_owner/coupon/modal/apply/css/style.css' ?version={{ 'version'|version }}">
 
 <ul class="coupon_list scroll_style">
   <li class="coupon_item">
