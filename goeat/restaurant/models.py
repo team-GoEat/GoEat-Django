@@ -135,6 +135,10 @@ class Restaurant(models.Model):
     res_exp = models.TextField(blank=True, null=True)
     # 식당 이미지
     res_image = models.TextField(blank=True, null=True)
+    # 식당 아이디
+    res_pos_id = models.CharField(max_length=100, blank=True)
+    # 식당 비밀번호
+    res_pos_pw = models.CharField(max_length=100, blank=True)
 
     # 예약 가능 여부
     @property
