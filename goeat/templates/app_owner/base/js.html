@@ -298,5 +298,26 @@
   }
 
 
+  function is_reserve(reserve) {
+
+    var params = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'reserve': reserve
+    }
+
+    $.ajax({
+      url: "{% host_url 'reserve_update' host 'owner' %}",
+      type: "POST",
+      data: params,
+      success: function (result) {
+        alert('변경되었습니다.');
+      },
+      error: function (result) {
+        alert("서버와의 연결이 끊어졌습니다.")
+      }
+    });
+
+  }
+
 
 </script>

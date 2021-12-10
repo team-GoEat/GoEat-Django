@@ -2,70 +2,92 @@
 {% load hosts %}
 {% load version %}
 
-<!-- <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}"> -->
-<link rel="stylesheet" href="{% static 'app_owner/login/css/style.css' %}?version={{ 'version'|version }}">
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="login_section">
-  <div class="login_content on">
-    <h1 class="title login_title">사장님 로그인</h1>
-    <div class="input_wrap">
-      <p>
-        아이디
-      </p>
-      <input class="input" type="text">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고잇</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+  <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}?version={{ 'version'|version }}">
+  <link rel="stylesheet" href="{% static 'app_owner/base/css/modal.css' %}?version={{ 'version'|version }}">
+
+</head>
+
+<body>
+  <nav class="nav">
+    <img class="nav_logo" src="{% static 'app_owner/base/images/logo_w.png' %}" alt="">
+
+    <div class="nav_control">
+      <img src="{% static 'app_owner/base/images/window_min.svg' %}" alt="" onclick="closeFullScreenMode()">
+      <img src="{% static 'app_owner/base/images/window_zoom.svg' %}" alt="" onclick="openFullScreenMode()">
+      <img src="{% static 'app_owner/base/images/window_close.svg' %}" alt="" onclick="winClose()">
     </div>
-    <div class="input_wrap">
-      <p>
-        비밀번호
-      </p>
-      <input class="input" type="password">
-    </div>
-    <button class="login_button" onclick="onClickLogin()">
-      로그인
-    </button>
-    <label class="check_wrap">
-      <input type="checkbox">
-      <div class="style_check">
-        <svg class="check_icon" xmlns="http://www.w3.org/2000/svg" width="13.174" height="10.483" viewBox="0 0 13.174 10.483">
-          <path d="M20.285,11.038a1.209,1.209,0,1,1,1.726,1.693l-6.434,8.042a1.209,1.209,0,0,1-1.74.032L9.574,16.54a1.209,1.209,0,1,1,1.708-1.708l3.375,3.373,5.6-7.131a.38.38,0,0,1,.032-.035Z" transform="translate(-9.182 -10.676)" fill="#ff0034" fill-rule="evenodd" />
-        </svg>
+  </nav>
+
+
+  <!-- <link rel="stylesheet" href="{% static 'app_owner/base/css/style.css' %}"> -->
+  <link rel="stylesheet" href="{% static 'app_owner/login/css/style.css' %}?version={{ 'version'|version }}">
+
+  <div class="login_section">
+    <div class="login_content on">
+      <h1 class="title login_title">사장님 로그인</h1>
+      <div class="input_wrap">
+        <p>
+          아이디
+        </p>
+        <input class="input" type="text" id="pos_id" onkeyup="init_fail()">
       </div>
-      <span>
-        자동 로그인
-      </span>
-    </label>
+      <div class="input_wrap">
+        <p>
+          비밀번호
+        </p>
+        <input class="input" type="password" id="pos_pw" onkeyup="init_fail()">
+      </div>
+      <button class="login_button" onclick="onClickLogin()">
+        로그인
+      </button>
 
-    <!-- <p class="login_fail">
-      로그인에 실패하였습니다.<br />
-      아이디 / 비밀번호 찾기는 고잇 팀(<span class="red_text">070-4006-7014</span>)에 문의해 주세요.
-    </p> -->
-  </div>
-
-  <div class="open_content">
-    <h1 class="title">
-      오늘 (<span class="today"></span>)<br />
-      <span class="red_text">실시간 예약</span>을 오픈할까요?
-    </h1>
-
-    <p class="open_info">
-      예약 가능 시간<br />
-      AM 11:00 ~ PM 2:00
-    </p>
-
-    <div class="button_wrap">
-      <button class="btn_fill" onclick="onClickOpen(true)">오픈하기</button>
-      <button class="btn_border" onclick="onClickOpen(false)">아니오</button>
+      <p class="login_fail">
+        로그인에 실패하였습니다.<br />
+        아이디 / 비밀번호 찾기는 고잇 팀(<span class="red_text">070-4006-7014</span>)에 문의해 주세요.
+      </p>
     </div>
+
+    <div class="open_content">
+      <h1 class="title">
+        오늘 (<span class="today"></span>)<br />
+        <span class="red_text">실시간 예약</span>을 오픈할까요?
+      </h1>
+
+      <p class="open_info">
+        예약 가능 시간<br />
+        <span id="open_time"></span>
+      </p>
+
+      <div class="button_wrap">
+        <button class="btn_fill" onclick="onClickOpen(true)">오픈하기</button>
+        <button class="btn_border" onclick="onClickOpen(false)">아니오</button>
+      </div>
+    </div>
+
+    <img class="logo" src="{% static 'app_owner/base/images/logo.png' %}" alt="">
+  </div>
+  <div class="popup">
+    <span class="popup_icon">!</span>
+    <p class="popup_text">
+      프로그램 사용에 문제가 있으신가요?<br />
+      고잇 팀 <span class="red_text">(070-4006-7014)</span>에 문의해 주세요.
+    </p>
   </div>
 
-  <img class="logo" src="{% static 'app_owner/base/images/logo.png' %}" alt="">
-</div>
-<div class="popup">
-  <span class="popup_icon">!</span>
-  <p class="popup_text">
-    프로그램 사용에 문제가 있으신가요?<br />
-    고잇 팀 <span class="red_text">(070-4006-7014)</span>에 문의해 주세요.
-  </p>
-</div>
+  {% include 'app_owner/login/js.html' %}
 
-{% include 'app_owner/login/js.html' %}
+</body>
+
+</html>

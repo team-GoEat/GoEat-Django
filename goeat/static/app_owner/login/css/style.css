@@ -97,6 +97,10 @@
     cursor: pointer;
   }
   
+  .login_fail{
+    display: none;
+  }
+  
   .login_content .login_fail {
     text-align: center;
     font-size: 13px;
