@@ -15,9 +15,9 @@ from restaurant.models import (
 """
 # 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
-    list_filter = ['res_type', 'is_affiliate']
-    list_display = ['id', 'res_name', 'is_affiliate', 'res_address', 'res_telenum', 'res_time', 'short_res_exp', 'short_res_image']
-    search_fields = ['res_name']
+    list_filter = ['res_type', 'is_reservable_r']
+    list_display = ['id', 'res_name', 'is_reservable_r', 'res_address', 'res_telenum', 'short_res_exp', 'short_res_image']
+    search_fields = ['id', 'res_name']
 
     class Meta:
         model = Restaurant
