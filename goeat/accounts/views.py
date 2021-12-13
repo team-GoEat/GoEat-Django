@@ -1599,7 +1599,7 @@ def get_user_recent_reserve(request, *args, **kwargs):
     
     try:
         resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)[0]
-    # 예약을 단 한번도 하지 않았을때
+    # 예약을 단 한번도 하지 않았으면
     except:
         return Response([], status=200)
     

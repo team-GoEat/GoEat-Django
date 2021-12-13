@@ -6,7 +6,7 @@ import random
 from accounts.models import User
 from restaurant.models import (
     Restaurant, Menu, ResService, MenuSecondClass,
-    MenuType, ResReservation, MenuFirstClass
+    MenuType, MenuFirstClass
 )
 from restaurant.serializers import (
     SimpleRestaurantSerializer, SimpleMenuSerializer,
@@ -148,14 +148,6 @@ def get_restaurant_from_home(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    is_reservable = False
-    
-    try:
-        resRes = ResReservation.objects.get(restaurant=res)
-        is_reservable = resRes.is_reservable
-    except ResReservation.DoesNotExist:
-        pass
-
     data = {
         'res_name': res.res_name,
         'res_type': [],
@@ -167,7 +159,7 @@ def get_restaurant_from_home(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': is_reservable,
+        'is_reservable': res.is_reservable_r,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -204,14 +196,6 @@ def get_restaurant_from_home_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    is_reservable = False
-    
-    try:
-        resRes = ResReservation.objects.get(restaurant=res)
-        is_reservable = resRes.is_reservable
-    except ResReservation.DoesNotExist:
-        pass
-
     data = {
         'res_name': res.res_name,
         'res_type': [],
@@ -223,7 +207,7 @@ def get_restaurant_from_home_notlogin(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': is_reservable,
+        'is_reservable': res.is_reservable_r,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -261,14 +245,6 @@ def get_restaurant_from_cat(request, *args, **kwargs):
         res = Restaurant.objects.get(id=res_id)
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    is_reservable = False
-    
-    try:
-        resRes = ResReservation.objects.get(restaurant=res)
-        is_reservable = resRes.is_reservable
-    except ResReservation.DoesNotExist:
-        pass
     
     data = {
         'res_name': res.res_name,
@@ -281,7 +257,7 @@ def get_restaurant_from_cat(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': is_reservable,
+        'is_reservable': res.is_reservable_r,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -321,14 +297,6 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    is_reservable = False
-    
-    try:
-        resRes = ResReservation.objects.get(restaurant=res)
-        is_reservable = resRes.is_reservable
-    except ResReservation.DoesNotExist:
-        pass
-
     data = {
         'res_name': res.res_name,
         'res_type': [],
@@ -340,7 +308,7 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
         'res_time': res.res_time,
         'res_image': res.res_image,
         'res_menu': [],
-        'is_reservable': is_reservable,
+        'is_reservable': res.is_reservable_r,
         'is_fav': False
     }
     for menu in res.res_menu.all():
@@ -629,10 +597,9 @@ def get_all_resreservation_list(request, *args, **kwargs):
 
     data = []
 
-    all_res = ResReservation.objects.filter(is_reservable=True)
+    all_res = Restaurant.objects.filter(is_reservable_r=True)
     
-    for res in all_res:
-        r = res.restaurant
+    for r in all_res:
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
@@ -654,10 +621,9 @@ def get_all_resreservation_list_notlogin(request, *args, **kwargs):
 
     data = []
 
-    all_res = ResReservation.objects.filter(is_reservable=True)
+    all_res = Restaurant.objects.filter(is_reservable_r=True)
     
-    for res in all_res:
-        r = res.restaurant
+    for r in all_res:
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
@@ -681,7 +647,7 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     fav_res = user.fav_res.all()
-    resRes = ResReservation.objects.filter(is_reservable=True)
+    resRes = Restaurant.objects.filter(is_reservable_r=True)
     
     data = {
         'all': [],
@@ -716,7 +682,7 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
                     
             # 예약 가능한지 체크
             for rr in resRes:
-                if rr.restaurant == r:
+                if rr == r:
                     data['is_reservable'].append(temp)
                     break
             else:
@@ -735,7 +701,7 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     }
 
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
-    resRes = ResReservation.objects.filter(is_reservable=True)
+    resRes = Restaurant.objects.filter(is_reservable_r=True)
     res_id_list = []
 
     for m in menu:
@@ -759,7 +725,7 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
                 
                 # 예약 가능한지 체크
                 for rr in resRes:
-                    if rr.restaurant == r:
+                    if rr == r:
                         data['is_reservable'].append(temp)
                         break
                 else:
@@ -784,7 +750,7 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     fav_res = user.fav_res.all()
-    resRes = ResReservation.objects.filter(is_reservable=True)
+    resRes = Restaurant.objects.filter(is_reservable_r=True)
 
     data = {
         'all': [],
@@ -806,7 +772,7 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
                 
         # 예약 가능한지 체크
         for rr in resRes:
-            if rr.restaurant == r:
+            if rr == r:
                 data['is_reservable'].append(temp)
                 break
         else:
@@ -824,7 +790,7 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
-    resRes = ResReservation.objects.filter(is_reservable=True)
+    resRes = Restaurant.objects.filter(is_reservable_r=True)
     
     data = {
         'all': [],
@@ -843,7 +809,7 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
         
         # 예약 가능한지 체크
         for rr in resRes:
-            if rr.restaurant == r:
+            if rr == r:
                 data['is_reservable'].append(temp)
                 break
         else:
@@ -854,18 +820,19 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
 # 식당 예약 여부 바꾸기
 @api_view(['PUT'])
 def res_change_reserve(request, *args, **kwargs):
-    res_id = kwargs.get('res_id')
-    # 0이면 예약 불가능, 1이면 가능
-    reserve_status = request.POST.get('reserve_status')
+    pass
+#     res_id = kwargs.get('res_id')
+#     # 0이면 예약 불가능, 1이면 가능
+#     reserve_status = request.POST.get('reserve_status')
 
-    try:
-        resReservation = ResReservation.objects.get(restaurant__pk=res_id)
-    except ResReservation.DoesNotExist:
-        return JsonResponse({'msg': '변경이 불가능합니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+#     try:
+#         resReservation = ResReservation.objects.get(restaurant__pk=res_id)
+#     except ResReservation.DoesNotExist:
+#         return JsonResponse({'msg': '변경이 불가능합니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
-    if reserve_status:
-        resReservation.accept_reserve()
-        return JsonResponse({'msg': '예약 가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-    else:
-        resReservation.reject_reserve()
-        return JsonResponse({'msg': '예약 불가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+#     if reserve_status:
+#         resReservation.accept_reserve()
+#         return JsonResponse({'msg': '예약 가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+#     else:
+#         resReservation.reject_reserve()
+#         return JsonResponse({'msg': '예약 불가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})

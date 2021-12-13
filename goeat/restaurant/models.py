@@ -121,6 +121,8 @@ class Restaurant(models.Model):
     res_type = models.ManyToManyField(MenuType, blank=True, related_name='restaurant')
     # 가맹 여부
     is_affiliate = models.BooleanField(default=False)
+    # 예약 가능 여부
+    is_reservable_r = models.BooleanField(default=False)
     # 식당 전화번호
     res_telenum = models.CharField(max_length=30, blank=True)
     # 식당 주소
@@ -140,6 +142,11 @@ class Restaurant(models.Model):
     # 식당 비밀번호
     res_pos_pw = models.CharField(max_length=100, blank=True)
 
+    # 예약 가능 여부 바꾸기
+    # def change_reserve(self):
+    #     self.is_reservable != self.is_reservable
+    #     self.save()
+    
     # 예약 가능 여부
     @property
     def is_reservable(self):
@@ -158,14 +165,6 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
-
-    # 음식점이 생성되고 가맹을 맺었다면 ResReservation Object도 같이 생성
-    def save(self, *args, **kwargs):
-        created = not self.pk
-        super().save(*args, **kwargs)
-        if created:
-            if self.is_affiliate:
-                ResReservation.objects.create(restaurant=self)
 
 
 """
@@ -202,31 +201,3 @@ class ResService(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.restaurant, self.service_exp)
-
-
-"""
-#############################################################################################
-
-                                    음식점 예약 모델
-
-#############################################################################################
-"""
-# 음식점 예약
-class ResReservation(models.Model):
-    # 음식점
-    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='res_reservation')
-    # 예약 가능 여부
-    is_reservable = models.BooleanField(default=True)
-
-    # 예약 불가능하게 설정
-    def reject_reserve(self):
-        self.is_reservable = False
-        self.save()
-
-    # 예약 가능하게 설정
-    def accept_reserve(self):
-        self.is_reservable = True
-        self.save()
-
-    def __str__(self):
-        return '{} {}'.format(self.restaurant, self.is_reservable)

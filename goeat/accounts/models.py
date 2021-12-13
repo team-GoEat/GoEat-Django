@@ -412,9 +412,9 @@ class ResReservationRequest(models.Model):
     res_expect_time = models.DateTimeField(null=True, blank=True)
     # 예약 승인된 시간 + 추가 시간
     res_deadline_time = models.DateTimeField(null=True, blank=True)
-    # 예약 요청 상태 (승낙은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
+    # 예약 요청 상태 (승인 대기, 예약 확정은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
     is_active = models.BooleanField(blank=True, null=False, default=True)
-    # 예약 승낙 여부 (승낙하면 True)
+    # 예약 승낙 여부 (예약 확정하면 True)
     is_accepted = models.BooleanField(blank=True, null=False, default=False)
 
     def save(self, *args, **kwargs):
