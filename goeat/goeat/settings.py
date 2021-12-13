@@ -106,7 +106,6 @@ MIDDLEWARE = [
 ]
 
 ####### HOSTS SETTING ( 변경 금지 )
-
 ROOT_HOSTCONF = 'goeat.hosts'
 ROOT_URLCONF = 'goeat.urls'
 DEFAULT_HOST = 'www'
