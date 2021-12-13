@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class Views_Controls(View):
     def post(self, request):
-        print('coupon')
+
         context = {}
 
         return render(request, 'app_owner/coupon/index.html', context)

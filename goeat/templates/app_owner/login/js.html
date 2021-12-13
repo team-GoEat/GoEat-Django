@@ -1,3 +1,5 @@
+{% load hosts %}
+
 <script>
   const loginContent = document.querySelector(".login_content");
   const openContent = document.querySelector(".open_content");
@@ -6,15 +8,73 @@
 
   today.innerHTML = getToday();
 
+  function init_fail() {
+    $('.login_fail').css('display', 'none');
+  }
+
   function onClickLogin() {
-    loginContent.classList.remove("on");
-    openContent.classList.add("on");
+
+    if ($('#pos_id').val() != '' && $('#pos_pw').val() != '') {
+
+      var params = {
+        'csrfmiddlewaretoken': '{{ csrf_token }}',
+        'pos_id': $('#pos_id').val(),
+        'pos_pw': $('#pos_pw').val(),
+      }
+
+      $.ajax({
+        url: "{% host_url 'login' host 'owner' %}",
+        type: "POST",
+        data: params,
+        success: function (result) {
+
+          console.log(result);
+
+          if (result.result === 'success') {
+
+            $('.login_fail').css('display', 'none');
+
+            $('#open_time').text(result.data.res_time)
+
+            loginContent.classList.remove("on");
+            openContent.classList.add("on");
+
+          } else if (result.result === 'fail') {
+            $('.login_fail').css('display', 'block');
+          }
+        },
+        error: function (result) {
+          alert("서버와의 연결이 끊어졌습니다.")
+        }
+      });
+
+
+
+    }
+    else alert('로그인 정보를 입력해주세요.');
+
+
   }
 
   function onClickOpen(open) {
-    onClickToggle(open);
-    showNav();
-    reserve();
+
+    var params = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'reserve': open
+    }
+
+    $.ajax({
+      url: "{% host_url 'reserve_update' host 'owner' %}",
+      type: "POST",
+      data: params,
+      success: function (result) {
+        location.href = "{% host_url 'main' host 'owner' %}";
+      },
+      error: function (result) {
+        alert("서버와의 연결이 끊어졌습니다.");
+      }
+    });
+
   }
 
   function getToday() {
