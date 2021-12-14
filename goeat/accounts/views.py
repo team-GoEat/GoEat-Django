@@ -1,22 +1,17 @@
-from datetime import datetime, timedelta
 from django.http import JsonResponse
-from django.db.models import F, Q, Prefetch, Sum
+from django.db.models import F, Q
 from django.db import transaction
-from rest_framework import status, viewsets, generics, permissions
+from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from firebase_admin import messaging
 from accounts.push_fcm import push_team_request, push_notice
-import requests
 import json
 import logging
-from collections import defaultdict
 from restaurant.models import (
-    Restaurant, Menu, MenuCannotEat, MenuSecondClass, MenuFeature,
-    MenuType, MenuIngredient, MenuFirstClass
+    Restaurant, MenuCannotEat, MenuSecondClass, MenuFirstClass
 )
 from accounts.models import (
     User, Team, TeamRequest, ResService, NonMember,

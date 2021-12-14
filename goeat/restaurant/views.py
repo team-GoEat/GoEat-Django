@@ -6,13 +6,11 @@ import random
 from accounts.models import User
 from restaurant.models import (
     Restaurant, Menu, ResService, MenuSecondClass,
-    MenuType, MenuFirstClass
+    MenuType, 
 )
 from restaurant.serializers import (
-    SimpleRestaurantSerializer, SimpleMenuSerializer,
-    RestaurantSerializer, ResServiceSerializer,
-    SimpleResSerializer, AutoResSerializer, AutoSecondMenuSerializer,
-    GetResByIdSerializer
+    SimpleRestaurantSerializer,ResServiceSerializer,
+    AutoResSerializer, AutoSecondMenuSerializer,
 )
 
 
