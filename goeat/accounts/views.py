@@ -220,39 +220,19 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@api_view(['POST'])
+@api_view(['GET'])
 def test(request, *args, **kwargs):
-    user_id = 'CQUT'
+    user_id = 'JPED'
 
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
+    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
+    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
     
-    try:
-        teams = Team.objects.filter(teammates__in=[user])
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    print(noshow_cnt)
+    print(arrived_cnt)
     
-    for team in teams:
-        # 팀 비선호재료 초기화
-        team.menu_cannoteat.clear()
-        # 위드잇하는 팀원 목록
-        for teammate in team.teammates.all():
-            if teammate == user:
-                continue
-            try:
-                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
-            except UserTeamProfile.DoesNotExist:
-                continue
-            for cne in team_profile.user.menu_cannoteat.all():
-                team.menu_cannoteat.add(cne)
-                
-        # 사용자의 비선호재료 다시 추가
-        for cne in team.user.menu_cannoteat.all():
-            team.menu_cannoteat.add(cne)
-            
-    user.delete()
+    manner_points = noshow_cnt / (noshow_cnt + arrived_cnt) * 100
+    print(int(manner_points))
         
     return Response(status=200)
 
@@ -1643,11 +1623,31 @@ def res_cancel_reserve(request, *args, **kwargs):
     msg = request.POST.get('msg')
 
     try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    try:
         user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
     except ResReservationRequest.DoesNotExist:
         return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     user_res.cancel(msg)
+    # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
+    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
+    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
+    
+    manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
+    
+    if manner_points < 30:
+        user.manner_rank = 1
+        user.save()
+    elif manner_points > 70:
+        user.manner_rank = -1
+        user.save()
+    else:
+        user.manner_rank = 0
+        user.save()
     
     return Response({'예약을 취소하였습니다!'}, status=200)
 
@@ -1658,13 +1658,33 @@ def res_finish_reserve(request, *args, **kwargs):
     res_id = request.POST.get('res_id')
 
     try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    try:
         user_res = ResReservationRequest.objects.get(sender__goeat_id=user_id, receiver__pk=res_id, is_active=True)
     except ResReservationRequest.DoesNotExist:
         return JsonResponse({'msg': '예약이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     user_res.arrived()
+    # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
+    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
+    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
     
-    return Response({'예약이 완료되었습니다!'}, status=200)
+    manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
+    
+    if manner_points < 30:
+        user.manner_rank = 1
+        user.save()
+    elif manner_points > 70:
+        user.manner_rank = -1
+        user.save()
+    else:
+        user.manner_rank = 0
+        user.save()
+    
+    return Response({'방문이 완료되었습니다!'}, status=200)
     
     
 """

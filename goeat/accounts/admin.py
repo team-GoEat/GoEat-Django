@@ -29,8 +29,8 @@ class TeamRequestAdmin(admin.ModelAdmin):
         model = TeamRequest
 
 class UserAdmin(admin.ModelAdmin):
-    list_filter = ['gender', 'age']
-    list_display = ['id', 'goeat_id', 'username', 'name', 'gender', 'age', 'is_alarm']
+    list_filter = ['manner_rank']
+    list_display = ['id', 'goeat_id', 'username', 'name', 'manner_rank', 'is_alarm']
     search_fields = ['goeat_id', 'username']
 
     class Meta:
