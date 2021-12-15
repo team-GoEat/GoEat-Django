@@ -85,6 +85,8 @@ class User(AbstractUser):
     name = models.CharField(max_length=30, unique=False)
     # 고잇 아이디
     goeat_id = models.CharField(max_length=30, blank=True, unique=True, editable=False, default=id_generator)
+    # 매너 등급 보통:0, 젠틀:1, 비매너:-1
+    manner_rank = models.IntegerField(default=0)
     # 성별
     gender = models.CharField(max_length=30, default='')
     # 나이
