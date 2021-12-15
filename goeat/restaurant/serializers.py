@@ -12,6 +12,12 @@ from rest_framework import serializers
 
 #############################################################################################
 """
+# MenuLikeSerializer, MenuHateSerializer 
+class SimpleMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuSecondClass
+        fields = ('id', 'second_class_name', 'menu_second_image')
+
 # 다양한 곳에서 사용
 class MenuSecondClassSerializer(serializers.ModelSerializer):
     class Meta:

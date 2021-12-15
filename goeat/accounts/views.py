@@ -1570,13 +1570,15 @@ def user_reserve_res(request, *args, **kwargs):
 
     if request.method == 'POST':
         try:
-            resRes = ResReservationRequest.objects.get(sender=user, receiver=restaurant, is_active=True)
-            return JsonResponse({'msg': '예약할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            # is_active인 예약이 존재하고 있다면 예약 불가능
+            resRes = ResReservationRequest.objects.get(sender=user, is_active=True)
+            if resRes:
+                return JsonResponse({'msg': 0}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
         except ResReservationRequest.DoesNotExist:
             resRes = ResReservationRequest(sender=user, receiver=restaurant, additional_person=additional_person, additional_time=additional_time)
             resRes.save()
 
-        return JsonResponse({'msg': '예약하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+            return JsonResponse({'msg': 1}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 # 음식점 예약 내역 보기
 @api_view(['GET'])
