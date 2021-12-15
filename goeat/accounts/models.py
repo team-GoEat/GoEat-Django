@@ -324,7 +324,7 @@ class TeamRequest(models.Model):
 
 #############################################################################################
 """
-# 스탬프 
+# 스탬프 - 사용중이지않음.
 class Stamp(models.Model):
     # 사용자
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='stamp_owner')
@@ -363,6 +363,8 @@ class Stamp(models.Model):
 
 #############################################################################################
 """
+
+# 쿠폰 - 사용중이지않음.
 class Coupon(models.Model):
     # 사용자
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='coupon_owner')
@@ -394,7 +396,7 @@ class Coupon(models.Model):
 
 #############################################################################################
 """
-# 사용자 음식점 예약 내역
+# 사용자 음식점 예약 내역 - 
 class ResReservationRequest(models.Model): 
     # 사용자
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='res_sender')

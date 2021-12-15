@@ -12,7 +12,6 @@ class session_check(object):
         hosts = request.META['HTTP_HOST'].split('.')[0]
 
         if hosts == "owner":
-            print('ddd')
             try:
                 if request.session.get('res_id',None) is None:
                     if 'login' not in request.path and 'signup' not in request.path:

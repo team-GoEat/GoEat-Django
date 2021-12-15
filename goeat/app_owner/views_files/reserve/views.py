@@ -18,13 +18,13 @@ class Views_Controls(View):
 class Reserve_Views_Controls(View):
     
     def post(self, request):
-    
-        if bool(request.POST['reserve']):
-            reserve = ResReservation.objects.get(restaurant__id=562)
+        
+        if request.POST['reserve'] == 'true':
+            reserve = ResReservation.objects.get(restaurant__id=request.session['res_id'])
             reserve.accept_reserve()
 
         else:
-            reserve = ResReservation.objects.get(restaurant__id=562)
+            reserve = ResReservation.objects.get(restaurant__id=request.session['res_id'])
             reserve.reject_reserve()
 
         request.session['is_reservable'] = bool(request.POST['reserve'])
