@@ -11,6 +11,7 @@ from django.db.models.fields import DateTimeField
 #############################################################################################
 """
 
+# 음식점이 쿠폰 발급이 가능한 조건
 class ResCoupon(models.Model):
 
     # 음식점
