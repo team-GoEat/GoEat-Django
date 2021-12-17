@@ -3,7 +3,6 @@ from restaurant.models import (
     Restaurant, Menu, MenuIngredient, MenuType, 
     MenuCannotEat, ResService, Service,
     MenuFirstClass, MenuSecondClass, MenuFeature,
-    ResReservation
 )
 
 
@@ -16,9 +15,9 @@ from restaurant.models import (
 """
 # 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
-    list_filter = ['res_type', 'is_affiliate']
-    list_display = ['id', 'res_name', 'is_affiliate', 'res_address', 'res_telenum', 'res_time', 'short_res_exp', 'short_res_image']
-    search_fields = ['res_name']
+    list_filter = ['res_type', 'is_reservable_r']
+    list_display = ['id', 'res_name', 'is_reservable_r', 'res_address', 'res_telenum', 'short_res_exp', 'short_res_image']
+    search_fields = ['id', 'res_name']
 
     class Meta:
         model = Restaurant
@@ -119,22 +118,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Service
-
-
-"""
-#############################################################################################
-
-                                음식점 예약 관련 어드민
-
-#############################################################################################
-"""
-class ResReservationAdmin(admin.ModelAdmin):
-    list_filter = ['is_reservable']
-    list_display = ['restaurant', 'is_reservable']
-    search_fields = ['restaurant__id', 'restaurant__res_name']
-
-    class Meta:
-        model = ResReservation
+        
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Menu, MenuAdmin)
@@ -146,4 +130,3 @@ admin.site.register(Service, ServiceAdmin)
 admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
 admin.site.register(MenuSecondClass, MenuSecondClassAdmin)
 admin.site.register(MenuFeature, MenuFeatureAdmin)
-admin.site.register(ResReservation, ResReservationAdmin)

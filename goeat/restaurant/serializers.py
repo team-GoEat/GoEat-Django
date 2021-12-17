@@ -1,7 +1,6 @@
 from restaurant.models import (
     Restaurant, Menu, ResService, Service, 
-    MenuType, ResReservation, MenuSecondClass,
-    MenuFeature, MenuIngredient
+    MenuType, MenuSecondClass,
 )
 from rest_framework import serializers
 
@@ -13,6 +12,12 @@ from rest_framework import serializers
 
 #############################################################################################
 """
+# MenuLikeSerializer, MenuHateSerializer 
+class SimpleMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuSecondClass
+        fields = ('id', 'second_class_name', 'menu_second_image')
+
 # 다양한 곳에서 사용
 class MenuSecondClassSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,22 +48,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = ('res_name', 'res_type', 'is_affiliate', 'res_telenum', 'res_address', 'res_time', 'res_image', 'res_menu', 'res_exp')
 
-# SimpleResSerializer에서 사용
-class Simple3MenuSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Menu
-        fields = ('menu_name', 'menu_price', 'menu_image')
-
-# get_restaurant_by_menu_type에서 사용
-class SimpleResSerializer(serializers.ModelSerializer):
-    res_type = MenuTypeSerializer(read_only=True, many=True)
-    res_menu = Simple3MenuSerializer(read_only=True, many=True)
-    is_reservable = serializers.BooleanField(read_only=True)
-
-    class Meta:
-        model = Restaurant
-        fields = ('id', 'res_name', 'res_type', 'res_address', 'res_menu', 'is_reservable')
 
 """
 #############################################################################################
@@ -72,12 +61,6 @@ class SimpleRestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = ('id', 'res_name', 'res_image', 'res_address', 'x_cor', 'y_cor')
-
-# MenuLikeSerializer, MenuHateSerializer 
-class SimpleMenuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MenuSecondClass
-        fields = ('id', 'second_class_name', 'menu_second_image')
 
 # get_restaurant_by_menuid에서 사용
 class GetResByIdSerializer(serializers.ModelSerializer):

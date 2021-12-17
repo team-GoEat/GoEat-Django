@@ -1,0 +1,18 @@
+{% load hosts %}
+{% load version %}
+{% load phonesplit %}
+
+
+{% for item in stamplogs %}
+<li class="record_item record_layout">
+    <p class="record_date">
+        {{ item.stamp_create_dttm|date:'Y.m.d a h:i' }}
+    </p>
+    <p class="record_count">
+        {{ item.stamp_own }}개 적립
+    </p>
+    <p class="record_info">
+        {{ item.stamp.user.username|split }} (#{{ item.stamp.user.goeat_id }})
+    </p>
+</li>
+{% endfor %}

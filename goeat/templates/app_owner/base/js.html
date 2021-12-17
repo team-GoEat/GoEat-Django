@@ -4,15 +4,6 @@
 <script>
   const showpage = 'showpage_container';
 
-  // 로그인
-  // async function login() {
-  //   let result = await DomCallback("{% host_url 'login' host 'owner' %}", {});
-  //   if (result.result) {
-  //     allHide();
-  //     show('login', result);
-  //     hideNav();
-  //   }
-  // }
   // 예약관리
   async function reserve() {
     let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
@@ -303,7 +294,7 @@
     }
 
     $.ajax({
-      url: "{% host_url 'reserve_update' host 'owner' %}",
+      url: "{% host_url 'reverse' host 'owner' %}",
       type: "POST",
       data: params,
       success: function (result) {

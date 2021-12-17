@@ -3,8 +3,9 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
-import datetime
-import time
+import datetime,time
+from accounts.model_files.stamp import *
+from accounts.model_files.coupon import *
 from restaurant.models import (
     Restaurant, Menu, MenuCannotEat, ResService,
     Service, MenuSecondClass, MenuFeature, MenuIngredient,
@@ -85,6 +86,8 @@ class User(AbstractUser):
     name = models.CharField(max_length=30, unique=False)
     # 고잇 아이디
     goeat_id = models.CharField(max_length=30, blank=True, unique=True, editable=False, default=id_generator)
+    # 매너 등급 보통:0, 젠틀:1, 비매너:-1
+    manner_rank = models.IntegerField(default=0)
     # 성별
     gender = models.CharField(max_length=30, default='')
     # 나이
@@ -359,7 +362,8 @@ class Stamp(models.Model):
 """
 #############################################################################################
 
-                                            쿠폰
+                                            사용자 쿠폰 관련 모델
+                                            Made. EdoubleK
 
 #############################################################################################
 """
@@ -414,9 +418,9 @@ class ResReservationRequest(models.Model):
     res_expect_time = models.DateTimeField(null=True, blank=True)
     # 예약 승인된 시간 + 추가 시간
     res_deadline_time = models.DateTimeField(null=True, blank=True)
-    # 예약 요청 상태 (승낙은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
+    # 예약 요청 상태 (승인 대기, 예약 확정은 일단 계속 True, 방문 완료하면 False, 거절/취소하면 바로 False)
     is_active = models.BooleanField(blank=True, null=False, default=True)
-    # 예약 승낙 여부 (승낙하면 True)
+    # 예약 승낙 여부 (예약 확정하면 True)
     is_accepted = models.BooleanField(blank=True, null=False, default=False)
 
     def save(self, *args, **kwargs):

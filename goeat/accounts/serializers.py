@@ -132,11 +132,10 @@ class SimpleUserProfileSerializer(serializers.ModelSerializer):
         fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
 
 # user_profile에서 사용
-# 나중에 쿠폰, 예약 내역 필요
 class Simple2UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('goeat_id', 'profile_img', 'username', 'name', 'is_alarm')
+        fields = ('goeat_id', 'profile_img', 'manner_rank', 'username', 'name', 'is_alarm')
 
 # get_team_request에서 사용
 class TeamRequestSerializer(serializers.ModelSerializer):

@@ -1,11 +1,42 @@
 {% load static %}
 {% load hosts %}
 {% load version %}
+{% load phonesplit %}
 
 <link rel="stylesheet" href="{% static 'app_owner/base/css/counter.css' %}?version={{ 'version'|version }}">
 <link rel="stylesheet" href="{% static 'app_owner/stamp/modal/apply/css/style.css' %}?version={{ 'version'|version }}">
 
 <ul class="request_list scroll_style">
+
+
+    {% for item in stamp_appling %}
+    <li class="request_item">
+        <div class="user">
+            <p class="title">
+                휴대폰 번호 뒷자리 / 아이디
+            </p>
+            <p class="desc">
+                {{ item.user.username|split }} / {{ item.user.goeat_id }}
+            </p>
+        </div>
+        <div class="counter">
+            <button onclick="onClickCountDown('{{item.id}}')">
+                <img src="static/app_owner/base/images/arrowcircle.svg" alt="">
+            </button>
+            <p class="counter_text"><span class="counter_value" id="count_{{item.id}}">{{ item.stamp_point }}</span>개 적립</p>
+            <button onclick="onClickCountUp('{{item.id}}')">
+                <img class="right_arrow" src="static/app_owner/base/images/arrowcircle.svg" alt="">
+            </button>
+        </div>
+        <div class="other">
+            <span class="other_time">{{ item.stamp_create_dttm|date:'Y.m.d a h:i' }}</span>
+            <div class="button_wrap">
+                <button class="btn_fill" onclick="stamp_submit('{{item.id}}',true)">적립하기</button>
+                <button class="btn_border" onclick="stamp_submit('{{item.id}}',false)">취소하기</button>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
 
 </ul>
 {% include 'app_owner/stamp/modal/apply/js.html' %}
