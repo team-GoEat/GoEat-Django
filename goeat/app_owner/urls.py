@@ -4,6 +4,8 @@ urlpatterns = [
     path('', include('app_owner.views_files.main.urls')),
     # === 로그인 ===
     path('login/', include('app_owner.views_files.login.urls')),
+    # === 로그아웃 ===
+    path('logout/', include('app_owner.views_files.logout.urls')),
 
     # === 예약관리 ===
     path('reserve/', include('app_owner.views_files.reserve.urls')),

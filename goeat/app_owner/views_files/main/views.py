@@ -8,8 +8,7 @@ from restaurant.models import Restaurant
 
 class Views_Controls(View):
     def get(self, request):
-        print('main')
-        print(request.session['is_reservable_r'])
+
         context = {}
 
         return render(request, 'app_owner/main/index.html', context)

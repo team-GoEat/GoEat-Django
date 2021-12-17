@@ -22,15 +22,15 @@ class ResCoupon(models.Model):
     # 쿠폰을 얻기 위한 스탬프 갯수
     coupon_count = models.IntegerField(default=0)
     # 쿠폰 발행 시작 날짜
-    coupone_start_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    coupon_start_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
     # 쿠폰  발행 종료 날짜
-    coupone_end_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    coupon_end_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
     # 쿠폰 발행 요청날짜
-    coupone_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    coupon_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
     # 쿠폰 생성
     def create_coupon(self, restaurant, service):
-        Coupon.objects.create(user=self.user, restaurant=restaurant, service=service)
+        ResCoupon.objects.create(user=self.user, restaurant=restaurant, service=service)
         self.save()
 
     def __str__(self):

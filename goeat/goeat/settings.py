@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
     # 'django_extensions',
 
     'restaurant',
@@ -101,8 +102,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app_owner.middleware.login_session.session_check',
     'django_hosts.middleware.HostsResponseMiddleware',
+    'app_owner.middleware.login_session.session_check',
 ]
 
 ####### HOSTS SETTING ( 변경 금지 )

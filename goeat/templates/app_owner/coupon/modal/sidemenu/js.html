@@ -1,86 +1,62 @@
 <script>
-  var couponList = document.querySelector(".couponadd_list");
-  var couponInputAll = document.querySelectorAll(".couponadd_input");
-  var couponItem = [
-    {
-      sideMenu: "감자튀김",
-      stampCount: 3,
-      issueDate: "21.10.10"
-    },
-    {
-      sideMenu: "감자튀김",
-      stampCount: 4,
-      issueDate: "21.10.10"
-    },
-    {
-      sideMenu: "감자튀김",
-      stampCount: 5,
-      issueDate: "21.10.10"
-    },
-  ];
+  var couponList = new Array;
 
-  renderItem();
+  function arrAddCoupon() {
+    if (inputCheck()) {
+      couponList.push({
+        'coupon_content': $('#side_menu').val(),
+        'coupon_count': $('#stamp_count').val(),
+        'coupon_start_dttm': $('#issue_date').val(),
+      })
+    }
 
-  function onDeleteCouponItem(index) {
-    couponItem = couponItem.filter((_, i) => String(i) !== index);
-    renderItem();
-  }
-  function onAddCouponItem() {
-    const sideMenu = document.querySelector('#side_menu');
-    const stampCount = document.querySelector('#stamp_count');
-    const issueDate = document.querySelector('#issue_date');
-
-    if (
-      !sideMenu.value ||
-      !stampCount.value ||
-      !issueDate.value
-    ) return alert("누락된 값이 있습니다.");
-
-    let newItem = {
-      sideMenu: sideMenu.value,
-      stampCount: Number(stampCount.value),
-      issueDate: issueDate.value,
-    };
-    couponItem = [newItem, ...couponItem];
-    sideMenu.value = "";
-    stampCount.value = "";
-    issueDate.value = "";
-
-    renderItem();
+    viewAddCoupon(couponList);
   }
 
-
-  function renderItem() {
-    couponList.innerHTML = couponItem.map((value, index) => (
-      `
-      <li class="item">
-        <div class="order">
-          <span class="order_number">
-            ${index + 1}
-          </span>
-        </div>
-        <div class="text_box">
-          <p class="text">
-            ${value.sideMenu}
-          </p>
-          <p class="text">
-            ${value.stampCount}
-          </p>
-          <p class="text">
-            ${value.issueDate}
-          </p>
-        </div>
-        <div class="button_wrap">
-          <button class="content_btn btn_fill" onclick="onDeleteCouponItem('${index}')">삭제</button>
-        </div>
-      </li>
-      `
-    )).join("")
+  function viewAddCoupon(arr) {
+    arr.forEach((item, idx, arr) => {
+      $('.couponadd_list').append(`
+        <li class="item" data-index="${idx}">
+          <div class="order">
+            <span class="order_number">
+              ${idx}
+            </span>
+          </div>
+          <div class="text_box">
+            <p class="text">
+              ${item.coupon_content}
+            </p>
+            <p class="text">
+              ${item.coupon_count}
+            </p>
+            <p class="text">
+              ${item.coupon_start_dttm}
+            </p>
+          </div>
+          <div class="button_wrap">
+            <button class="content_btn btn_fill" onclick="removeCoupon(${idx})">삭제</button>
+          </div>
+        </li>
+    `);
+    })
   }
+
+  function removeCoupon(idx) {
+
+  }
+
+  function inputCheck() {
+    if ($('#side_menu').val() == '') { alert('사이드메뉴를 입력해주세요.'); return false; }
+    else if ($('#stamp_count').val() == '') { alert('스템프 갯수를 입력해주세요.'); return false; }
+    else if ($('#issue_date').val() == '') { alert('발급일자를 입력해주세요.'); return false; }
+    else { return true; }
+  }
+
 
   ////////////////////////////////////////////////////////////
 
 
+  var couponInputAll = document.querySelectorAll(".couponadd_input");
   var couponInput = document.querySelector(".couponadd_input");
   var couponAddNumberPad = document.querySelectorAll(".number_pad button");
 

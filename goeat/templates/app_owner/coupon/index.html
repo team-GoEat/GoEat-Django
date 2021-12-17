@@ -1,6 +1,7 @@
 {% load static %}
 {% load hosts %}
 {% load version %}
+{% load humanize %}
 
 <link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}?version={{ 'version'|version }}">
 <link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}?version={{ 'version'|version }}">
@@ -67,39 +68,23 @@
           현재 등록된 쿠폰
         </p>
         <div class="table_hader table_layout">
-          <div>
-            사이드 메뉴
-          </div>
-          <div>
-            스탬프 갯수
-          </div>
-          <div>
-            유효 기간
-          </div>
+          <div>사이드 메뉴</div>
+          <div>스탬프 갯수</div>
+          <div>유효 기간</div>
         </div>
         <ul class="table_list">
+
+          <!-- 사용가능한 사이드메뉴 쿠폰 -->
+          {% for item in usable_coupon %}
+          {% if item.coupon_type %}
           <li class="table_item table_layout">
-            <div>
-              콜라
-            </div>
-            <div>
-              3
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
+            <div>{{ item.coupon_content }}</div>
+            <div>{{ item.coupon_count }}</div>
+            <div>{{ item.coupon_start_dttm|date:"Y-m-d" }} ~ {{ item.coupon_end_dttm|date:"Y-m-d" }}</div>
           </li>
-          <li class="table_item table_layout">
-            <div>
-              감자튀김
-            </div>
-            <div>
-              5
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
-          </li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
       </div>
       <div class="table_wrap">
@@ -107,119 +92,71 @@
           할인 쿠폰
         </p>
         <div class="table_hader table_layout">
-          <div>
-            할인 금액
-          </div>
-          <div>
-            스탬프 갯수
-          </div>
-          <div>
-            유효 기간
-          </div>
+          <div>할인 금액</div>
+          <div>스탬프 갯수</div>
+          <div>유효 기간</div>
         </div>
         <ul class="table_list">
+
+          <!-- 사용가능한 할인쿠폰 -->
+          {% for item in usable_coupon %}
+          {% if not item.coupon_type %}
           <li class="table_item table_layout">
-            <div>
-              1,000
-            </div>
-            <div>
-              3
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
+            <div>{{ item.coupon_content }}</div>
+            <div>{{ item.coupon_count }}</div>
+            <div>{{ item.coupon_start_dttm|date:"Y-m-d" }} ~ {{ item.coupon_end_dttm|date:"Y-m-d" }}</div>
           </li>
-          <li class="table_item table_layout">
-            <div>
-              3,000
-            </div>
-            <div>
-              5
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
-          </li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
       </div>
       <div class="table_wrap">
-        <p class="table_title">
-          지난 등록된 쿠폰
-        </p>
+        <p class="table_title">지난 등록된 쿠폰</p>
+
         <div class="table_hader table_layout">
-          <div>
-            사이드 메뉴
-          </div>
-          <div>
-            스탬프 갯수
-          </div>
-          <div>
-            유효 기간
-          </div>
+          <div>사이드 메뉴</div>
+          <div>스탬프 갯수</div>
+          <div>유효 기간</div>
         </div>
+
         <ul class="table_list">
+
+          <!-- 사용 불가능한 사이드메뉴 쿠폰 -->
+          {% for item in unusable_coupon %}
+          {% if item.coupon_type %}
           <li class="table_item table_layout">
-            <div>
-              콜라
-            </div>
-            <div>
-              3
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
+            <div>{{ item.coupon_content }}</div>
+            <div>{{ item.coupon_count }}</div>
+            <div>{{ item.coupon_start_dttm|date:"Y-m-d" }} ~ {{ item.coupon_end_dttm|date:"Y-m-d" }}</div>
           </li>
-          <li class="table_item table_layout">
-            <div>
-              감자튀김
-            </div>
-            <div>
-              5
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
-          </li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
       </div>
       <div class="table_wrap">
-        <p class="table_title">
-          할인 쿠폰
-        </p>
+        <p class="table_title">할인 쿠폰</p>
+
         <div class="table_hader table_layout">
-          <div>
-            할인 금액
-          </div>
-          <div>
-            스탬프 갯수
-          </div>
-          <div>
-            유효 기간
-          </div>
+          <div>할인 금액</div>
+          <div>스탬프 갯수</div>
+          <div>유효 기간</div>
         </div>
+
         <ul class="table_list">
+
+          <!-- 사용 불가능한 할인쿠폰 -->
+          {% for item in unusable_coupon %}
+          {% if not item.coupon_type %}
           <li class="table_item table_layout">
-            <div>
-              1,000
-            </div>
-            <div>
-              3
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
+            <div>{{ item.coupon_content }}</div>
+            <div>{{ item.coupon_count }}</div>
+            <div>{{ item.coupon_start_dttm|date:"Y-m-d" }} ~ {{ item.coupon_end_dttm|date:"Y-m-d" }}</div>
           </li>
-          <li class="table_item table_layout">
-            <div>
-              3,000
-            </div>
-            <div>
-              5
-            </div>
-            <div>
-              21.10.26 ~ 22.04.26
-            </div>
-          </li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
       </div>
     </div>
