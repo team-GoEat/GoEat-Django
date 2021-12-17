@@ -1,7 +1,30 @@
+{% load hosts %}
+{% load static %}
+
 <script>
   var couponList = new Array;
 
-  function arrAddCoupon() {
+  // 쿠폰 리스트 Create
+  function createCoupon() {
+    var parmas = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+
+    $.post({
+      url: "{% host_url 'create_coupon' host 'owner' %}",
+      data: parmas,
+      success: (result) => {
+        $('.couponadd_list').empty();
+
+      },
+      error: (result) => {
+        alert('서버와의 연결이 끊어졌습니다. [ERROR:001]');
+      }
+    })
+  }
+
+  // 추가한 쿠폰 array에 추가
+  function addCoupon() {
     if (inputCheck()) {
       couponList.push({
         'coupon_content': $('#side_menu').val(),
@@ -13,13 +36,16 @@
     viewAddCoupon(couponList);
   }
 
+  // 추가한 쿠폰 리스트에 추가
   function viewAddCoupon(arr) {
+    $('.couponadd_list').empty();
+
     arr.forEach((item, idx, arr) => {
       $('.couponadd_list').append(`
         <li class="item" data-index="${idx}">
           <div class="order">
             <span class="order_number">
-              ${idx}
+              ${idx + 1}
             </span>
           </div>
           <div class="text_box">
@@ -41,8 +67,10 @@
     })
   }
 
+  // 모달 쿠폰 목록 지우기
   function removeCoupon(idx) {
-
+    couponList.splice(idx, 1);
+    $(`.couponadd_list .item[data-index='${idx}']`).remove();
   }
 
   function inputCheck() {
