@@ -422,6 +422,10 @@ class ResReservationRequest(models.Model):
     is_active = models.BooleanField(blank=True, null=False, default=True)
     # 예약 승낙 여부 (예약 확정하면 True)
     is_accepted = models.BooleanField(blank=True, null=False, default=False)
+    # 노쇼 여부 ??
+    # is_noshow = models.BooleanField(blank=True, default=False)
+    # 방문완료 여부 ??
+    # is_arrived = models.BooleanField(blank=True, default=False)
 
     def save(self, *args, **kwargs):
         if not self.res_start_time:
