@@ -28,8 +28,6 @@
         data: params,
         success: function (result) {
 
-          console.log(result);
-
           if (result.result === 'success') {
 
             $('.login_fail').css('display', 'none');
@@ -40,15 +38,16 @@
             openContent.classList.add("on");
 
           } else if (result.result === 'fail') {
+
             $('.login_fail').css('display', 'block');
+
           }
+
         },
         error: function (result) {
           alert("서버와의 연결이 끊어졌습니다.")
         }
       });
-
-
 
     }
     else alert('로그인 정보를 입력해주세요.');
@@ -64,7 +63,7 @@
     }
 
     $.ajax({
-      url: "{% host_url 'reserve_update' host 'owner' %}",
+      url: "{% host_url 'reverse' host 'owner' %}",
       type: "POST",
       data: params,
       success: function (result) {

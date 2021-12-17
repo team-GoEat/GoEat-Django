@@ -3,8 +3,9 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
-import datetime
-import time
+import datetime,time
+from accounts.model_files.stamp import *
+from accounts.model_files.coupon import *
 from restaurant.models import (
     Restaurant, Menu, MenuCannotEat, ResService,
     Service, MenuSecondClass, MenuFeature, MenuIngredient,
@@ -326,7 +327,7 @@ class TeamRequest(models.Model):
 
 #############################################################################################
 """
-# 스탬프 
+# 스탬프 - 사용중이지않음.
 class Stamp(models.Model):
     # 사용자
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='stamp_owner')
@@ -361,10 +362,13 @@ class Stamp(models.Model):
 """
 #############################################################################################
 
-                                            쿠폰
+                                            사용자 쿠폰 관련 모델
+                                            Made. EdoubleK
 
 #############################################################################################
 """
+
+# 쿠폰 - 사용중이지않음.
 class Coupon(models.Model):
     # 사용자
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='coupon_owner')
@@ -396,7 +400,7 @@ class Coupon(models.Model):
 
 #############################################################################################
 """
-# 사용자 음식점 예약 내역
+# 사용자 음식점 예약 내역 - 
 class ResReservationRequest(models.Model): 
     # 사용자
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='res_sender')

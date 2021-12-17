@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import truncatechars
-
+from restaurant.model_files.coupon import *
 """
 #############################################################################################
 
@@ -174,7 +174,8 @@ class Restaurant(models.Model):
 
 #############################################################################################
 """
-# 모든 음식점 서비스 모델
+
+# 모든 음식점 서비스 모델 - 사용중이지 않음
 class Service(models.Model):
     # 서비스 스탬프 목표치 
     service_count = models.IntegerField(default=0)
@@ -184,7 +185,7 @@ class Service(models.Model):
     def __str__(self):
         return '{} {}'.format(self.service_content, self.service_count)
 
-# 음식점별 서비스 모델
+# 음식점별 서비스 모델 - 사용중이지 않음
 class ResService(models.Model):
     # 음식점
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='restaurant')
