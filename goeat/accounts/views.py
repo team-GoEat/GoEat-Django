@@ -1639,10 +1639,10 @@ def res_cancel_reserve(request, *args, **kwargs):
     
     manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
     
-    if manner_points < 30:
+    if manner_points <= 10:
         user.manner_rank = 1
         user.save()
-    elif manner_points > 70:
+    elif manner_points >= 20:
         user.manner_rank = -1
         user.save()
     else:
@@ -1674,10 +1674,10 @@ def res_finish_reserve(request, *args, **kwargs):
     
     manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
     
-    if manner_points < 30:
+    if manner_points <= 10:
         user.manner_rank = 1
         user.save()
-    elif manner_points > 70:
+    elif manner_points >= 20:
         user.manner_rank = -1
         user.save()
     else:
