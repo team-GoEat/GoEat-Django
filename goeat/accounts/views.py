@@ -10,6 +10,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.push_fcm import push_team_request, push_notice
 import json
 import logging
+import random
+import requests
 from restaurant.models import (
     Restaurant, MenuCannotEat, MenuSecondClass, MenuFirstClass
 )
@@ -1812,3 +1814,40 @@ def delete_fcm_token(request, *args, **kwargs):
     token.delete()
     
     return Response(status=200)
+
+
+"""
+#############################################################################################
+
+                                            SMS 인증                                         
+
+#############################################################################################
+"""
+@api_view(['POST'])
+def sms_authentication(request, *args, **kwargs):
+    userphonenum = request.POST.get('userphonenum')
+    
+    chars = '0123456789'
+    
+    sms_url = "https://sslsms.cafe24.com/sms_sender.php"
+    rand_num = ''.join(random.choice(chars) for _ in range(4))
+    
+    sms = {
+        'user_id': 'skykira',
+        'secure': "de932c0e2de9b53371680da54bc98c72",
+        'msg': "Go Eat 인증번호: {}".format(rand_num),
+        'rphone': userphonenum,
+        'sphone1': '070',
+        'sphone2': '4006',
+        'sphone3': '7014',
+        'mode': 1,
+        'smsType': 'S'
+    }
+    
+    result = requests.post(sms_url, sms)
+    
+    data = {
+        'result': 'success',
+        'randnum': rand_num
+    }
+    return Response(data, status=200)

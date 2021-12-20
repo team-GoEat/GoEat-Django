@@ -123,5 +123,8 @@ urlpatterns = [
     # FCM 토큰 삭제
     path('fcm/delete/<str:user_id>/', views.delete_fcm_token, name='delete_fcm_token'),
 
+    # SMS 인증
+    path('sms/', views.sms_authentication, name='sms_authentication'),
+
     path('test/', views.test, name='test'),
 ]
