@@ -1,6 +1,8 @@
 from django.db import models
-from django.template.defaultfilters import truncatechars
+from django.db.models.fields import TimeField
+from django.template.defaultfilters import default, truncatechars
 from restaurant.model_files.coupon import *
+from django.conf import settings
 """
 #############################################################################################
 
@@ -141,6 +143,18 @@ class Restaurant(models.Model):
     res_pos_id = models.CharField(max_length=100, blank=True)
     # 식당 비밀번호
     res_pos_pw = models.CharField(max_length=100, blank=True)
+    # 식당 오픈시간
+    res_open_tm = models.TimeField(default='00:00', blank=True)
+    # 식당 마감시간
+    res_close_tm = models.TimeField(default='00:00', blank=True)
+    # 식당 브레이크 타임
+    is_breaktime = models.BooleanField(default=False)
+    # 식당 브레이크 타임 시작시간
+    res_break_start_tm = models.TimeField(default='00:00', blank=True)
+    # 식당 브레이크 타임 마감시간
+    res_break_end_tm = models.TimeField(default='00:00', blank=True)
+    # 식당 요일별 오픈 여부
+    res_open_days = models.JSONField(default=settings.RES_DAYS)
 
     # 예약 가능 여부 바꾸기
     # def change_reserve(self):
