@@ -1845,9 +1845,17 @@ def sms_authentication(request, *args, **kwargs):
     }
     
     result = requests.post(sms_url, sms)
+    result_text = result.text.split(',')
     
-    data = {
-        'result': 'success',
-        'randnum': rand_num
-    }
-    return Response(data, status=200)
+    if result_text[0] == 'success':
+        data = {
+            'result': 'success',
+            'randnum': rand_num
+        }
+        return Response(data, status=200)
+    else:
+        data = {
+            'result': 'failed',
+            'randnum': rand_num
+        }
+        return Response(data, status=400)
