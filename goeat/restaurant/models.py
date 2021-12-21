@@ -158,9 +158,9 @@ class Restaurant(models.Model):
     res_open_days = models.JSONField(default=settings.RES_DAYS)
 
     # 예약 가능 여부 바꾸기
-    # def change_reserve(self):
-    #     self.is_reservable != self.is_reservable
-    #     self.save()
+    def change_reserve(self):
+        self.is_reservable_r = not self.is_reservable_r
+        self.save()
     
     # 예약 가능 여부
     @property

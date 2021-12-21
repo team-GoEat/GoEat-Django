@@ -815,22 +815,16 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
 
     return Response(data, status=200)
 
-# 식당 예약 여부 바꾸기
+# 음식점 예약 여부 바꾸기
 @api_view(['PUT'])
 def res_change_reserve(request, *args, **kwargs):
-    pass
-#     res_id = kwargs.get('res_id')
-#     # 0이면 예약 불가능, 1이면 가능
-#     reserve_status = request.POST.get('reserve_status')
-
-#     try:
-#         resReservation = ResReservation.objects.get(restaurant__pk=res_id)
-#     except ResReservation.DoesNotExist:
-#         return JsonResponse({'msg': '변경이 불가능합니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-
-#     if reserve_status:
-#         resReservation.accept_reserve()
-#         return JsonResponse({'msg': '예약 가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-#     else:
-#         resReservation.reject_reserve()
-#         return JsonResponse({'msg': '예약 불가능하게 변경되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+    res_id = kwargs.get('res_id')
+    
+    try:
+        restaurant = Restaurant.objects.get(pk=res_id)
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    restaurant.change_reserve()
+    
+    return Response(status=200)

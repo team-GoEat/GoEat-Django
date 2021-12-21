@@ -168,6 +168,7 @@ def change_user_profile(request, *args, **kwargs):
     user_name = request.POST.get('user_name')
     profile_img = request.POST.get('profile_img')
     is_alarm = request.POST.get('is_alarm')
+    is_alarm = is_alarm.capitalize()
 
     try:
         user = User.objects.get(goeat_id=user_id)
@@ -222,19 +223,21 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@api_view(['GET'])
+@api_view(['POST'])
 def test(request, *args, **kwargs):
+    is_alarm = request.POST.get('is_alarm')
     user_id = 'JPED'
+    is_alarm = is_alarm.capitalize()
+    
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
-    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
-    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
-    
-    print(noshow_cnt)
-    print(arrived_cnt)
-    
-    manner_points = noshow_cnt / (noshow_cnt + arrived_cnt) * 100
-    print(int(manner_points))
+    print(user.is_alarm)
+    user.is_alarm = is_alarm
+    user.save()
+    print(user.is_alarm)
         
     return Response(status=200)
 
@@ -1580,7 +1583,7 @@ def get_user_recent_reserve(request, *args, **kwargs):
         resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)[0]
     # 예약을 단 한번도 하지 않았으면
     except:
-        return Response([], status=200)
+        return Response({}, status=200)
     
     serializer = UserReservationSerializer(resRes)
     
