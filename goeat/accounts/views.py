@@ -1639,8 +1639,8 @@ def res_cancel_reserve(request, *args, **kwargs):
 
     user_res.cancel(msg)
     # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
-    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
-    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
+    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, is_noshow=True).count()
+    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, is_arrived=True).count()
     
     manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
     
@@ -1674,8 +1674,8 @@ def res_finish_reserve(request, *args, **kwargs):
 
     user_res.arrived()
     # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
-    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
-    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
+    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, is_noshow=True).count()
+    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, is_arrived=True).count()
     
     manner_points = int(noshow_cnt / (noshow_cnt + arrived_cnt) * 100)
     
