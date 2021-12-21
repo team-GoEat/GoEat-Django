@@ -222,19 +222,13 @@ def search_user(request, *args, **kwargs):
 
 #############################################################################################
 """
-@api_view(['GET'])
+@api_view(['POST'])
 def test(request, *args, **kwargs):
     user_id = 'JPED'
 
-    # 매너 등급 = 예약 취소(노쇼) / (예약 취소(노쇼) + 방문 완료) * 100
-    noshow_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='예약 취소(고객 노쇼)').count()
-    arrived_cnt = ResReservationRequest.objects.filter(sender__goeat_id=user_id, res_state='방문 완료').count()
-    
-    print(noshow_cnt)
-    print(arrived_cnt)
-    
-    manner_points = noshow_cnt / (noshow_cnt + arrived_cnt) * 100
-    print(int(manner_points))
+    is_alarm = request.POST.get('is_alarm')
+    print(is_alarm)
+    print(type(is_alarm))
         
     return Response(status=200)
 
