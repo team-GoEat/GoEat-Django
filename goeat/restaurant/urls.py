@@ -48,7 +48,7 @@ urlpatterns = [
     # (비회원) 카테고리ID로 음식점 실시간 예약 리스트 받기
     path('reserve/type/<int:menu_type_id>/', views.get_resreservation_by_menutype_notlogin, name='get_resreservation_by_menutype_notlogin'),
     # 식당 예약 여부 바꾸기
-    path('reserve/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
+    path('reserve/change/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
 
     # 22가지 랜덤 메뉴
     path('tastemenu/', views.taste_menu, name='taste_menu'),
