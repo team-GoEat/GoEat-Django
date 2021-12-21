@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.fields import TimeField
 from django.template.defaultfilters import default, truncatechars
 from restaurant.model_files.coupon import *
+from restaurant.model_files.notice import *
 from django.conf import settings
 """
 #############################################################################################

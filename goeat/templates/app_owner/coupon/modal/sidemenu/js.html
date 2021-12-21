@@ -7,7 +7,8 @@
   // 쿠폰 리스트 Create
   function createCoupon() {
     var parmas = {
-      'csrfmiddlewaretoken': '{{ csrf_token }}'
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'couponList[]': couponList
     }
 
     $.post({
@@ -15,7 +16,9 @@
       data: parmas,
       success: (result) => {
         $('.couponadd_list').empty();
-
+        couponList.splice(0, couponList.length);
+        allHide();
+        coupon();
       },
       error: (result) => {
         alert('서버와의 연결이 끊어졌습니다. [ERROR:001]');

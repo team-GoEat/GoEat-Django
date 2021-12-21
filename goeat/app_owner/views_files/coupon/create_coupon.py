@@ -10,7 +10,8 @@ import datetime
 class Views_Controls(View):
     def post(self, request):
 
-        coupon_data = ResCoupon()
+        print(request.POST)
+        print(request.POST.getlist('couponList[]'))
 
         context = {}
 
