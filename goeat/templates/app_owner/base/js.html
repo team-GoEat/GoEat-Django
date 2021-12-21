@@ -100,8 +100,10 @@
     }
   }
 
-  async function settingNotice() {
-    let result = await DomCallback("{% host_url 'setting_notice' host 'owner' %}", {});
+  async function settingNotice(notice_id) {
+    let result = await DomCallback("{% host_url 'setting_notice' host 'owner' %}", {
+      'notice_id': notice_id
+    });
     if (result.result) {
       modalShow('고잇 공지사항', result);
     }

@@ -1,3 +1,6 @@
+{% load hosts %}
+{% load static %}
+
 <script>
   var timeNumber = "";
   var timeTextElement = undefined;
@@ -49,59 +52,121 @@
     }
   }
 
-  // 요일 체크박스
-  var offDayState = ["월요일", "화요일"];
-  var weekDayArray = [
-    {
-      eng: "monday",
-      kor: "월요일"
-    },
-    {
-      eng: "tuesday",
-      kor: "화요일"
-    },
-    {
-      eng: "wednesday",
-      kor: "수요일"
-    },
-    {
-      eng: "thursday",
-      kor: "목요일"
-    },
-    {
-      eng: "friday",
-      kor: "금요일"
-    },
-    {
-      eng: "saturday",
-      kor: "토요일"
-    },
-    {
-      eng: "sunday",
-      kor: "일요일"
-    },
-  ];
 
-  weekBtnRander();
+  // 영업시간 저장
+  function openTimeSave() {
+    var params = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'res_open_tm': $('#open_start_time').text(),
+      'res_close_tm': $('#open_end_time').text(),
+    }
 
-  function weekBtnRander() {
-    const weekDayBox = document.querySelector(".offday_set");
-    weekDayBox.innerHTML = weekDayArray.map(v => `
-      <div class="week_button">
-        <input id=${v.eng} name=${v.kor} type="checkbox" ${offDayState.some(offvalue => offvalue === v.kor) ? "checked" : ""}>
-        <label for=${v.eng} class="week_style">
-          <div class="check_icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="6.366" viewBox="0 0 8 6.366">
-              <path d="M15.924,10.9a.734.734,0,1,1,1.048,1.028l-3.907,4.883a.734.734,0,0,1-1.057.02L9.42,14.237A.734.734,0,1,1,10.457,13.2l2.049,2.048,3.4-4.33.02-.021Z" transform="translate(-9.182 -10.676)" fill-rule="evenodd" />
-            </svg>
-          </div>
-          <span class="week_text">
-            ${v.kor}
-          </span>
-        </label>
-      </div>
-    `).join("");
+    $.post({
+      url: "{% host_url 'open_time_update' host 'owner' %}",
+      data: params,
+      success: (result) => {
+        alert(result['msg']);
+      },
+      error: (result) => {
+        alert(`[ERROR:${result.status}]`);
+      }
+    })
   }
 
+  // 브레이크 타임 저장
+  function breakTimeSave() {
+    var params = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'type': 'update_time',
+      'res_break_start_tm': $('#brake_start_time').text(),
+      'res_break_end_tm': $('#brake_end_time').text(),
+    }
+
+    $.post({
+      url: "{% host_url 'break_time_update' host 'owner' %}",
+      data: params,
+      success: (result) => {
+        alert(result['msg']);
+      },
+      error: (result) => {
+        alert(`[ERROR:${result.status}]`);
+      }
+    })
+  }
+
+  // 브레이크 타임 토글
+  function breakTimeToggle() {
+    var params = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'type': 'toggle',
+    }
+
+    $.post({
+      url: "{% host_url 'break_time_update' host 'owner' %}",
+      data: params,
+      success: (result) => {
+        alert(result['msg']);
+      },
+      error: (result) => {
+        alert(`[ERROR:${result.status}]`);
+      }
+    })
+  }
+
+  function Serialize_li(cls) {
+    var result = {};
+
+    document.querySelectorAll(cls).forEach((item, idx, arr) => {
+
+      result[$(item).attr('id')] = {}
+
+      $(item).children("input").each((idx, item2) => {
+
+        var titleKey = $(item).attr('id');
+        var objKey = $(item2).attr('data-key');
+
+        switch ($(item2).attr('type')) {
+
+          case 'text':
+            result[titleKey][objKey] = $(item2).attr('value');
+            break;
+
+          case 'hidden':
+            result[titleKey][objKey] = $(item2).attr('value');
+            break;
+
+          case 'checkbox':
+            result[titleKey][objKey] = $(item2).is(':checked');
+            break;
+
+          default:
+            result[titleKey][objKey] = '';
+            break;
+        }
+
+      });
+
+    });
+
+    return JSON.stringify(result);
+  }
+
+  // 휴무일 데이터 저장
+  function openDaysSave() {
+
+    $.post({
+      url: "{% host_url 'open_days_update' host 'owner' %}",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      data: {
+        'res_days': Serialize_li(`.week_button`)
+      },
+      success: (result) => {
+        alert(result['msg']);
+      },
+      error: (result) => {
+        alert(`[ERROR:${result.status}]`);
+      }
+    })
+  }
 
 </script>

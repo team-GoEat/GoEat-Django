@@ -251,6 +251,13 @@ USE_TZ = False
 # owner static version
 VERSION = 1.0
 
+# owner Json Result
+RESULT = {
+    'result': 'fail',
+    'msg': '',
+    'value': []
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -271,31 +278,31 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 레스토랑 요일별 기본 데이터
 RES_DAYS = {
-    '0':{
+    'week_0':{
         'name':'월요일',
         'state':False
     },
-    '1':{
+    'week_1':{
         'name':'화요일',
         'state':False
     },
-    '2':{
+    'week_2':{
         'name':'수요일',
         'state':False
     },
-    '3':{
+    'week_3':{
         'name':'목요일',
         'state':False
     },
-    '4':{
+    'week_4':{
         'name':'금요일',
         'state':False
     },
-    '5':{
+    'week_5':{
         'name':'토요일',
         'state':False
     },
-    '6':{
+    'week_6':{
         'name':'일요일',
         'state':False
     }
