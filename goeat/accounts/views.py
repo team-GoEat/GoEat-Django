@@ -168,7 +168,7 @@ def change_user_profile(request, *args, **kwargs):
     user_name = request.POST.get('user_name')
     profile_img = request.POST.get('profile_img')
     is_alarm = request.POST.get('is_alarm')
-    # if is_alarm
+    is_alarm = is_alarm.capitalize()
 
     try:
         user = User.objects.get(goeat_id=user_id)
@@ -226,21 +226,18 @@ def search_user(request, *args, **kwargs):
 @api_view(['POST'])
 def test(request, *args, **kwargs):
     is_alarm = request.POST.get('is_alarm')
-    if is_alarm == 'true':
-        is_alarm = 'True'
-    else:
-        is_alarm = 'False'
     user_id = 'JPED'
+    is_alarm = is_alarm.capitalize()
     
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
-    # print(user.is_alarm)
-    # user.is_alarm = is_alarm
-    # user.save()
-    # print(user.is_alarm)
+    print(user.is_alarm)
+    user.is_alarm = is_alarm
+    user.save()
+    print(user.is_alarm)
         
     return Response(status=200)
 
