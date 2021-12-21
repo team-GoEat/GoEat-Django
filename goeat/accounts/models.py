@@ -462,12 +462,15 @@ class ResReservationRequest(models.Model):
     def cancel(self, msg):
         self.res_state = msg
         self.is_active = False
+        if msg == '예약 취소(고객 노쇼)':
+            self.is_noshow = True
         self.save()
 
     # 고객 방문 완료시
     def arrived(self):
         self.res_state = '방문 완료'
         self.is_active = False
+        self.is_arrived = True
         self.save()
 
 
