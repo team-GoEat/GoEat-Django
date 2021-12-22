@@ -16,17 +16,16 @@ from restaurant.models import (
     Restaurant, MenuCannotEat, MenuSecondClass, MenuFirstClass
 )
 from accounts.models import (
-    User, Team, TeamRequest, ResService, NonMember,
-    Stamp, Coupon, ResReservationRequest, UserTeamProfile,
-    MenuFeaturePoint, MenuTypePoint, MenuIngredientPoint, MenuPoint,
+    User, Team, TeamRequest, NonMember,
+    ResReservationRequest, UserTeamProfile, MenuFeaturePoint, 
+    MenuTypePoint, MenuIngredientPoint, MenuPoint,
     Alarm, UserFcmClientToken
 )
 from accounts.serializers import (
     SimpleUserProfileSerializer, MenuHateSerializer, MenuLikeSerializer, 
-    FavResSerializer, CouponSerializer, StampSerializer,
-    UserReservationSerializer, Simple2UserProfileSerializer,
-    RegisterSerializer, MyTokenObtainPairSerializer,
-    ChangePasswordSerializer, TeamRequestSerializer, AlarmSerializer,
+    FavResSerializer, UserReservationSerializer, Simple2UserProfileSerializer,
+    RegisterSerializer, MyTokenObtainPairSerializer, ChangePasswordSerializer, 
+    TeamRequestSerializer, AlarmSerializer,
 )
 
 logger = logging.getLogger('collection')
@@ -143,6 +142,155 @@ def account_withdraw(request, *args, **kwargs):
 """
 #############################################################################################
 
+                                            알림
+
+#############################################################################################
+"""
+# 알림 리스트
+@api_view(['GET'])
+def get_alarm_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    user_alarm = Alarm.objects.filter(receiver=user, is_read=False)
+    serializer = AlarmSerializer(user_alarm, many=True)
+
+    return Response(serializer.data, status=200)
+
+# 알림 읽음
+@api_view(['POST'])
+def alarm_read(request, *args, **kwargs):
+    alarm_id = request.POST.get('alarm_id')
+
+    try:
+        alarm = Alarm.objects.get(pk=alarm_id)
+    except Alarm.DoesNotExist:
+        return JsonResponse({'msg': '잘못됐습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    alarm.read_alarm()
+
+    return Response(status=200)
+
+
+"""
+#############################################################################################
+
+                                        FCM 토큰 관련
+
+#############################################################################################
+"""
+@api_view(['POST'])
+def save_fcm_token(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    fcm_token = request.POST.get('fcm_token')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    token, created = UserFcmClientToken.objects.get_or_create(user=user, fcm_token=fcm_token)
+    
+    if not created:
+        return JsonResponse({'msg': '중복된 토큰입니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    return Response(status=200)
+
+@api_view(['POST'])
+def send_fcm_message(request, *args, **kwargs):
+    message_title = request.POST.get('message_title')
+    message_body = request.POST.get('message_body')
+
+    tokens = UserFcmClientToken.objects.filter(is_active=True)
+    n = tokens.count()
+    idx = 0
+
+    while idx <= n:
+        tokens_list = []
+        for i in range(idx, idx+500):
+            try:
+                tokens_list.append(tokens[i].fcm_token)
+            except IndexError:
+                break
+        
+        push_notice(tokens_list, message_title, message_body)
+        
+        idx = idx+500
+
+    return Response(status=200)
+
+@api_view(['DELETE'])
+def delete_fcm_token(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    fcm_token = request.POST.get('fcm_token')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        token = UserFcmClientToken.objects.get(user=user, fcm_token=fcm_token)
+    except:
+        return JsonResponse({'msg': '토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    token.delete()
+    
+    return Response(status=200)
+
+
+"""
+#############################################################################################
+
+                                            SMS 인증                                         
+
+#############################################################################################
+"""
+@api_view(['POST'])
+def sms_authentication(request, *args, **kwargs):
+    userphonenum = request.POST.get('userphonenum')
+    
+    chars = '0123456789'
+    
+    sms_url = "https://sslsms.cafe24.com/sms_sender.php"
+    rand_num = ''.join(random.choice(chars) for _ in range(4))
+    
+    sms = {
+        'user_id': 'skykira',
+        'secure': "de932c0e2de9b53371680da54bc98c72",
+        'msg': "Go Eat 인증번호: {}".format(rand_num),
+        'rphone': userphonenum,
+        'sphone1': '070',
+        'sphone2': '4006',
+        'sphone3': '7014',
+        'mode': 1,
+        'smsType': 'S'
+    }
+    
+    result = requests.post(sms_url, sms)
+    result_text = result.text.split(',')
+    
+    if result_text[0] == 'success':
+        data = {
+            'result': 'success',
+            'randnum': rand_num
+        }
+        return Response(data, status=200)
+    else:
+        data = {
+            'result': 'failed',
+            'randnum': rand_num
+        }
+        return Response(data, status=400)
+
+
+"""
+#############################################################################################
+
                                         User 관련
 
 #############################################################################################
@@ -214,6 +362,66 @@ def search_user(request, *args, **kwargs):
 
     serializer = SimpleUserProfileSerializer(user)
     return Response(serializer.data, status=200)
+
+
+"""
+#############################################################################################
+
+                                        못먹는 재료
+
+#############################################################################################
+"""
+# 못먹는 재료
+@api_view(['POST', 'PUT'])
+def cannot_eat(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    cannoteat_string = request.POST.get('cannoteat_str')
+
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        team = Team.objects.get(user=user)
+    except Team.DoesNotExist:
+        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    user.menu_cannoteat.clear()
+    
+    for i in range(len(cannoteat_string)):
+        if cannoteat_string[i] == '0':
+            continue
+        else:
+            mce_id = i
+            try:
+                mce = MenuCannotEat.objects.get(pk = mce_id)
+            except MenuCannotEat.DoesNotExist:
+                return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+            user.menu_cannoteat.add(mce)
+    
+    if request.method == 'POST':
+        for mce in user.menu_cannoteat.all():
+            team.menu_cannoteat.add(mce)
+                
+        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
+
+    elif request.method == 'PUT':
+        # 팀 비선호재료 초기화
+        team.menu_cannoteat.clear()
+        # 위드잇하는 팀원 목록
+        for teammate in team.teammates.all():
+            try:
+                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
+            except UserTeamProfile.DoesNotExist:
+                continue
+            for cne in team_profile.user.menu_cannoteat.all():
+                team.menu_cannoteat.add(cne)
+        # 사용자의 비선호재료 다시 추가
+        for cne in user.menu_cannoteat.all():
+            team.menu_cannoteat.add(cne)
+        
+        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
 
 
 """
@@ -730,6 +938,7 @@ def usertaste_reset(request, *args, **kwargs):
 
     return Response({'msg': 'OK'}, status=200)
 
+
 """
 #############################################################################################
 
@@ -1227,147 +1436,6 @@ def change_nonmember_rank(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                            알림
-
-#############################################################################################
-"""
-# 알림 리스트
-@api_view(['GET'])
-def get_alarm_list(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    user_alarm = Alarm.objects.filter(receiver=user, is_read=False)
-    serializer = AlarmSerializer(user_alarm, many=True)
-
-    return Response(serializer.data, status=200)
-
-# 알림 읽음
-@api_view(['POST'])
-def alarm_read(request, *args, **kwargs):
-    alarm_id = request.POST.get('alarm_id')
-
-    try:
-        alarm = Alarm.objects.get(pk=alarm_id)
-    except Alarm.DoesNotExist:
-        return JsonResponse({'msg': '잘못됐습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    alarm.read_alarm()
-
-    return Response(status=200)
-
-"""
-#############################################################################################
-
-                                        스탬프
-
-#############################################################################################
-"""
-# 유저 스탬프 목록
-@api_view(['GET'])
-def user_stamp_list(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    stamp = Stamp.objects.filter(user=user)
-    serializer = StampSerializer(stamp, many=True)
-    return Response(serializer.data, status=200)
-
-# 스탬프 적립
-@api_view(['GET'])
-def get_stamp(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    res_id = kwargs.get('res_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    restaurant = Restaurant.objects.get(id=res_id)
-    res_service = ResService.objects.get(restaurant=restaurant)
-
-    # 스탬프 받아오기
-    try:
-        stamp = Stamp.objects.get(user=user, res_service=res_service)
-        
-    # 스탬프 처음 사용한다면 스탬프 새로 생성
-    except Stamp.DoesNotExist:
-        Stamp.objects.create(user=user, res_service=res_service)
-        
-    # 스탬프 하나 추가
-    stamp.add_stamp()
-        
-    # 서비스 받아오기
-    services = stamp.get_services()
-    for service in services:
-            
-        # 가진 스탬프 개수가 서비스 개수랑 같으면 쿠폰 추가
-        if stamp.stamp_own == service.service_count:
-            stamp.append_coupon(restaurant=restaurant, service=service)
-
-        # 가진 스탬프 개수가 최대치에 도달하면 리셋
-    if stamp.stamp_own == res_service.stamp_max_cnt:
-        stamp.reset_stamp_own()
-
-    return JsonResponse({'msg': "스탬프가 성공적으로 적립되었습니다."}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-
-
-"""
-#############################################################################################
-
-                                            쿠폰                                            
-
-#############################################################################################
-"""
-# 유저 쿠폰 목록
-@api_view(['GET'])
-def user_coupon_list(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    user_coupon = Coupon.objects.filter(user=user)
-    serializer = CouponSerializer(user_coupon, many=True)
-    return Response(serializer.data, status=200)
-
-# 쿠폰 사용
-@api_view(['GET'])
-def use_coupon(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    coupon_id = kwargs.get('coupon_id')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        coupon = Coupon.objects.get(pk=coupon_id)
-    except Coupon.DoesNotExist:
-        return JsonResponse({'msg': '쿠폰이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    if user == coupon.user:
-        coupon.delete()
-        return JsonResponse({'msg': '쿠폰을 사용하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-    else:
-        return JsonResponse({'msg': '사용자가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-
-"""
-#############################################################################################
-
                         좋아한 메뉴, 싫어한 메뉴, 찜한 음식점
 
 #############################################################################################
@@ -1589,6 +1657,14 @@ def get_user_recent_reserve(request, *args, **kwargs):
     
     return Response(serializer.data, status=200)
 
+
+"""
+#############################################################################################
+
+                                        
+
+#############################################################################################
+"""
 # 음식점 예약 승인
 @api_view(['PUT'])
 def res_accept_reserve(request, *args, **kwargs):
@@ -1690,175 +1766,3 @@ def res_finish_reserve(request, *args, **kwargs):
         user.save()
     
     return Response({'방문이 완료되었습니다!'}, status=200)
-    
-    
-"""
-#############################################################################################
-
-                                        못먹는 재료
-
-#############################################################################################
-"""
-# 못먹는 재료
-@api_view(['POST', 'PUT'])
-def cannot_eat(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    cannoteat_string = request.POST.get('cannoteat_str')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        team = Team.objects.get(user=user)
-    except Team.DoesNotExist:
-        return JsonResponse({'msg': '팀이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-    
-    user.menu_cannoteat.clear()
-    
-    for i in range(len(cannoteat_string)):
-        if cannoteat_string[i] == '0':
-            continue
-        else:
-            mce_id = i
-            try:
-                mce = MenuCannotEat.objects.get(pk = mce_id)
-            except MenuCannotEat.DoesNotExist:
-                return JsonResponse({'msg': '메뉴가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-            user.menu_cannoteat.add(mce)
-    
-    if request.method == 'POST':
-        for mce in user.menu_cannoteat.all():
-            team.menu_cannoteat.add(mce)
-                
-        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-
-    elif request.method == 'PUT':
-        # 팀 비선호재료 초기화
-        team.menu_cannoteat.clear()
-        # 위드잇하는 팀원 목록
-        for teammate in team.teammates.all():
-            try:
-                team_profile = UserTeamProfile.objects.get(team=team, user=teammate, is_with=True)
-            except UserTeamProfile.DoesNotExist:
-                continue
-            for cne in team_profile.user.menu_cannoteat.all():
-                team.menu_cannoteat.add(cne)
-        # 사용자의 비선호재료 다시 추가
-        for cne in user.menu_cannoteat.all():
-            team.menu_cannoteat.add(cne)
-        
-        return JsonResponse({'msg': '반영되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-
-
-"""
-#############################################################################################
-
-                                        FCM 토큰 관련
-
-#############################################################################################
-"""
-@api_view(['POST'])
-def save_fcm_token(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    fcm_token = request.POST.get('fcm_token')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    token, created = UserFcmClientToken.objects.get_or_create(user=user, fcm_token=fcm_token)
-    
-    if not created:
-        return JsonResponse({'msg': '중복된 토큰입니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    return Response(status=200)
-
-@api_view(['POST'])
-def send_fcm_message(request, *args, **kwargs):
-    message_title = request.POST.get('message_title')
-    message_body = request.POST.get('message_body')
-
-    tokens = UserFcmClientToken.objects.filter(is_active=True)
-    n = tokens.count()
-    idx = 0
-
-    while idx <= n:
-        tokens_list = []
-        for i in range(idx, idx+500):
-            try:
-                tokens_list.append(tokens[i].fcm_token)
-            except IndexError:
-                break
-        
-        push_notice(tokens_list, message_title, message_body)
-        
-        idx = idx+500
-
-    return Response(status=200)
-
-@api_view(['DELETE'])
-def delete_fcm_token(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    fcm_token = request.POST.get('fcm_token')
-
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        token = UserFcmClientToken.objects.get(user=user, fcm_token=fcm_token)
-    except:
-        return JsonResponse({'msg': '토큰이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-    
-    token.delete()
-    
-    return Response(status=200)
-
-
-"""
-#############################################################################################
-
-                                            SMS 인증                                         
-
-#############################################################################################
-"""
-@api_view(['POST'])
-def sms_authentication(request, *args, **kwargs):
-    userphonenum = request.POST.get('userphonenum')
-    
-    chars = '0123456789'
-    
-    sms_url = "https://sslsms.cafe24.com/sms_sender.php"
-    rand_num = ''.join(random.choice(chars) for _ in range(4))
-    
-    sms = {
-        'user_id': 'skykira',
-        'secure': "de932c0e2de9b53371680da54bc98c72",
-        'msg': "Go Eat 인증번호: {}".format(rand_num),
-        'rphone': userphonenum,
-        'sphone1': '070',
-        'sphone2': '4006',
-        'sphone3': '7014',
-        'mode': 1,
-        'smsType': 'S'
-    }
-    
-    result = requests.post(sms_url, sms)
-    result_text = result.text.split(',')
-    
-    if result_text[0] == 'success':
-        data = {
-            'result': 'success',
-            'randnum': rand_num
-        }
-        return Response(data, status=200)
-    else:
-        data = {
-            'result': 'failed',
-            'randnum': rand_num
-        }
-        return Response(data, status=400)

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.conf import settings
 from accounts.utils import id_generator
@@ -7,9 +7,8 @@ import datetime,time
 from accounts.model_files.stamp import *
 from accounts.model_files.coupon import *
 from restaurant.models import (
-    Restaurant, Menu, MenuCannotEat, ResService,
-    Service, MenuSecondClass, MenuFeature, MenuIngredient,
-    MenuType
+    Restaurant, MenuCannotEat, MenuSecondClass, MenuFeature,
+    MenuIngredient, MenuType
 )
 
 
@@ -318,79 +317,6 @@ class TeamRequest(models.Model):
     def cancel(self):
         self.is_active=False
         self.save()
-
-
-"""
-#############################################################################################
-
-                                        스탬프
-
-#############################################################################################
-"""
-# 스탬프 - 사용중이지않음.
-class Stamp(models.Model):
-    # 사용자
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='stamp_owner')
-    # 음식점 서비스
-    res_service = models.ForeignKey(ResService, on_delete=models.CASCADE, related_name='res_service')
-    # 현재 사용자가 가진 스탬프 개수 
-    stamp_own = models.IntegerField(default=0)
-
-    # 음식점 서비스 가져오기
-    def get_services(self):
-        return self.res_service.services.all()
-
-    # 스탬프 적립
-    def add_stamp(self):
-        self.stamp_own += 1
-        self.save()
-
-    # 쿠폰 생성
-    def append_coupon(self, restaurant, service):
-        Coupon.objects.create(user=self.user, restaurant=restaurant, service=service)
-        self.save()
-
-    # 스탬프 개수 초기화
-    def reset_stamp_own(self):
-        self.stamp_own = 0
-        self.save()
-
-    def __str__(self):
-        return '{} {}'.format(self.user.username, self.user.goeat_id, self.res_service.restaurant.res_name)
-
-
-"""
-#############################################################################################
-
-                                            사용자 쿠폰 관련 모델
-                                            Made. EdoubleK
-
-#############################################################################################
-"""
-
-# 쿠폰 - 사용중이지않음.
-class Coupon(models.Model):
-    # 사용자
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='coupon_owner')
-    # 음식점
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='coupon')
-    # 음식점 서비스
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='coupon_service')
-    # 쿠폰 발급기간
-    coupon_start_date = models.DateTimeField(auto_now_add=True)
-    # 쿠폰 만료기간
-    coupon_due_date = models.DateTimeField(editable=False)
-    
-    def __str__(self):
-        return '{} {}'.format(self.user.username, self.user.goeat_id, self.restaurant.res_name)
-
-    # 쿠폰 만료기간 = 쿠폰 발급기간 + 음식점 쿠폰 만료기간
-    def save(self, *args, **kwargs):
-        if not self.coupon_start_date:
-            self.coupon_start_date = timezone.now()
-        res_service = ResService.objects.get(restaurant=self.restaurant)
-        self.coupon_due_date = self.coupon_start_date + datetime.timedelta(days = res_service.stamp_max_time)
-        super(Coupon, self).save(*args, **kwargs)
 
 
 """

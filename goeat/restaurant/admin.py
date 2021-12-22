@@ -1,8 +1,8 @@
 from django.contrib import admin
 from restaurant.models import (
-    Restaurant, Menu, MenuIngredient, MenuType, 
-    MenuCannotEat, ResService, Service,
-    MenuFirstClass, MenuSecondClass, MenuFeature,
+    Restaurant, Menu, MenuIngredient, MenuType,
+    MenuCannotEat, MenuFirstClass, MenuSecondClass,
+    MenuFeature,
 )
 
 
@@ -92,32 +92,6 @@ class MenuCannotEatAdmin(admin.ModelAdmin):
 
     class Meta:
         model = MenuCannotEat
-
-
-"""
-#############################################################################################
-
-                                음식점 서비스 관련 어드민
-
-#############################################################################################
-"""
-# 음식점별 서비스 어드민
-class ResServiceAdmin(admin.ModelAdmin):
-    list_filter = ['restaurant']
-    list_display = ['id', 'restaurant', 'service_exp']
-    search_fields = ['restaurant', 'services']
-
-    class Meta:
-        model = ResService
-
-# 모든 음식점 서비스 어드민
-class ServiceAdmin(admin.ModelAdmin):
-    list_filter = ['service_content', 'service_count']
-    list_display = ['service_content', 'service_count']
-    search_fields = ['service_content', 'service_count']
-
-    class Meta:
-        model = Service
         
 
 admin.site.register(Restaurant, RestaurantAdmin)
@@ -125,8 +99,6 @@ admin.site.register(Menu, MenuAdmin)
 admin.site.register(MenuIngredient, MenuIngredientAdmin)
 admin.site.register(MenuType, MenuTypeAdmin)
 admin.site.register(MenuCannotEat, MenuCannotEatAdmin)
-admin.site.register(ResService, ResServiceAdmin)
-admin.site.register(Service, ServiceAdmin)
 admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
 admin.site.register(MenuSecondClass, MenuSecondClassAdmin)
 admin.site.register(MenuFeature, MenuFeatureAdmin)
