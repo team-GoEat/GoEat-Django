@@ -34,10 +34,7 @@ if os.environ.get('DJANGO_DEBUG', False):
 else:
     DEBUG = True
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['goeat.kr']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
