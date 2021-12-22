@@ -426,6 +426,8 @@ class ResReservationRequest(models.Model):
     is_noshow = models.BooleanField(blank=True, default=False)
     # 방문완료 여부
     is_arrived = models.BooleanField(blank=True, default=False)
+    # 음식점에서의 예약이 생겼는지의 여부
+    is_view = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.res_start_time:
