@@ -1,3 +1,21 @@
 <script>
+    setTime();
 
+    setInterval(() => {
+        setTime();
+    }, 1000)
+
+    function setTime() {
+        $(".limit_time[data-state='False']").each((idx, item) => {
+            let now = new Date();
+            let limit_time = new Date($(item).attr('data-limit-time'));
+            let result = new Date(limit_time.getTime() - now.getTime());
+
+            let min = result.getMinutes() > 9 ? result.getMinutes() : `0${result.getMinutes()}`;
+            let sec = result.getSeconds() > 9 ? result.getSeconds() : `0${result.getSeconds()}`;
+
+            $(item).text(`${min}:${sec}`);
+            $(item).parents('.layout_note').siblings('.layout_order').find('.reserve_idx').text(idx + 1);
+        })
+    }
 </script>

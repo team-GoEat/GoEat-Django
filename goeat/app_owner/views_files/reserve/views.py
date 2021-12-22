@@ -3,12 +3,19 @@ from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.urls import reverse
 
+import datetime
+from datetime import timedelta
+
+from accounts.models import ResReservationRequest
 
 class Views_Controls(View):
 
     def post(self, request):
-        print('reserve')
+
+        reservation = ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).order_by('-is_active')
+
         context = {
+            'reservation': reservation,
 
         }
 

@@ -1,38 +1,34 @@
 <script>
 
-  $.datepicker.setDefaults({
-    dateFormat: 'yymmdd',
-    prevText: '이전 달',
-    nextText: '다음 달',
+  // gijgo datepicker 한글 패치 커스텀
+  gj.core.messages['ko'] = {
     monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-    showMonthAfterYear: true,
-    yearSuffix: '년'
-  });
+    monthShortNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    weekDaysMin: ['일', '월', '화', '수', '목', '금', '토'],
+    weekDaysShort: ['일', '월', '화', '수', '목', '금', '토'],
+    weekDays: ['일', '월', '화', '수', '목', '금', '토'],
+    am: "오전",
+    pm: "오후",
+    ok: "확인",
+    cancel: "취소",
+    titleFormat: "yyyy년 mmmm",
+  }
 
   $('.start_datepicker').datepicker({
     format: 'yyyy.mm.dd',
     value: getTodayFormat(),
     showRightIcon: false,
-    modal: true
+    modal: true,
+    locale: 'ko'
   });
+
   $('.end_datepicker').datepicker({
     format: 'yyyy.mm.dd',
     value: getTodayFormat(),
     showRightIcon: false,
-    modal: true
+    modal: true,
+    locale: 'ko'
   });
-
-  // $('#start_datepicker').datepicker({
-  // maxDate: function () {
-  //   var date = new Date();
-  //   date.setDate(date.getDate());
-  //   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  // }
-  // });
 
   function getTodayFormat() {
     const date = new Date();

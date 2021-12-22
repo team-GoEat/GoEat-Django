@@ -1,6 +1,8 @@
 {% load static %}
 {% load hosts %}
 {% load version %}
+{% load date %}
+{% load reserve %}
 
 <link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}?version={{ 'version'|version }}">
 <link rel="stylesheet" href="{% static 'app_owner/reserve/css/style.css' %}?version={{ 'version'|version }}">
@@ -97,142 +99,14 @@
       </div>
     </div>
     <ul class="table_content scroll_style">
-      <li class="reserve_list layout ">
-        <div class="layout_order">
-          <div class="order_wrap">
-            <span>1</span>
-          </div>
-        </div>
-        <div class="layout_time">
-          <p class="date">2021.10.30</p>
-          <div class="time">
-            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
-            <span class="time_text">
-              11:45
-            </span>
-          </div>
-        </div>
-        <div class="layout_number">
-          <div class="count">
-            <figure></figure>
-            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
-            <span class="person_text">50명</span>
-          </div>
-          <p class="grade">
-            <span>매너 등급</span>
-            <span class="grade_text good">젠틀</span>
-          </p>
-        </div>
-        <div class="layout_status">
-          <span>
-            승인 대기
-          </span>
-        </div>
-        <div class="layout_note">
-          <!-- <span class="tel">
-                050-2923-1111
-              </span> -->
-          <div class="button_box">
-            <div class="btn approve">
-              <span>손님이 도착하면 눌러주세요</span>
-              <button>예약 승인</button>
-            </div>
-            <div class="btn reject">
-              <span>
-                050-2923-1111
-              </span>
-              <button onclick="reserveReject()">예약 거절</button>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="reserve_list layout ">
-        <div class="layout_order">
-          <div class="order_wrap">
-            <span>1</span>
-          </div>
-        </div>
-        <div class="layout_time">
-          <p class="date">2021.10.30</p>
-          <div class="time">
-            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
-            <span class="time_text">
-              11:45
-            </span>
-          </div>
-        </div>
-        <div class="layout_number">
-          <div class="count">
-            <figure></figure>
-            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
-            <span class="person_text">50명</span>
-          </div>
-          <p class="grade">
-            <span>매너 등급</span>
-            <span class="grade_text bad">비매너</span>
-          </p>
-        </div>
-        <div class="layout_status">
-          <span>
-            승인 대기
-          </span>
-        </div>
-        <div class="layout_note">
-          <!-- <span class="tel">
-                050-2923-1111
-              </span> -->
-          <div class="button_box">
-            <div class="btn approve">
-              <span>손님이 도착하면 눌러주세요</span>
-              <button>예약 승인</button>
-            </div>
-            <div class="btn reject">
-              <span>
-                050-2923-1111
-              </span>
-              <button onclick="reserveReject()">예약 거절</button>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="reserve_list layout end">
-        <div class="layout_order">
-          <div class="order_wrap">
-            <span>O</span>
-          </div>
-        </div>
-        <div class="layout_time">
-          <p class="date">2021.10.30</p>
-          <div class="time">
-            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
-            <span class="time_text">
-              11:45
-            </span>
-          </div>
-        </div>
-        <div class="layout_number">
-          <div class="count">
-            <figure></figure>
-            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
-            <span class="person_text">50명</span>
-          </div>
-          <p class="grade">
-            <span>매너 등급</span>
-            <span class="grade_text">보통</span>
-          </p>
-        </div>
-        <div class="layout_status">
-          <span>
-            승인 대기
-          </span>
-        </div>
-        <div class="layout_note">
-          <span class="tel">
-            050-2923-1111
-          </span>
-        </div>
-      </li>
-      <li class="reserve_list layout end">
+
+      {% for item in reservation %}
+
+      {{ request|reserve_set:item|safe }}
+
+      {% endfor %}
+
+      <!-- <li class="reserve_list layout end">
         <div class="layout_order">
           <div class="order_wrap">
             <span>X</span>
@@ -268,7 +142,7 @@
             050-2923-1111
           </span>
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </div>
