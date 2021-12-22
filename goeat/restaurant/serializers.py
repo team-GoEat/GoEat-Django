@@ -1,6 +1,5 @@
 from restaurant.models import (
-    Restaurant, Menu, ResService, Service, 
-    MenuType, MenuSecondClass,
+    Restaurant, Menu, MenuType, MenuSecondClass,
 )
 from rest_framework import serializers
 
@@ -72,30 +71,6 @@ class GetResByIdSerializer(serializers.ModelSerializer):
 """
 #############################################################################################
 
-                            음식점 서비스 관련 시리얼라이저
-
-#############################################################################################
-"""
-# ResServiceSerializer에서 사용
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Service
-        fields = ('service_count', 'service_content')
-
-# get_service_by_res에서 사용
-class ResServiceSerializer(serializers.ModelSerializer):
-    services = ServiceSerializer(read_only=True, many=True)
-    res_id = serializers.IntegerField(source='restaurant.id')
-    res_name = serializers.CharField(source='restaurant.res_name')
-
-    class Meta:
-        model = ResService
-        fields = ('res_id', 'res_name', 'services', 'stamp_exp')
-
-
-"""
-#############################################################################################
-
                                    2차군집, 음식점 자동완성                            
 
 #############################################################################################
@@ -116,7 +91,7 @@ class AutoSecondMenuSerializer(serializers.ModelSerializer):
 """
 #############################################################################################
 
-                            
+                                        필요없음
 
 #############################################################################################
 """

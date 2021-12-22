@@ -2,11 +2,11 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import (
-    TokenObtainPairSerializer, TokenRefreshSerializer
+    TokenObtainPairSerializer,
 )
 from accounts.models import (
-    User, Coupon, Stamp, ResReservationRequest, 
-    TeamRequest, Team, MenuPoint, MenuFeaturePoint,
+    User, ResReservationRequest, TeamRequest, 
+    Team, MenuPoint, MenuFeaturePoint,
     MenuTypePoint, MenuIngredientPoint, Alarm
 )
 from restaurant.serializers import (
@@ -197,49 +197,6 @@ class AlarmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alarm
         fields = ('id', 'sender_id', 'receiver_id', 'sender_name', 'receiver_name', 'message', 'is_read', 'sent_date')
-
-"""
-#############################################################################################
-
-                                        스탬프
-
-#############################################################################################
-"""
-# user_stamp_list에서 사용
-class StampSerializer(serializers.ModelSerializer):
-    user_id = serializers.CharField(source='user.goeat_id')
-    res_id = serializers.IntegerField(source='res_service.restaurant.id')
-    res_name = serializers.CharField(source='res_service.restaurant.res_name')
-    res_address = serializers.CharField(source='res_service.restaurant.res_address')
-    stamp_max_cnt = serializers.IntegerField(source='res_service.stamp_max_cnt')
-
-    class Meta:
-        model = Stamp
-        fields = ('user_id', 'res_id', 'res_name', 'res_address', 'stamp_max_cnt', 'stamp_own')
-
-
-"""
-#############################################################################################
-
-                                        쿠폰
-
-#############################################################################################
-"""
-# user_coupon_list에서 사용
-class CouponSerializer(serializers.ModelSerializer):
-    user_id = serializers.CharField(source='user.goeat_id')
-    user_url = serializers.SerializerMethodField()
-    res_id = serializers.IntegerField(source='restaurant.id')
-    res_name = serializers.CharField(source='restaurant.res_name')
-    coupon_id = serializers.IntegerField(source='id')
-    service_content = serializers.CharField(source='service.service_content')
-
-    def get_user_url(self, obj):
-        return obj.user.user_coupon_url + str(obj.id) + '/'
-
-    class Meta:
-        model = Coupon
-        fields = ('user_id', 'user_url', 'res_id', 'res_name', 'coupon_id', 'service_content', 'coupon_due_date')
 
 
 """

@@ -32,9 +32,6 @@ urlpatterns = [
     # 메뉴 검색
     path('search/menu/<str:keyword>/', views.search_menu, name='search_menu'),
 
-    # 식당 서비스
-    path('service/<int:res_id>/', views.get_service_by_res, name='get_service_by_res'),
-
     # 전체 실시간 예약 리스트 보기
     path('reserve/list/<str:user_id>/', views.get_all_resreservation_list, name='get_all_resreservation_list'),
     # (비회원) 전체 실시간 예약 리스트 보기

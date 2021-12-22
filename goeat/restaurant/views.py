@@ -5,12 +5,12 @@ from django.http import JsonResponse
 import random
 from accounts.models import User
 from restaurant.models import (
-    Restaurant, Menu, ResService, MenuSecondClass,
+    Restaurant, Menu, MenuSecondClass,
     MenuType, 
 )
 from restaurant.serializers import (
-    SimpleRestaurantSerializer,ResServiceSerializer,
-    AutoResSerializer, AutoSecondMenuSerializer,
+    SimpleRestaurantSerializer, AutoResSerializer,
+    AutoSecondMenuSerializer,
 )
 
 
@@ -553,32 +553,6 @@ def search_menu(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                        음식점 서비스
-
-#############################################################################################
-"""
-# 식당별 서비스
-@api_view(['GET'])
-def get_service_by_res(request, *args, **kwargs):
-    res_id = kwargs.get('res_id')
-
-    try:
-        res = Restaurant.objects.get(pk=res_id)
-    except Restaurant.DoesNotExist:
-        return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
-    try:
-        res_services = ResService.objects.filter(restaurant=res)
-    except ResService.DoesNotExist:
-        return JsonResponse({'msg': '식당 서비스가 없습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
-
-    serializer = ResServiceSerializer(res_services, many=True)
-    return Response(serializer.data, status=200)
-
-
-"""
-#############################################################################################
-
                                     음식점 예약 관련
 
 #############################################################################################
@@ -815,6 +789,14 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
 
     return Response(data, status=200)
 
+
+"""
+#############################################################################################
+
+                                    음식점 예약 관련
+
+#############################################################################################
+"""
 # 음식점 예약 여부 바꾸기
 @api_view(['PUT'])
 def res_change_reserve(request, *args, **kwargs):
