@@ -93,7 +93,7 @@
           <span>
             손님이 도착하면<br /> 손님 도착을 꼭 눌러주세요!
           </span>
-          <img class="refresh_icon" src="{% static 'app_owner/base/images/refresh.svg' %}" alt="">
+          <img class="refresh_icon" src="{% static 'app_owner/base/images/refresh.svg' %}" alt="" onclick="reserve()">
         </div>
 
       </div>
@@ -112,3 +112,4 @@
 
 {% include 'app_owner/base/date.html' %}
 {% include 'app_owner/reserve/js.html' %}
+{% include 'app_owner/reserve/callback/js.html' %}

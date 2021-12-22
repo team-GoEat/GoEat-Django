@@ -29,11 +29,46 @@ class Views_Controls2(View):
 
         result = ''
 
-        reservation = ResReservationRequest.objects.filter(receiver_id=request.session['res_id'],is_view=False)
+        list_id = request.POST.get('list_id','')
 
-        for item in reservation:
-            result += make_reserve(request,item).content.decode('UTF-8')
-            item.is_view = True
-            item.save()
+        if list_id != '':
 
-        return HttpResponse(result)
+            reservation = ResReservationRequest.objects.get(pk=list_id)
+
+            result += make_reserve(request,reservation).content.decode('UTF-8')
+            reservation.is_view = True
+            reservation.save()
+                
+
+            return HttpResponse(result)
+
+        else:
+
+            reservation = ResReservationRequest.objects.filter(receiver_id=request.session['res_id'],is_view=False)
+
+            for item in reservation:
+                result += make_reserve(request,item).content.decode('UTF-8')
+                item.is_view = True
+                item.save()
+
+            return HttpResponse(result)
+
+class Views_Controls3(View):
+
+    def post(self, request):
+
+        type = request.POST['type']
+
+        reservation = ResReservationRequest.objects.get(pk=request.POST['list_id'])
+
+        if type == 'accept':
+            reservation.accept()
+        elif type == 'arrived':
+            reservation.arrived()
+        elif type == 'reject':
+            reservation.reject(request.POST.get('msg',''))
+        elif type == 'cancel':
+            reservation.cancel(request.POST.get('msg',''))
+
+        
+        return HttpResponse('')
