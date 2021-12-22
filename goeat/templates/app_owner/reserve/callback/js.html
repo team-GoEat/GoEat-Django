@@ -6,7 +6,7 @@
     function reserveApprove() {
 
         $.post({
-            url: "{% host_url %}",
+            url: "",
             headers: { "X-CSRFToken": "{{ csrf_token }}" },
             data: { "type": "reserve_approve" },
             success: (result) => {

@@ -66,9 +66,27 @@
       </span> -->
         <div class="button_box">
             <div class="btn approve">
-                <div class="limit_time" data-reserve-time="{{item.res_start_time|date:'Y-m-d H:i:s'}}" data-limit-time="{{item.res_start_time|date_set}}" data-state="{{ item.is_accepted }}">
 
-                </div>
+                {% if item.is_active %}
+
+                <div class="limit_time" data-reserve-time="{{item.res_start_time|date:'Y-m-d H:i:s'}}" data-limit-time="{{item.res_start_time|date_set}}" data-state="False"></div>
+
+
+                {% else %}
+
+                {% if item.is_arrived %}
+                <div class="limit_time" data-reserve-time="{{item.res_start_time|date:'Y-m-d H:i:s'}}" data-limit-time="{{item.res_start_time|date_set}}" data-state="True"></div>
+
+                {% else %}
+
+                {% if not item.is_accepted %}
+                <div class="limit_time" data-reserve-time="{{item.res_start_time|date:'Y-m-d H:i:s'}}" data-limit-time="{{item.res_start_time|date_set}}" data-state="True"></div>
+
+                {% endif %}
+
+                {% endif %}
+
+                {% endif %}
                 <!-- <span>손님이 도착하면 눌러주세요</span> -->
 
                 <button>예약 승인</button>
