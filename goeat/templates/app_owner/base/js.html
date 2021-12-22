@@ -17,6 +17,12 @@
     };
   };
 
+  // setInterval clear
+  function intervalClear() {
+    clearInterval(interval1);
+    clearInterval(interval2);
+  }
+
   // 예약관리
   async function reserve() {
     let result = await DomCallback("{% host_url 'reserve' host 'owner' %}", {});
@@ -28,6 +34,8 @@
 
   // 스탬프관리
   async function stamp() {
+    intervalClear();
+
     let result = await DomCallback("{% host_url 'stamp' host 'owner' %}", {});
     if (result.result) {
       allHide();
@@ -37,6 +45,8 @@
 
   // 쿠폰관리
   async function coupon() {
+    intervalClear();
+
     let result = await DomCallback("{% host_url 'coupon' host 'owner' %}", {});
     if (result.result) {
       allHide();
@@ -46,6 +56,8 @@
 
   // 가게관리
   async function setting() {
+    intervalClear();
+
     let result = await DomCallback("{% host_url 'setting' host 'owner' %}", {});
     if (result.result) {
       allHide();
