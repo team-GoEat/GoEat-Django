@@ -28,6 +28,8 @@
         data: params,
         success: function (result) {
 
+          consoel.log(result);
+
           if (result.result === 'success') {
 
             $('.login_fail').css('display', 'none');
