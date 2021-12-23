@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 import json
 import sys
-from datetime import timedelta, datetime
+from datetime import timedelta
 from types import TracebackType
 import firebase_admin
 from firebase_admin import credentials
