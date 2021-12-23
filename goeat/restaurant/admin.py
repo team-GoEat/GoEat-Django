@@ -4,7 +4,9 @@ from restaurant.models import (
     MenuCannotEat, MenuFirstClass, MenuSecondClass,
     MenuFeature,
 )
-
+from restaurant.model_files.notice import (
+    ResNotice, 
+)
 
 """
 #############################################################################################
@@ -33,7 +35,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
     list_filter = []
-    list_display = ['id', 'menu_name',  'menu_price', 'short_menu_image']
+    list_display = ['menu_name', 'menu_price', 'short_menu_image']
     search_fields = ['menu_name', 'menu_second_name__second_class_name']
 
     class Meta:
@@ -93,6 +95,22 @@ class MenuCannotEatAdmin(admin.ModelAdmin):
     class Meta:
         model = MenuCannotEat
         
+        
+"""
+#############################################################################################
+
+                                    음식점 공지사항 어드민
+
+#############################################################################################
+"""
+# 음식점 공지사항 어드민
+class ResNoticeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'notice_title', 'notice_content', 'state', 'notice_create_dttm']
+    search_fields = ['notice_title']
+
+    class Meta:
+        model = ResNotice
+
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Menu, MenuAdmin)
@@ -102,3 +120,4 @@ admin.site.register(MenuCannotEat, MenuCannotEatAdmin)
 admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
 admin.site.register(MenuSecondClass, MenuSecondClassAdmin)
 admin.site.register(MenuFeature, MenuFeatureAdmin)
+admin.site.register(ResNotice, ResNoticeAdmin)
