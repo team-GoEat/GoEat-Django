@@ -28,4 +28,4 @@ class Views_Controls(View):
             'unusable_coupon': unusable_coupon,
         }
 
-        return render(request, 'app_owner/coupon/index.html', context)
+        return render(request, 'app_owner/coupon/ready.html', context)

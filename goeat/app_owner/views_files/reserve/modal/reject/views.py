@@ -6,9 +6,13 @@ from django.urls import reverse
 
 class Views_Controls(View):
     def post(self, request):
-        print('reject')
+        context = {}
+
+        return render(request, 'app_owner/reserve/modal/reject/index.html',context)
+
+class Views_Controls2(View):
+    def post(self, request):
 
         context = {}
 
-        return render(request, 'app_owner/reserve/modal/reject/index.html',
-                      context)
+        return render(request, 'app_owner/reserve/modal/reject/cancel.html',context)

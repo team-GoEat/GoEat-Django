@@ -16,7 +16,7 @@ class Views_Controls(View):
 
             }
 
-            return render(request, 'app_owner/stamp/index.html', context)
+            return render(request, 'app_owner/stamp/ready.html', context)
 
         elif type == 'list':
             

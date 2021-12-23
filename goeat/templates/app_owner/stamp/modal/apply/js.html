@@ -24,12 +24,25 @@
       type: "POST",
       data: params,
       success: function (result) {
-        alert('적립이 완료되었습니다.');
-        modalClose();
-        init_list();
+
+        Swal.fire({
+          icon: 'success',
+          text: '적립이 완료되었습니다.',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        }).then((result) => {
+          modalClose();
+          init_list();
+        });
+
       },
       error: function (result) {
-        alert("서버와의 연결이 끊어졌습니다.")
+        Swal.fire({
+          icon: 'warning',
+          text: '서버와의 연결이 원활하지 않습니다.',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     });
 

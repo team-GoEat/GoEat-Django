@@ -4,4 +4,5 @@ from app_owner.views_files.reserve.modal.reject import views as reject_views
 
 urlpatterns = [
     path('', reject_views.Views_Controls.as_view(), name='reserve_reject'),
+    path('cancel/', reject_views.Views_Controls2.as_view(), name='reserve_cancel'),
 ]

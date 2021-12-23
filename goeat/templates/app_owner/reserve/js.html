@@ -1,21 +1,161 @@
+{% load static %}
+{% load hosts %}
+{% load version %}
+{% load date %}
+
 <script>
+
     setTime();
 
-    setInterval(() => {
+    var interval1 = setInterval(() => {
         setTime();
     }, 1000)
 
+    eventify(_reject_array, function (result) {
+        update(result.item, result.list_id, result.type, result.msg);
+    });
+
+    function sleep(t) {
+        return new Promise(resolve => setTimeout(resolve, t));
+    }
+
     function setTime() {
+
         $(".limit_time[data-state='False']").each((idx, item) => {
+
             let now = new Date();
             let limit_time = new Date($(item).attr('data-limit-time'));
-            let result = new Date(limit_time.getTime() - now.getTime());
+            let result = limit_time.getTime() - now.getTime();
+            let result2 = new Date(result);
 
-            let min = result.getMinutes() > 9 ? result.getMinutes() : `0${result.getMinutes()}`;
-            let sec = result.getSeconds() > 9 ? result.getSeconds() : `0${result.getSeconds()}`;
+            if (result < 0) {
 
-            $(item).text(`${min}:${sec}`);
-            $(item).parents('.layout_note').siblings('.layout_order').find('.reserve_idx').text(idx + 1);
+                $(item).text(`무응답 처리예정`);
+
+                if (_complete_arrary.indexOf($(item).parents('li').attr('id').split('_')[1]) <= 0) {
+
+                    _complete_arrary.push($(item).parents('li').attr('id').split('_')[1]);
+
+                    _reject_array.push({
+                        elem: item,
+                        list_id: $(item).parents('li').attr('id').split('_')[1],
+                        type: 'reject',
+                        msg: '무응답'
+                    });
+
+                }
+
+            }
+            else {
+
+                let min = result2.getMinutes() > 9 ? result2.getMinutes() : `0${result2.getMinutes()}`;
+                let sec = result2.getSeconds() > 9 ? result2.getSeconds() : `0${result2.getSeconds()}`;
+
+                $(item).text(`남은시간 ${min}:${sec}`);
+            }
+        })
+
+        $(".reserve_idx").each((idx, item) => {
+            $(item).text(idx + 1);
+        })
+    }
+
+    var interval2 = setInterval(() => {
+        new_reserve();
+    }, 5000)
+
+    function new_reserve() {
+        $.post({
+            url: "{% host_url 'get_reserve' host 'owner' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: { list_id: '' },
+            success: (result) => {
+                $('.table_content').prepend(result);
+            },
+            error: (result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
+            }
+        })
+    }
+
+
+    async function submit_reserveReject() {
+
+        _reason = $("input[name='reject']:checked").val();
+        modalClose();
+        update(_elem, _list_id, 'reject', _reason);
+    }
+
+
+
+    async function submit_reserveCancel() {
+        _reason = $("input[name='cancel']:checked").val();
+        modalClose();
+        update(_elem, _list_id, 'cancel', _reason);
+    }
+
+
+    function update(elem, list_id, type, msg = '') {
+
+        _list_id = list_id;
+
+        $.post({
+            url: "{% host_url 'set_reserve' host 'owner' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: {
+                list_id: list_id,
+                type: type,
+                msg: msg
+            },
+            success: (result) => {
+
+                var child_id = $(elem).parents('li').attr('id')
+                var index = 0;
+
+                $(".table_content li").each((idx, item) => {
+                    if (child_id == $(item).attr('id')) index = idx;
+                });
+
+                $.post({
+                    url: "{% host_url 'get_reserve' host 'owner' %}",
+                    headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                    data: { list_id: list_id },
+                    success: (result) => {
+
+                        $('.table_content li').eq(index).remove();
+
+                        if (type == 'accept') {
+                            if (index == 0) $('.table_content').prepend(result);
+                            else $(result).insertAfter($('.table_content li').eq(index - 1)[0]);
+                        }
+                        else {
+                            $('.table_content').append(result);
+                        }
+                    },
+                    error: (result) => {
+                        Swal.fire({
+                            icon: 'warning',
+                            text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                            confirmButtonText: '확인',
+                            confirmButtonColor: '#ff0034'
+                        })
+                    }
+                })
+
+            },
+            error: (result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
+            }
         })
     }
 </script>
