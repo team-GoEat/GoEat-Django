@@ -10,7 +10,10 @@ class Views_Controls(View):
 
     def get(self,request):
 
-        context = {}
+        context = {
+            'user_id' : request.GET.get('user_id',''),
+            'user_pw' : request.GET.get('user_pw','')
+        }
 
         return render(request, 'app_owner/login/index.html', context)
 
