@@ -73,7 +73,12 @@
                 $('.table_content').prepend(result);
             },
             error: (result) => {
-                alert(`[ERROR:${result.status}]`)
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
             }
         })
     }
@@ -133,13 +138,23 @@
                         }
                     },
                     error: (result) => {
-                        alert(`[ERROR:${result.status}]`)
+                        Swal.fire({
+                            icon: 'warning',
+                            text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                            confirmButtonText: '확인',
+                            confirmButtonColor: '#ff0034'
+                        })
                     }
                 })
 
             },
             error: (result) => {
-                alert(`[ERROR:${result.status}]`)
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
             }
         })
     }

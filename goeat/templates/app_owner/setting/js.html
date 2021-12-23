@@ -65,10 +65,20 @@
       url: "{% host_url 'open_time_update' host 'owner' %}",
       data: params,
       success: (result) => {
-        alert(result['msg']);
+        Swal.fire({
+          icon: 'warning',
+          text: result['msg'],
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       },
       error: (result) => {
-        alert(`[ERROR:${result.status}]`);
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     })
   }
@@ -86,10 +96,20 @@
       url: "{% host_url 'break_time_update' host 'owner' %}",
       data: params,
       success: (result) => {
-        alert(result['msg']);
+        Swal.fire({
+          icon: 'warning',
+          text: result['msg'],
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       },
       error: (result) => {
-        alert(`[ERROR:${result.status}]`);
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     })
   }
@@ -105,10 +125,20 @@
       url: "{% host_url 'break_time_update' host 'owner' %}",
       data: params,
       success: (result) => {
-        alert(result['msg']);
+        Swal.fire({
+          icon: 'warning',
+          text: result['msg'],
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       },
       error: (result) => {
-        alert(`[ERROR:${result.status}]`);
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     })
   }
@@ -161,10 +191,20 @@
         'res_days': Serialize_li(`.week_button`)
       },
       success: (result) => {
-        alert(result['msg']);
+        Swal.fire({
+          icon: 'warning',
+          text: result['msg'],
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       },
       error: (result) => {
-        alert(`[ERROR:${result.status}]`);
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     })
   }

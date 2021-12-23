@@ -56,7 +56,12 @@
 
         },
         error: function (result) {
-          alert("서버와의 연결이 끊어졌습니다.")
+          Swal.fire({
+            icon: 'warning',
+            text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+            confirmButtonText: '확인',
+            confirmButtonColor: '#ff0034'
+          })
         }
       });
 
@@ -98,12 +103,24 @@
 
         },
         error: function (result) {
-          alert("서버와의 연결이 끊어졌습니다.")
+          Swal.fire({
+            icon: 'warning',
+            text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+            confirmButtonText: '확인',
+            confirmButtonColor: '#ff0034'
+          })
         }
       });
 
     }
-    else alert('로그인 정보를 입력해주세요.');
+    else {
+      Swal.fire({
+        icon: 'warning',
+        text: '로그인 정보를 입력해주세요.',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#ff0034'
+      })
+    }
 
 
   }
@@ -123,7 +140,12 @@
         location.href = "{% host_url 'main' host 'owner' %}";
       },
       error: function (result) {
-        alert("서버와의 연결이 끊어졌습니다.");
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
       }
     });
 

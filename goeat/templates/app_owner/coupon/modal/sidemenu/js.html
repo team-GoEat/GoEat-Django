@@ -21,7 +21,12 @@
         coupon();
       },
       error: (result) => {
-        alert('서버와의 연결이 끊어졌습니다. [ERROR:001]');
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        });
       }
     })
   }
