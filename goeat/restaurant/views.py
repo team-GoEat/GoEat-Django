@@ -361,7 +361,7 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
-            'res_address': r.res_address,
+            'res_address': r.res_address, # 나중에 지워야함
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False
@@ -390,7 +390,7 @@ def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
-            'res_address': r.res_address,
+            'res_address': r.res_address, # 나중에 지워야함
             'x_cor': r.x_cor,
             'y_cor': r.y_cor
         }
@@ -717,13 +717,14 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).prefetch_related('res_menu').distinct()
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     fav_res = user.fav_res.all()
-    resRes = Restaurant.objects.filter(is_reservable_r=True)
-
+    discount_menus = Menu.objects.filter(menu_second_name__menu_type__pk=menu_type_id, 
+                                discount__gt=0)
+    
     data = {
         'all': [],
         'is_reservable': []
@@ -734,6 +735,8 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
             'res_id': r.id,
             'res_name': r.res_name,
             'res_address': r.res_address,
+            'menu_name': None,
+            'menu_price': None,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False
@@ -741,12 +744,15 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
 
         if r in fav_res:
             temp['is_fav']=True
+            
+        for rr in r.res_menu.all():
+            if rr in discount_menus:
+                temp['menu_name'] = rr.menu_name
+                temp['menu_price'] = rr.menu_price - rr.discount
                 
         # 예약 가능한지 체크
-        for rr in resRes:
-            if rr == r:
-                data['is_reservable'].append(temp)
-                break
+        if r.is_reservable_r:
+            data['is_reservable'].append(temp)
         else:
             data['all'].append(temp)
 
@@ -758,11 +764,12 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
 
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).prefetch_related('res_menu').distinct()
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
-    resRes = Restaurant.objects.filter(is_reservable_r=True)
+    discount_menus = Menu.objects.filter(menu_second_name__menu_type__pk=menu_type_id, 
+                                discount__gt=0)
     
     data = {
         'all': [],
@@ -773,17 +780,20 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
-            'res_address': r.res_address,
+            'res_address': r.res_address, # 나중에 지워야함
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False
         }
         
+        for rr in r.res_menu.all():
+            if rr in discount_menus:
+                temp['menu_name'] = rr.menu_name
+                temp['menu_price'] = rr.menu_price - rr.discount
+        
         # 예약 가능한지 체크
-        for rr in resRes:
-            if rr == r:
-                data['is_reservable'].append(temp)
-                break
+        if r.is_reservable_r:
+            data['is_reservable'].append(temp)
         else:
             data['all'].append(temp)
 
