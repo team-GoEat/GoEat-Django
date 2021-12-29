@@ -569,7 +569,8 @@ def get_all_resreservation_list(request, *args, **kwargs):
 
     data = []
 
-    all_res = Restaurant.objects.filter(is_reservable_r=True)
+    all_res = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    discount_menus = Menu.objects.filter(discount__gt=0)
     
     for r in all_res:
         temp = {
@@ -577,12 +578,18 @@ def get_all_resreservation_list(request, *args, **kwargs):
             'res_name': r.res_name,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
-            'is_fav': False
+            'is_fav': False,
+            'is_discount': False
         }
 
+        for rr in r.res_menu.all():
+            if rr in discount_menus:
+                temp['is_discount'] = True
+        
         for fav_res in user.fav_res.all():
             if fav_res.id == r.id:
                 temp['is_fav']=True
+        
         data.append(temp)
         
     return Response(data, status=200)
@@ -593,7 +600,8 @@ def get_all_resreservation_list_notlogin(request, *args, **kwargs):
 
     data = []
 
-    all_res = Restaurant.objects.filter(is_reservable_r=True)
+    all_res = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    discount_menus = Menu.objects.filter(discount__gt=0)
     
     for r in all_res:
         temp = {
@@ -601,8 +609,14 @@ def get_all_resreservation_list_notlogin(request, *args, **kwargs):
             'res_name': r.res_name,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
-            'is_fav': False
+            'is_fav': False,
+            'is_discount': False
         }
+        
+        for rr in r.res_menu.all():
+            if rr in discount_menus:
+                temp['is_discount'] = True
+        
         data.append(temp)
         
     return Response(data, status=200)
@@ -780,7 +794,9 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
         temp = {
             'res_id': r.id,
             'res_name': r.res_name,
-            'res_address': r.res_address, # 나중에 지워야함
+            'res_address': r.res_address,
+            'menu_name': None,
+            'menu_price': None,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False

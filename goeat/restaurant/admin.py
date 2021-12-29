@@ -34,8 +34,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 """
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
-    list_filter = []
-    list_display = ['menu_name', 'menu_price', 'short_menu_image']
+    list_display = ['menu_name', 'menu_price', 'discount', 'short_menu_image']
     search_fields = ['menu_name', 'menu_second_name__second_class_name']
 
     class Meta:
