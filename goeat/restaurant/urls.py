@@ -11,13 +11,13 @@ urlpatterns = [
     # 음식점 정보
     path('', include(router.urls)),
 
-    # 음식점 정보 (홈에서)
+    # POST 음식점 상세 정보 (홈에서)
     path('mlist/<int:res_id>/<str:user_id>/', views.get_restaurant_from_home, name='get_restaurant_from_home'),
-    # (비회원) 음식점 정보 (홈에서)
+    # POST (비회원) 음식점 상세 정보 (홈에서)
     path('mlist/<int:res_id>/', views.get_restaurant_from_home_notlogin, name='get_restaurant_from_home_notlogin'),
-    # 음식점 정보 (카테고리에서)
+    # POST 음식점 상세 정보 (카테고리에서)
     path('tlist/<int:res_id>/<str:user_id>/', views.get_restaurant_from_cat, name='get_restaurant_from_cat'),
-    # (비회원) 음식점 정보 (카테고리에서)
+    # POST (비회원) 음식점 상세 정보 (카테고리에서)
     path('tlist/<int:res_id>/', views.get_restaurant_from_cat_notlogin, name='get_restaurant_from_cat_notlogin'),
     # 카테고리로 음식점 리스트 받기
     path('menu/type/<int:menu_type_id>/<str:user_id>/', views.get_restaurant_by_menu_type, name='get_restaurant_by_menu_type'),

@@ -125,11 +125,11 @@ def taste_menu(request, *args, **kwargs):
 """
 #############################################################################################
 
-                                    음식점 기본 정보
+                                    음식점 상세 정보
 
 #############################################################################################
 """
-# 홈화면에서 들어올때
+# 홈화면에서 들어올때 음식점 상세 정보
 @api_view(['POST'])
 def get_restaurant_from_home(request, *args, **kwargs):
     res_id = kwargs.get('res_id')
@@ -158,32 +158,45 @@ def get_restaurant_from_home(request, *args, **kwargs):
         'res_image': res.res_image,
         'res_menu': [],
         'is_reservable': res.is_reservable_r,
+        'is_discount': False,
         'is_fav': False
     }
+    
     for menu in res.res_menu.all():
         m_temp = {
             'menu_name': menu.menu_name,
             'menu_price': menu.menu_price,
+            'dc_price': None,
             'menu_image': menu.menu_image,
             'menu_second_name': [],
             'is_rep': False
         }
+        
+        # 같은 2차군집인지 체크
         for second_name in menu.menu_second_name.all():
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.id == int(menu_id):
                 m_temp['is_rep'] = True
+        
+        # 할인가 있는지 체크
+        if menu.discount != 0:
+            m_temp['dc_price'] = menu.menu_price - menu.discount
+            data['is_discount'] = True
+        
         data['res_menu'].append(m_temp)
 
+    # 음식점 카테고리 추가
     for rtype in res.res_type.all():
         data['res_type'].append({"type_name": rtype.type_name})
     
+    # 사용자 즐겨찾기 여부
     for fav_res in user.fav_res.all():
         if fav_res.id == res.id:
             data['is_fav'] = True
 
     return Response(data, status=200)
 
-# (비회원) 홈화면에서 들어올때
+# (비회원) 홈화면에서 들어올때 음식점 상세 정보
 @api_view(['POST'])
 def get_restaurant_from_home_notlogin(request, *args, **kwargs):
     res_id = kwargs.get('res_id')
@@ -206,28 +219,40 @@ def get_restaurant_from_home_notlogin(request, *args, **kwargs):
         'res_image': res.res_image,
         'res_menu': [],
         'is_reservable': res.is_reservable_r,
+        'is_discount': False,
         'is_fav': False
     }
+    
     for menu in res.res_menu.all():
         m_temp = {
             'menu_name': menu.menu_name,
             'menu_price': menu.menu_price,
+            'dc_price': None,
             'menu_image': menu.menu_image,
             'menu_second_name': [],
             'is_rep': False
         }
+        
+        # 같은 2차군집인지 체크
         for second_name in menu.menu_second_name.all():
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.id == int(menu_id):
                 m_temp['is_rep'] = True
+        
+        # 할인가 있는지 체크
+        if menu.discount != 0:
+            m_temp['dc_price'] = menu.menu_price - menu.discount
+            data['is_discount'] = True
+        
         data['res_menu'].append(m_temp)
 
+    # 음식점 카테고리 추가
     for rtype in res.res_type.all():
         data['res_type'].append({"type_name": rtype.type_name})
 
     return Response(data, status=200)
 
-# 카테고리에서 들어올때
+# 카테고리에서 들어올때 음식점 상세 정보
 @api_view(['POST'])
 def get_restaurant_from_cat(request, *args, **kwargs):
     res_id = kwargs.get('res_id')
@@ -256,16 +281,20 @@ def get_restaurant_from_cat(request, *args, **kwargs):
         'res_image': res.res_image,
         'res_menu': [],
         'is_reservable': res.is_reservable_r,
+        'is_discount': False,
         'is_fav': False
     }
+    
     for menu in res.res_menu.all():
         m_temp = {
             'menu_name': menu.menu_name,
             'menu_price': menu.menu_price,
+            'dc_price': None,
             'menu_image': menu.menu_image,
             'menu_second_name': [],
             "is_rep": False
         }
+        
         for second_name in menu.menu_second_name.all():
             if second_name.second_class_name == '추천안함':
                 m_temp['menu_second_name'].append(second_name.id)
@@ -273,18 +302,26 @@ def get_restaurant_from_cat(request, *args, **kwargs):
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.menu_type.id == int(type_id):
                 m_temp['is_rep'] = True
+                
+        # 할인가 있는지 체크
+        if menu.discount != 0:
+            m_temp['dc_price'] = menu.menu_price - menu.discount
+            data['is_discount'] = True
+        
         data['res_menu'].append(m_temp)
 
+    # 음식점 카테고리 추가
     for rtype in res.res_type.all():
         data['res_type'].append({"type_name": rtype.type_name})
     
+    # 사용자 즐겨찾기 여부
     for fav_res in user.fav_res.all():
         if fav_res.id == res.id:
             data['is_fav'] = True
 
     return Response(data, status=200)
 
-# (비회원) 카테고리에서 들어올때
+# (비회원) 카테고리에서 들어올때 음식점 상세 정보
 @api_view(['POST'])
 def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
     res_id = kwargs.get('res_id')
@@ -307,16 +344,20 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
         'res_image': res.res_image,
         'res_menu': [],
         'is_reservable': res.is_reservable_r,
+        'is_discount': False,
         'is_fav': False
     }
+    
     for menu in res.res_menu.all():
         m_temp = {
             'menu_name': menu.menu_name,
             'menu_price': menu.menu_price,
+            'dc_price': None,
             'menu_image': menu.menu_image,
             'menu_second_name': [],
             "is_rep": False
         }
+        
         for second_name in menu.menu_second_name.all():
             if second_name.second_class_name == '추천안함':
                 m_temp['menu_second_name'].append(second_name.id)
@@ -324,8 +365,15 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
             m_temp['menu_second_name'].append(second_name.id)
             if second_name.menu_type.id == int(type_id):
                 m_temp['is_rep'] = True
+                
+        # 할인가 있는지 체크
+        if menu.discount != 0:
+            m_temp['dc_price'] = menu.menu_price - menu.discount
+            data['is_discount'] = True
+                
         data['res_menu'].append(m_temp)
 
+    # 음식점 카테고리 추가
     for rtype in res.res_type.all():
         data['res_type'].append({"type_name": rtype.type_name})
 
