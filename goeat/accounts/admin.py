@@ -11,22 +11,14 @@ class OutstandingTokenAdmin(OutstandingTokenAdmin):
     def has_delete_permission(self, *args, **kwargs):
         return True
 
-class TeamAdmin(admin.ModelAdmin):
-    list_filter = ['user']
-    list_display = ['user']
-    search_fields = ['user__goeat_id', 'user__username']
 
-    class Meta:
-        model = Team
+"""
+#############################################################################################
 
-class TeamRequestAdmin(admin.ModelAdmin):
-    list_filter = ['sender', 'receiver']
-    list_display = ['sender', 'receiver', 'is_active']
-    search_fields = ['sender__goeat_id', 'sender__username', 'receiver__goeat_id', 'receiver__username']
+                                        사용자 어드민
 
-    class Meta:
-        model = TeamRequest
-
+#############################################################################################
+"""
 class UserAdmin(admin.ModelAdmin):
     list_filter = ['manner_rank']
     list_display = ['id', 'goeat_id', 'username', 'name', 'manner_rank', 'is_alarm']
@@ -35,14 +27,33 @@ class UserAdmin(admin.ModelAdmin):
     class Meta:
         model = User
 
-class ResReservationRequestAdmin(admin.ModelAdmin):
-    list_filter = ['sender', 'is_active']
-    list_display = ['sender', 'receiver', 'res_state', 'res_start_time', 'res_expect_time', 'res_deadline_time', 'is_active', 'is_accepted']
-    search_fields = ['sender__goeat_id', 'sender__username', 'receiver__id', 'receiver__res_name']
+        
+"""
+#############################################################################################
+
+                                    팀(친구) 관련 어드민
+
+#############################################################################################
+"""
+# 팀(친구) 어드민
+class TeamAdmin(admin.ModelAdmin):
+    list_filter = ['user']
+    list_display = ['user']
+    search_fields = ['user__goeat_id', 'user__username']
 
     class Meta:
-        model = ResReservationRequest
+        model = Team
 
+# 팀(친구) 요청 어드민
+class TeamRequestAdmin(admin.ModelAdmin):
+    list_filter = ['sender', 'receiver']
+    list_display = ['sender', 'receiver', 'is_active']
+    search_fields = ['sender__goeat_id', 'sender__username', 'receiver__goeat_id', 'receiver__username']
+
+    class Meta:
+        model = TeamRequest
+
+# 팀(친구) 팀원 어드민
 class UserTeamProfileAdmin(admin.ModelAdmin):
     list_filter = ['rank', 'is_fav']
     list_display = ['user', 'team', 'rank', 'is_fav', 'is_with']
@@ -50,7 +61,8 @@ class UserTeamProfileAdmin(admin.ModelAdmin):
 
     class Meta:
         model = UserTeamProfile
-
+        
+# 팀(친구) 비회원 어드민
 class NonMemberAdmin(admin.ModelAdmin):
     list_filter = ['rank', 'is_fav']
     list_display = ['id', 'name', 'rank', 'is_fav', 'is_with']
@@ -58,6 +70,21 @@ class NonMemberAdmin(admin.ModelAdmin):
 
     class Meta:
         model = NonMember
+
+
+"""
+#############################################################################################
+
+                                        메뉴 점수 어드민                                        
+
+#############################################################################################
+"""
+class MenuPointAdmin(admin.ModelAdmin):
+    list_display = ['id', 'team', 'menu', 'points']
+    search_fields = ['team__user__goeat_id', 'team__user__username', 'menu__second_class_name']
+
+    class Meta:
+        model = MenuPoint
 
 class MenuFeaturePointAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'menu_feature', 'points']
@@ -80,13 +107,14 @@ class MenuIngredientPointAdmin(admin.ModelAdmin):
     class Meta:
         model = MenuIngredientPoint
 
-class MenuPointAdmin(admin.ModelAdmin):
-    list_display = ['id', 'team', 'menu', 'points']
-    search_fields = ['team__user__goeat_id', 'team__user__username', 'menu__second_class_name']
 
-    class Meta:
-        model = MenuPoint
+"""
+#############################################################################################
 
+                                        알림 어드민
+
+#############################################################################################
+"""
 class AlarmAdmin(admin.ModelAdmin):
     list_filter = ['is_read', 'message']
     list_display = ['sender', 'receiver', 'message', 'is_read', 'sent_time']
@@ -95,6 +123,14 @@ class AlarmAdmin(admin.ModelAdmin):
     class Meta:
         model = Alarm
 
+
+"""
+#############################################################################################
+
+                                        FCM 어드민                                        
+
+#############################################################################################
+"""
 class UserFcmClientTokenAdmin(admin.ModelAdmin):
     list_display = ['user', 'fcm_token']
     search_fields = ['user__goeat_id', 'user__username', 'fcm_token']
@@ -102,6 +138,23 @@ class UserFcmClientTokenAdmin(admin.ModelAdmin):
     class Meta:
         model = UserFcmClientToken
 
+
+"""
+#############################################################################################
+
+                                        예약 내역 어드민                                                                            
+
+#############################################################################################
+"""
+class ResReservationRequestAdmin(admin.ModelAdmin):
+    list_filter = ['sender', 'is_active']
+    list_display = ['sender', 'receiver', 'res_state', 'res_start_time', 'res_expect_time', 'res_deadline_time', 'is_active', 'is_accepted']
+    search_fields = ['sender__goeat_id', 'sender__username', 'receiver__id', 'receiver__res_name']
+
+    class Meta:
+        model = ResReservationRequest
+        
+        
 admin.site.unregister(OutstandingToken)
 admin.site.register(OutstandingToken, OutstandingTokenAdmin)
 admin.site.register(User, UserAdmin)
