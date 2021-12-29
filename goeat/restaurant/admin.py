@@ -4,7 +4,9 @@ from restaurant.models import (
     MenuCannotEat, MenuFirstClass, MenuSecondClass,
     MenuFeature,
 )
-
+from restaurant.model_files.notice import (
+    ResNotice, 
+)
 
 """
 #############################################################################################
@@ -16,7 +18,7 @@ from restaurant.models import (
 # 음식점 어드민
 class RestaurantAdmin(admin.ModelAdmin):
     list_filter = ['res_type', 'is_reservable_r']
-    list_display = ['id', 'res_name', 'is_reservable_r', 'res_address', 'res_telenum', 'short_res_exp', 'short_res_image']
+    list_display = ['id', 'res_name', 'is_reservable_r', 'is_affiliate', 'res_address', 'res_telenum', 'short_res_exp', 'short_res_image']
     search_fields = ['id', 'res_name']
 
     class Meta:
@@ -32,8 +34,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 """
 # 메뉴 어드민
 class MenuAdmin(admin.ModelAdmin):
-    list_filter = []
-    list_display = ['id', 'menu_name',  'menu_price', 'short_menu_image']
+    list_display = ['menu_name', 'menu_price', 'discount', 'short_menu_image']
     search_fields = ['menu_name', 'menu_second_name__second_class_name']
 
     class Meta:
@@ -68,7 +69,7 @@ class MenuFirstClassAdmin(admin.ModelAdmin):
 
 # 메뉴 2차 군집 어드민
 class MenuSecondClassAdmin(admin.ModelAdmin):
-    list_filter = ['menu_feature', 'menu_type', 'menu_first_name']
+    list_filter = ['menu_feature', 'menu_type']
     list_display = ['id', 'second_class_name', 'menu_type', 'menu_first_name', 'menu_soup', 'is_spicy', 'is_cold', 'is_favor', 'short_menu_image']
     search_fields = ['second_class_search_name', 'id']
 
@@ -93,6 +94,22 @@ class MenuCannotEatAdmin(admin.ModelAdmin):
     class Meta:
         model = MenuCannotEat
         
+        
+"""
+#############################################################################################
+
+                                    음식점 공지사항 어드민
+
+#############################################################################################
+"""
+# 음식점 공지사항 어드민
+class ResNoticeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'notice_title', 'notice_content', 'state', 'notice_create_dttm']
+    search_fields = ['notice_title']
+
+    class Meta:
+        model = ResNotice
+
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Menu, MenuAdmin)
@@ -102,3 +119,4 @@ admin.site.register(MenuCannotEat, MenuCannotEatAdmin)
 admin.site.register(MenuFirstClass, MenuFirstClassAdmin)
 admin.site.register(MenuSecondClass, MenuSecondClassAdmin)
 admin.site.register(MenuFeature, MenuFeatureAdmin)
+admin.site.register(ResNotice, ResNoticeAdmin)

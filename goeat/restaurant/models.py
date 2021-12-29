@@ -98,6 +98,8 @@ class Menu(models.Model):
     menu_image = models.TextField(blank=True, null=True)
     # 음식 가격
     menu_price = models.IntegerField(default=0)
+    # 할인
+    discount = models.IntegerField(default=0)
 
     def __str__(self):
         return '{}'.format(self.menu_name)
