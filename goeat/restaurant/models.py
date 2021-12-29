@@ -148,6 +148,8 @@ class Restaurant(models.Model):
     res_pos_id = models.CharField(max_length=100, blank=True)
     # 식당 비밀번호
     res_pos_pw = models.CharField(max_length=100, blank=True)
+    # 식당 포스기 on/off 체크
+    res_pos_time = models.DateTimeField(auto_now=True)
     # 식당 오픈시간
     res_open_tm = models.TimeField(default='00:00', blank=True)
     # 식당 마감시간
