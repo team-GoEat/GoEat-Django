@@ -716,10 +716,9 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
                 temp['is_fav']=True
             
             # 메뉴 할인가 체크
-            for rr in r.res_menu.all():
-                if rr in discount_menus:
-                    temp['dc_price'] = rr.menu_price - rr.discount
-                    
+            if m in discount_menus:
+                temp['dc_price'] = m.menu_price - m.discount
+                
             # 예약 가능한지 체크
             for rr in resRes:
                 if rr == r:
@@ -766,9 +765,8 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
                 }
                 
                 # 메뉴 할인가 체크
-                for rr in r.res_menu.all():
-                    if rr in discount_menus:
-                        temp['dc_price'] = rr.menu_price - rr.discount
+                if m in discount_menus:
+                    temp['dc_price'] = m.menu_price - m.discount
                 
                 # 예약 가능한지 체크
                 for rr in resRes:
