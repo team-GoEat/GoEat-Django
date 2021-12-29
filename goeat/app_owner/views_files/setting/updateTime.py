@@ -30,7 +30,7 @@ class BreakTime_Controls(View):
         
         if request.POST['type'] == 'toggle':
             res_data.is_breaktime = False if res_data.is_breaktime else True
-            result['msg'] = '브레이크 타임 OFF' if res_data.is_breaktime else '브레이크 타임 ON'
+            result['msg'] = '브레이크 타임 있음' if res_data.is_breaktime else '브레이크 타임 없음'
         else:
             res_data.res_break_start_tm = request.POST['res_break_start_tm'].replace(' ', '').replace('\n', '')
             res_data.res_break_end_tm = request.POST['res_break_end_tm'].replace(' ', '').replace('\n', '')

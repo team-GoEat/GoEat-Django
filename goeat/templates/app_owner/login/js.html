@@ -43,7 +43,7 @@
 
             $('.login_fail').css('display', 'none');
 
-            $('#open_time').text(result.data.res_time)
+            // $('#open_time').text(result.data.res_time)
 
             loginContent.classList.remove("on");
             openContent.classList.add("on");
@@ -83,8 +83,6 @@
         type: "POST",
         data: params,
         success: function (result) {
-
-          console.log(result);
 
           if (result.result === 'success') {
 

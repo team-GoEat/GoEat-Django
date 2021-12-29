@@ -13,12 +13,47 @@ class Views_Controls(View):
 
     def post(self, request):
 
-        reservation = ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).order_by('-is_active')
+        today = datetime.datetime.now()
+
+        if request.POST.get('start_dttm', '') == '' and request.POST.get('end_dttm', '') == '':
+            start_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S')
+            end_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S')
+
+        else:
+            start_dttm = datetime.datetime.strptime(request.POST['start_dttm'].replace('.', '-'), '%Y-%m-%d %H:%M:%S')
+            end_dttm = datetime.datetime.strptime(request.POST['end_dttm'].replace('.', '-'), '%Y-%m-%d %H:%M:%S')
+
+        reservation = ResReservationRequest.objects.filter(
+            receiver_id=request.session['res_id'],
+            res_start_time__range = [start_dttm, end_dttm]
+        ).order_by('-is_active')
+
+        
+        apply_count = 0 # 예약신청 횟수
+        confirm_count = 0 # 예약 승인 횟수
+        arrived_count = 0 # 손님 도착 횟수
+        decline_count = 0 # 예약 거절 횟수
+        cancel_count = 0 # 예약 취소 횟수
+        noresponse_count = 0 # 예약 무응답 횟수
+
+        print(reservation)
+
+        # for item in reservation:
+        #     apply_count += 1
+            
+        #     # 예약승인
+        #     if item.is_active & item.is_accepted:
+        #         confirm_count += 1
+
+        print(apply_count)
+        print(confirm_count)
 
         ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).update(is_view=True)
 
         context = {
             'reservation': reservation,
+            'start_dttm': datetime.datetime.strftime(start_dttm, '%Y-%m-%d').replace('-', '.'),
+            'end_dttm': datetime.datetime.strftime(end_dttm, '%Y-%m-%d').replace('-', '.')
         }
 
         return render(request, 'app_owner/reserve/index.html', context)

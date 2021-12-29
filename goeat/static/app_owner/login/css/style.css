@@ -115,6 +115,10 @@
     display: block;
   }
 
+  .open_content .title {
+    margin-bottom: 50px;
+  }
+
   .open_content .open_info {
     margin: 40px 0;
     text-align: center;

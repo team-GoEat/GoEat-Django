@@ -14,7 +14,15 @@
   }));
 
   function onClickNumber(value) {
-    if (timeNumber.length === 4) return;
+    if (is_first_timeset) {
+      is_first_timeset = false;
+      timeNumber = '';
+      timeInputAll[0].value = '';
+      timeInputAll[1].value = '';
+    }
+
+    if (timeNumber.length === 4) return
+
     timeNumber = timeNumber.concat(value).replace(/[^0-9]/g, "");
     printTime();
   }

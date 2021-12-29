@@ -5,7 +5,13 @@
 
 <script>
 
+    clearInterval(interval1);
+    clearInterval(interval2);
+
     setTime();
+
+    $('.start_datepicker').val('{{start_dttm}}');
+    $('.end_datepicker').val('{{end_dttm}}');
 
     var interval1 = setInterval(() => {
         setTime();
@@ -157,5 +163,12 @@
                 })
             }
         })
+    }
+
+    function readReserve() {
+        startDttm = $('.start_datepicker').val();
+        endDttm = $('.end_datepicker').val();
+
+        reserve();
     }
 </script>

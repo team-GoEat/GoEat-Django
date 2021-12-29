@@ -3,32 +3,61 @@
 {% load version %}
 {% load date %}
 
-<li class="reserve_list layout " id="list_{{item.id}}">
+<!-- 방문완료 -->
+{% if not item.is_active and item.is_arrived and item.is_accepted %}
+<li class="reserve_list layout end" id="list_{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
-
-
-            <!-- 방문완료 -->
-            {% if not item.is_active and item.is_arrived and item.is_accepted %}
             <span>O</span>
-            <!-- 승인대기 -->
-            {% elif item.is_active and not item.is_accepted %}
-            <span class="reserve_idx"></span>
+        </div>
+    </div>
+    <div class="layout_time">
+        <p class="date">{{ item.res_deadline_time|date:"Y.m.d" }}</p>
+        <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text">
+                {{ item.res_deadline_time|date:"H:i" }}
+            </span>
+        </div>
+    </div>
+    <div class="layout_number">
+        <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text">{{ item.additional_person }}명</span>
+        </div>
+        <p class="grade">
+            <span>매너 등급</span>
 
-            <!-- 예약확정 -->
-            {% elif item.is_active and item.is_accepted %}
-            <span class="reserve_idx"></span>
-
-            <!-- 예약거절 -->
-            {% elif not item.is_active and not item.is_accepted %}
-            <span>X</span>
-
-            <!-- 예약취소-->
-            {% elif not item.is_active and item.is_accepted %}
-            <span>X</span>
-
+            {% if item.sender.manner_rank == 0 %}
+            <span class="grade_text">보통</span>
+            {% elif item.sender.manner_rank == 1 %}
+            <span class="grade_text good">젠틀</span>
+            {% else %}
+            <span class="grade_text bad">비매너</span>
             {% endif %}
 
+        </p>
+    </div>
+    <div class="layout_status">
+        <span>
+            {{ item.res_state }}
+        </span>
+    </div>
+
+    <div class="layout_note">
+        <span class="tel">
+            050-2923-1111
+        </span>
+    </div>
+</li>
+
+<!-- 승인대기 -->
+{% elif item.is_active and not item.is_accepted %}
+<li class="reserve_list layout" id="list_{{item.id}}">
+    <div class="layout_order">
+        <div class="order_wrap">
+            <span class="reserve_idx"></span>
         </div>
     </div>
     <div class="layout_time">
@@ -65,15 +94,6 @@
         </span>
     </div>
 
-    <!-- 방문완료 -->
-    {% if not item.is_active and item.is_arrived and item.is_accepted %}
-    <div class="layout_note">
-        <span class="tel">
-            050-2923-1111
-        </span>
-    </div>
-    <!-- 승인대기 -->
-    {% elif item.is_active and not item.is_accepted %}
     <div class="layout_note">
         <div class="button_box">
             <div class="btn approve">
@@ -88,9 +108,50 @@
             </div>
         </div>
     </div>
+</li>
 
-    <!-- 예약확정 -->
-    {% elif item.is_active and item.is_accepted %}
+<!-- 예약확정 -->
+{% elif item.is_active and item.is_accepted %}
+<li class="reserve_list layout" id="list_{{item.id}}">
+    <div class="layout_order">
+        <div class="order_wrap">
+            <span class="reserve_idx"></span>
+        </div>
+    </div>
+    <div class="layout_time">
+        <p class="date">{{ item.res_deadline_time|date:"Y.m.d" }}-{{ item.id }}</p>
+        <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text">
+                {{ item.res_deadline_time|date:"H:i" }}
+            </span>
+        </div>
+    </div>
+    <div class="layout_number">
+        <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text">{{ item.additional_person }}명</span>
+        </div>
+        <p class="grade">
+            <span>매너 등급</span>
+
+            {% if item.sender.manner_rank == 0 %}
+            <span class="grade_text">보통</span>
+            {% elif item.sender.manner_rank == 1 %}
+            <span class="grade_text good">젠틀</span>
+            {% else %}
+            <span class="grade_text bad">비매너</span>
+            {% endif %}
+
+        </p>
+    </div>
+    <div class="layout_status">
+        <span>
+            {{ item.res_state }}
+        </span>
+    </div>
+
     <div class="layout_note">
         <div class="button_box">
             <div class="btn approve">
@@ -105,28 +166,103 @@
             </div>
         </div>
     </div>
-
-    <!-- 예약거절 -->
-    {% elif not item.is_active and not item.is_accepted %}
-    <div class="layout_note">
-        <span class="tel">
-            050-2923-1111
-        </span>
-    </div>
-
-    <!-- 예약취소-->
-    {% elif not item.is_active and item.is_accepted %}
-    <div class="layout_note">
-        <span class="tel">
-            050-2923-1111
-        </span>
-    </div>
-
-    {% endif %}
-
-    <!-- 예약거절 -->
-
-    <!-- 예약취소 -->
-
-
 </li>
+
+<!-- 예약거절 -->
+{% elif not item.is_active and not item.is_accepted %}
+<li class="reserve_list layout end" id="list_{{item.id}}">
+    <div class="layout_order">
+        <div class="order_wrap">
+            <span>X</span>
+        </div>
+    </div>
+    <div class="layout_time">
+        <p class="date">{{ item.res_deadline_time|date:"Y.m.d" }}-{{ item.id }}</p>
+        <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text disable">
+                {{ item.res_deadline_time|date:"H:i" }}
+            </span>
+        </div>
+    </div>
+    <div class="layout_number">
+        <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text disable">{{ item.additional_person }}명</span>
+        </div>
+        <p class="grade">
+            <span>매너 등급</span>
+
+            {% if item.sender.manner_rank == 0 %}
+            <span class="grade_text">보통</span>
+            {% elif item.sender.manner_rank == 1 %}
+            <span class="grade_text good">젠틀</span>
+            {% else %}
+            <span class="grade_text bad">비매너</span>
+            {% endif %}
+
+        </p>
+    </div>
+    <div class="layout_status">
+        <span>
+            {{ item.res_state }}
+        </span>
+    </div>
+
+    <div class="layout_note">
+        <span class="tel">
+            050-2923-1111
+        </span>
+    </div>
+</li>
+
+<!-- 예약취소-->
+{% elif not item.is_active and item.is_accepted %}
+<li class="reserve_list layout end" id="list_{{item.id}}">
+    <div class="layout_order">
+        <div class="order_wrap">
+            <span>X</span>
+        </div>
+    </div>
+    <div class="layout_time">
+        <p class="date">{{ item.res_deadline_time|date:"Y.m.d" }}-{{ item.id }}</p>
+        <div class="time">
+            <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
+            <span class="time_text disable">
+                {{ item.res_deadline_time|date:"H:i" }}
+            </span>
+        </div>
+    </div>
+    <div class="layout_number">
+        <div class="count">
+            <figure></figure>
+            <img class="person_icon" src="{% static 'app_owner/base/images/person_plus.svg' %}" alt="">
+            <span class="person_text disable">{{ item.additional_person }}명</span>
+        </div>
+        <p class="grade">
+            <span>매너 등급</span>
+
+            {% if item.sender.manner_rank == 0 %}
+            <span class="grade_text">보통</span>
+            {% elif item.sender.manner_rank == 1 %}
+            <span class="grade_text good">젠틀</span>
+            {% else %}
+            <span class="grade_text bad">비매너</span>
+            {% endif %}
+
+        </p>
+    </div>
+    <div class="layout_status">
+        <span>
+            {{ item.res_state }}
+        </span>
+    </div>
+
+    <div class="layout_note">
+        <span class="tel">
+            050-2923-1111
+        </span>
+    </div>
+</li>
+{% endif %}
