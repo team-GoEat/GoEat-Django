@@ -12,7 +12,21 @@
 
   var is_first_timeset = true; // 시간변경 모달 첫 입력 Boolean
 
-  var startDttm, endDttm; // 예약 날짜조회 끝 Date
+  var startDttm, endDttm; // 예약 날짜조회 Date
+
+  // 포스기 꺼져 있는지 체크
+  var posInterval = setInterval(() => {
+    $.post({
+      url: "{% host_url 'res_pos_state' host 'owner' %}",
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+      success: (result) => {
+        console.log(result);
+      },
+      error: (result) => {
+        console.log(result.status);
+      }
+    })
+  }, 5000)
 
   var eventify = function (arr, callback) {
     arr.push = function (e) {
@@ -36,9 +50,6 @@
     if (result.result) {
       allHide();
       show('reserve', result);
-
-      console.log(result)
-
     }
   }
 
@@ -439,6 +450,5 @@
     });
 
   }
-
 
 </script>

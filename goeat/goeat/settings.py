@@ -58,9 +58,14 @@ INSTALLED_APPS = [
     'django_hosts',
     'app_owner',
     'rest_framework_simplejwt.token_blacklist',
+    'django_crontab',
     # django-allauth
     'allauth',
     'allauth.account',
+]
+
+CRONJOBS = [
+    ('* * * * *', 'goeat.cron.RestaurantPosCron')
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

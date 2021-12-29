@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from restaurant.models import Restaurant
 
+import datetime
 
 class Views_Controls(View):
     def get(self, request):
@@ -29,3 +30,14 @@ class Reverse_Views_Controls(View):
         res.save()
 
         return HttpResponse('')
+
+class Restaurant_State_Controls(View):
+
+    def post(self, request):
+
+        now = datetime.datetime.now()
+        
+        res_data = Restaurant.objects.filter(is_reservable_r=True)
+        res_data.update(res_pos_time=now)
+        
+        return HttpResponse('check')
