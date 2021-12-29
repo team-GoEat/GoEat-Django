@@ -751,6 +751,7 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
             'res_address': r.res_address,
             'menu_name': None,
             'menu_price': None,
+            'dc_price': None,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False
@@ -762,7 +763,8 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
         for rr in r.res_menu.all():
             if rr in discount_menus:
                 temp['menu_name'] = rr.menu_name
-                temp['menu_price'] = rr.menu_price - rr.discount
+                temp['menu_price'] = rr.menu_price
+                temp['dc_price'] = rr.menu_price - rr.discount
                 
         # 예약 가능한지 체크
         if r.is_reservable_r:
@@ -797,6 +799,7 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
             'res_address': r.res_address,
             'menu_name': None,
             'menu_price': None,
+            'dc_price': None,
             'x_cor': r.x_cor,
             'y_cor': r.y_cor,
             'is_fav': False
@@ -805,7 +808,8 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
         for rr in r.res_menu.all():
             if rr in discount_menus:
                 temp['menu_name'] = rr.menu_name
-                temp['menu_price'] = rr.menu_price - rr.discount
+                temp['menu_price'] = rr.menu_price
+                temp['dc_price'] = rr.menu_price - rr.discount
         
         # 예약 가능한지 체크
         if r.is_reservable_r:
