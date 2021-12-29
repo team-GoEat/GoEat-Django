@@ -19,13 +19,13 @@ urlpatterns = [
     path('tlist/<int:res_id>/<str:user_id>/', views.get_restaurant_from_cat, name='get_restaurant_from_cat'),
     # POST (비회원) 음식점 상세 정보 (카테고리에서)
     path('tlist/<int:res_id>/', views.get_restaurant_from_cat_notlogin, name='get_restaurant_from_cat_notlogin'),
-    # 카테고리로 음식점 리스트 받기
+    # GET 카테고리로 음식점 리스트 받기
     path('menu/type/<int:menu_type_id>/<str:user_id>/', views.get_restaurant_by_menu_type, name='get_restaurant_by_menu_type'),
-    # (비회원) 카테고리로 음식점 리스트 받기
+    # GET (비회원) 카테고리로 음식점 리스트 받기
     path('menu/type/<int:menu_type_id>/', views.get_restaurant_by_menu_type_notlogin, name='get_restaurant_by_menu_type_notlogin'),
-    # 메뉴ID로 음식점 리스트 받기
+    # GET 메뉴ID로 음식점 리스트 받기
     path('menu/<int:menu_id>/<str:user_id>/', views.get_restaurant_by_menuid, name='get_restaurant_by_menuid'),
-    # (비회원) 메뉴ID로 음식점 리스트 받기
+    # GET (비회원) 메뉴ID로 음식점 리스트 받기
     path('menu/<int:menu_id>/', views.get_restaurant_by_menuid_notlogin, name='get_restaurant_by_menuid_notlogin'),
     # 식당 검색
     path('search/res/<str:keyword>/', views.search_res, name='search_res'),

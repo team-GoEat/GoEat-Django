@@ -681,15 +681,15 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
     fav_res = user.fav_res.all()
-    resRes = Restaurant.objects.filter(is_reservable_r=True)
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
+    resRes = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    discount_menus = Menu.objects.filter(discount__gt=0)
+    res_id_list = []
     
     data = {
         'all': [],
         'is_reservable': []
     }
-
-    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
-    res_id_list = []
 
     for m in menu:
         res = Restaurant.objects.filter(res_menu=m)
@@ -702,6 +702,7 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
             temp = {
                 'menu_name': m.menu_name,
                 'menu_price': m.menu_price,
+                'dc_price': None,
                 'res_id': r.id,
                 'res_name': r.res_name,
                 'res_address': r.res_address,
@@ -713,6 +714,11 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
             # 즐겨찾기 되어있는지 체크
             if r in fav_res:
                 temp['is_fav']=True
+            
+            # 메뉴 할인가 체크
+            for rr in r.res_menu.all():
+                if rr in discount_menus:
+                    temp['dc_price'] = rr.menu_price - rr.discount
                     
             # 예약 가능한지 체크
             for rr in resRes:
@@ -729,14 +735,15 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
 def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
 
+    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
+    resRes = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    discount_menus = Menu.objects.filter(discount__gt=0)
+    res_id_list = []
+
     data = {
         'all': [],
         'is_reservable': []
     }
-
-    menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
-    resRes = Restaurant.objects.filter(is_reservable_r=True)
-    res_id_list = []
 
     for m in menu:
         res = Restaurant.objects.filter(res_menu=m)
@@ -749,6 +756,7 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
                 temp = {
                     'menu_name': m.menu_name,
                     'menu_price': m.menu_price,
+                    'dc_price': None,
                     'res_id': r.id,
                     'res_name': r.res_name,
                     'res_address': r.res_address,
@@ -756,6 +764,11 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
                     'y_cor': r.y_cor,
                     'is_fav': False
                 }
+                
+                # 메뉴 할인가 체크
+                for rr in r.res_menu.all():
+                    if rr in discount_menus:
+                        temp['dc_price'] = rr.menu_price - rr.discount
                 
                 # 예약 가능한지 체크
                 for rr in resRes:
@@ -807,7 +820,8 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
 
         if r in fav_res:
             temp['is_fav']=True
-            
+        
+        # 메뉴 할인가 체크
         for rr in r.res_menu.all():
             if rr in discount_menus:
                 temp['menu_name'] = rr.menu_name
@@ -853,6 +867,7 @@ def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
             'is_fav': False
         }
         
+        # 메뉴 할인가 체크
         for rr in r.res_menu.all():
             if rr in discount_menus:
                 temp['menu_name'] = rr.menu_name
