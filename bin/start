@@ -8,3 +8,5 @@ killall -9 uwsgi
 echo "############# KILL OK #############"
 uwsgi --ini /usr/local/share/GoEat-Django/goeat/goeat_uwsgi.ini
 echo "############# START OK #############"
+deactivate
+cd ..
