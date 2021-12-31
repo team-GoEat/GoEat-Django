@@ -28,32 +28,50 @@ class Views_Controls(View):
             res_start_time__range = [start_dttm, end_dttm]
         ).order_by('-is_active')
 
-        
-        apply_count = 0 # 예약신청 횟수
-        confirm_count = 0 # 예약 승인 횟수
-        arrived_count = 0 # 손님 도착 횟수
-        decline_count = 0 # 예약 거절 횟수
-        cancel_count = 0 # 예약 취소 횟수
-        noresponse_count = 0 # 예약 무응답 횟수
+        count_set = {
+            'apply_count': 0, # 예약신청 횟수
+            'confirm_count': 0, # 예약 승인 횟수
+            'decline_count': 0, # 예약 거절 횟수
+            'noresponse_count': 0, # 예약 무응답 횟수
+            'arrived_count': 0, # 손님 도착 횟수
+            'cancel_count': 0, # 예약 취소 횟수
+        }
 
         print(reservation)
 
-        # for item in reservation:
-        #     apply_count += 1
+        for item in reservation:
+            # 예약신청
+            count_set['apply_count'] += 1
             
-        #     # 예약승인
-        #     if item.is_active & item.is_accepted:
-        #         confirm_count += 1
+            # 예약승인
+            if item.is_accepted:
+                count_set['confirm_count'] += 1
+            elif not item.is_active and not item.is_accepted:
+                # 예약무응답
+                if item.res_state == '무응답':
+                    count_set['noresponse_count'] += 1
+                # 예약거절
+                else:
+                    count_set['decline_count'] += 1
 
-        print(apply_count)
-        print(confirm_count)
+            # 손님도착
+            if not item.is_active and item.is_arrived and item.is_accepted:
+                count_set['arrived_count'] += 1
+            # 예약취소
+            elif not item.is_active and item.is_accepted:
+                count_set['cancel_count'] += 1
+
+            
+
+        print(count_set)
 
         ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).update(is_view=True)
 
         context = {
             'reservation': reservation,
             'start_dttm': datetime.datetime.strftime(start_dttm, '%Y-%m-%d').replace('-', '.'),
-            'end_dttm': datetime.datetime.strftime(end_dttm, '%Y-%m-%d').replace('-', '.')
+            'end_dttm': datetime.datetime.strftime(end_dttm, '%Y-%m-%d').replace('-', '.'),
+            'count_set': count_set
         }
 
         return render(request, 'app_owner/reserve/index.html', context)

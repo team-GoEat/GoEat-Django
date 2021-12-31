@@ -35,24 +35,25 @@
         <div class="info_desc">
           <p class="desc_wrap">
             <span>
-              예약 신청 : 100회
+              예약 신청 : {{ count_set.apply_count }}회
             </span>
             <span>
-              예약 승인 : 100회
+              예약 승인 : {{ count_set.confirm_count }}회
+            </span>
+
+            <span>
+              예약 거절 : {{ count_set.decline_count }}회
             </span>
             <span>
-              손님 도착 : 100회
+              예약 무응답 : {{ count_set.noresponse_count }}회
             </span>
           </p>
           <p class="desc_wrap">
             <span>
-              예약 거절 : 100회
+              손님 도착 : {{ count_set.arrived_count }}회
             </span>
             <span>
-              예약 취소 : 100회
-            </span>
-            <span>
-              예약 무응답 : 100회
+              예약 취소 : {{ count_set.cancel_count }}회
             </span>
           </p>
 
