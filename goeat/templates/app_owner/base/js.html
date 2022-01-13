@@ -147,12 +147,14 @@
     let result = await DomCallback("{% host_url 'coupon_sidemenu' host 'owner' %}", {});
     if (result.result) {
       modalShow("사이드 메뉴", result);
+      couponType = 1;
     }
   }
   async function couponDiscount() {
     let result = await DomCallback("{% host_url 'coupon_discount' host 'owner' %}", {});
     if (result.result) {
       modalShow("할인 쿠폰", result);
+      couponType = 0;
     }
   }
 

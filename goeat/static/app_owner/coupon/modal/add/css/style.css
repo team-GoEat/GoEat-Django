@@ -72,6 +72,10 @@
   white-space: nowrap;
 }
 
+.text_box .couponadd_input::-webkit-scrollbar, .text_box .text::-webkit-scrollbar {
+  display: none;
+}
+
 .couponadd_header {
   margin-bottom: 15px;
 }

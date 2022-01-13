@@ -3,22 +3,28 @@
 
 <script>
   var couponList = new Array;
+  var couponType;
 
   // 쿠폰 리스트 Create
   function createCoupon() {
+    console.log(couponList);
     var parmas = {
       'csrfmiddlewaretoken': '{{ csrf_token }}',
-      'couponList[]': couponList
+      'coupon_list': couponList,
+      'coupon_type': couponType
     }
 
     $.post({
       url: "{% host_url 'create_coupon' host 'owner' %}",
+      header: {
+        "Content-Type": "application/json"
+      },
       data: parmas,
       success: (result) => {
-        $('.couponadd_list').empty();
-        couponList.splice(0, couponList.length);
-        allHide();
-        coupon();
+        // $('.couponadd_list').empty();
+        // couponList.splice(0, couponList.length);
+        // allHide();
+        // coupon();
       },
       error: (result) => {
         Swal.fire({
@@ -40,6 +46,12 @@
         'coupon_start_dttm': $('#issue_date').val(),
       })
     }
+
+    console.log($('#side_menu').val());
+    console.log($('#stamp_count').val());
+    console.log($('#issue_date').val());
+
+    console.log(couponList);
 
     viewAddCoupon(couponList);
   }
