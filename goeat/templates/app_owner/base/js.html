@@ -59,7 +59,10 @@
   async function stamp() {
     intervalClear();
 
-    let result = await DomCallback("{% host_url 'stamp' host 'owner' %}", {});
+    let result = await DomCallback("{% host_url 'stamp' host 'owner' %}", {
+      'start_dttm': StampStartDttm === undefined ? '' : StampStartDttm + ' 00:00:00',
+      'end_dttm': StampeEndDttm === undefined ? '' : StampeEndDttm + ' 23:59:59'
+    });
     if (result.result) {
       allHide();
       show('stamp', result);
@@ -417,6 +420,9 @@
     const year = date.getFullYear();
     const month = ("0" + (1 + date.getMonth())).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
+
+    StampStartDttm = `${year}.${month}.${day}`;
+    StampeEndDttm = `${year}.${month}.${day}`;
 
     return (`${year}.${month}.${day}`);
   }
