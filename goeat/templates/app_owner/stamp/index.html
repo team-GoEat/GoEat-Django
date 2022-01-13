@@ -16,13 +16,13 @@
         날짜 :
       </span>
       <p class="datepicker_box">
-        <input class="start_datepicker" readonly />
+        <input class="start_datepicker" value="" readonly />
         <span>
           ~
         </span>
         <input class="end_datepicker" readonly />
       </p>
-      <button class="btn_fill">
+      <button class="btn_fill" onclick="SetStampDttm()">
         날짜변경
       </button>
     </div>
@@ -49,7 +49,7 @@
         </span>
         <div class="pay_desc">
           <p class="pay_date">
-            2021.10.10 ~ 2021.10.30
+            {{start_dttm}} ~ {{end_dttm}}
           </p>
           <p>
             총 적립 : 1000개
@@ -132,3 +132,4 @@
   init_list();
 </script>
 {% include 'app_owner/base/date.html' %}
+{% include 'app_owner/stamp/js.html' %}
