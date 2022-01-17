@@ -398,7 +398,10 @@ class ResReservationRequest(models.Model):
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
         for token in receiver_tokens:
             push_team_request(token.fcm_token, '예약이 거절되었어요! ({})'.format(msg), self.receiver.res_name)
-            
+        
+        # 알림
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=5)
+        
         self.save()
         
     # 예약 요청 취소
@@ -413,7 +416,10 @@ class ResReservationRequest(models.Model):
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
         for token in receiver_tokens:
             push_team_request(token.fcm_token, '예약이 취소되었어요! ({})'.format(msg), self.receiver.res_name)
-            
+        
+        # 알림
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=6)
+        
         self.save()
 
     # 고객 방문 완료시
@@ -426,7 +432,10 @@ class ResReservationRequest(models.Model):
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
         for token in receiver_tokens:
             push_team_request(token.fcm_token, '손님 도착 처리되었어요!', self.receiver.res_name)
-            
+        
+        # 알림
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=7)
+        
         self.save()
 
 

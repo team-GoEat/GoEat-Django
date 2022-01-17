@@ -11,3 +11,4 @@ djangorestframework-simplejwt
 django-allauth
 django-crontab
 firebase-admin
+querystring_parser
