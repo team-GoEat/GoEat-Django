@@ -117,7 +117,7 @@ class MenuIngredientPointAdmin(admin.ModelAdmin):
 """
 class AlarmAdmin(admin.ModelAdmin):
     list_filter = ['is_read', 'message']
-    list_display = ['sender', 'receiver', 'message', 'is_read', 'sent_time']
+    list_display = ['sender', 'receiver', 'res_sender', 'message', 'is_read', 'sent_time']
     search_fields = ['sender__goeat_id', 'sender__username', 'receiver__goeat_id', 'receiver__username']
 
     class Meta:
