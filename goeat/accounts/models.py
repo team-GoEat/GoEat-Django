@@ -10,7 +10,7 @@ from restaurant.models import (
     Restaurant, MenuCannotEat, MenuSecondClass, MenuFeature,
     MenuIngredient, MenuType
 )
-from accounts.push_fcm import push_team_request, push_notice
+from accounts.push_fcm import push_team_request
 
 
 """
@@ -380,7 +380,11 @@ class ResReservationRequest(models.Model):
         # 푸쉬 알림
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
         for token in receiver_tokens:
-            push_team_request(token.fcm_token, '예약이 승인됬어요!', '확인해주세요!')
+            push_team_request(token.fcm_token, '예약이 승인되었어요!', self.receiver.res_name)
+        
+        # 알림
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=4)
+        
         self.save()
 
     # 예약 요청 거절
@@ -389,6 +393,12 @@ class ResReservationRequest(models.Model):
         self.res_state = msg
         self.is_active = False
         self.is_accepted = False
+        
+        # 푸쉬 알림
+        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        for token in receiver_tokens:
+            push_team_request(token.fcm_token, '예약이 거절되었어요! ({})'.format(msg), self.receiver.res_name)
+            
         self.save()
         
     # 예약 요청 취소
@@ -398,6 +408,12 @@ class ResReservationRequest(models.Model):
         self.is_active = False
         if msg == '예약 취소(고객 노쇼)':
             self.is_noshow = True
+            
+        # 푸쉬 알림
+        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        for token in receiver_tokens:
+            push_team_request(token.fcm_token, '예약이 취소되었어요! ({})'.format(msg), self.receiver.res_name)
+            
         self.save()
 
     # 고객 방문 완료시
@@ -405,6 +421,12 @@ class ResReservationRequest(models.Model):
         self.res_state = '방문 완료'
         self.is_active = False
         self.is_arrived = True
+        
+        # 푸쉬 알림
+        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        for token in receiver_tokens:
+            push_team_request(token.fcm_token, '손님 도착 처리되었어요!', self.receiver.res_name)
+            
         self.save()
 
 
@@ -417,9 +439,11 @@ class ResReservationRequest(models.Model):
 """
 class Alarm(models.Model):
     # 보내는이
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_sender', null=True)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_sender', blank=True, null=True)
     # 받는이
-    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_receiver', null=True)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_receiver', blank=True, null=True)
+    # 음식점
+    res_sender = models.ForeignKey(Restaurant, on_delete=models.CASCADE, blank=True, null=True)
     # 프론트에서 나올 메시지 (1=친구추가)
     message = models.IntegerField(default=0)
     # 읽음 여부
@@ -427,8 +451,8 @@ class Alarm(models.Model):
     # 시간
     sent_time = models.DateTimeField(auto_now_add=True, null=True)
 
-    def __str__(self):
-        return '{} {} {}'.format(self.sender.goeat_id, self.receiver.goeat_id, self.is_read)
+    # def __str__(self):
+    #     return '{} {} {}'.format(self.sender.goeat_id, self.receiver.goeat_id, self.is_read)
 
     def read_alarm(self):
         self.is_read = True

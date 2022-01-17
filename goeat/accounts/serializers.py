@@ -188,15 +188,16 @@ class FavResSerializer(serializers.ModelSerializer):
 #############################################################################################
 """
 class AlarmSerializer(serializers.ModelSerializer):
-    sender_id = serializers.CharField(source='sender.name')
-    receiver_id = serializers.CharField(source='receiver.name')
-    sender_name = serializers.CharField(source='sender.name')
-    receiver_name = serializers.CharField(source='receiver.name')
+    sender_id = serializers.CharField(source='sender.name', allow_null=True)
+    receiver_id = serializers.CharField(source='receiver.name', allow_null=True)
+    sender_name = serializers.CharField(source='sender.name', allow_null=True)
+    receiver_name = serializers.CharField(source='receiver.name', allow_null=True)
+    res_name = serializers.CharField(source='res_sender.res_name', allow_null=True)
     sent_date = serializers.CharField(source='get_timestamp')
 
     class Meta:
         model = Alarm
-        fields = ('id', 'sender_id', 'receiver_id', 'sender_name', 'receiver_name', 'message', 'is_read', 'sent_date')
+        fields = ('id', 'sender_id', 'receiver_id', 'sender_name', 'receiver_name', 'res_name', 'message', 'is_read', 'sent_date')
 
 
 """
