@@ -10,6 +10,7 @@ from restaurant.models import (
     Restaurant, MenuCannotEat, MenuSecondClass, MenuFeature,
     MenuIngredient, MenuType
 )
+from accounts.push_fcm import push_team_request, push_notice
 
 
 """
@@ -375,6 +376,11 @@ class ResReservationRequest(models.Model):
         self.res_state = '예약 확정'
         self.res_expect_time = timezone.now()
         self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time)
+        
+        # 푸쉬 알림
+        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        for token in receiver_tokens:
+            push_team_request(token.fcm_token, '예약이 승인됬어요!', '확인해주세요!')
         self.save()
 
     # 예약 요청 거절
