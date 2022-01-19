@@ -23,9 +23,9 @@ class ResCoupon(models.Model):
     # 쿠폰을 얻기 위한 스탬프 갯수
     coupon_count = models.IntegerField(default=0)
     # 쿠폰 발행 시작 날짜
-    coupon_start_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    coupon_start_dttm = models.DateTimeField(auto_now_add=False,auto_now=False)
     # 쿠폰  발행 종료 날짜
-    coupon_end_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    coupon_end_dttm = models.DateTimeField(auto_now_add=False,auto_now=False)
     # 쿠폰 발행 요청날짜
     coupon_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
@@ -33,6 +33,17 @@ class ResCoupon(models.Model):
     def create_coupon(self, restaurant, service):
         ResCoupon.objects.create(user=self.user, restaurant=restaurant, service=service)
         self.save()
+
+    def __str__(self):
+        return '{} {}'.format(self.restaurant, self.service_exp)
+
+# 쿠폰 처리이력
+class ResCouponLog(models.Model):
+
+    # 음식점
+    res_coupon = models.ForeignKey('restaurant.ResCoupon',on_delete=models.CASCADE)
+    # 쿠폰 처리 시간
+    log_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
     def __str__(self):
         return '{} {}'.format(self.restaurant, self.service_exp)

@@ -1,84 +1,109 @@
+{% load hosts %}
+{% load static %}
+
 <script>
-  var couponList = document.querySelector(".couponadd_list");
-  var couponInputAll = document.querySelectorAll(".couponadd_input");
-  var couponItem = [
-    {
-      discount: 1000,
-      stampCount: 3,
-      issueDate: "21.10.10"
-    },
-    {
-      discount: 1000,
-      stampCount: 4,
-      issueDate: "21.10.10"
-    },
-    {
-      discount: 1000,
-      stampCount: 5,
-      issueDate: "21.10.10"
-    },
-  ];
+  var couponList = new Array;
+  var couponType;
 
-  renderItem();
+  // 쿠폰 리스트 Create
+  function createCoupon() {
+    console.log(couponList);
+    var parmas = {
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      'coupon_list': couponList,
+      'coupon_type': couponType
+    }
 
-  function onDeleteCouponItem(index) {
-    couponItem = couponItem.filter((_, i) => String(i) !== index);
-    renderItem();
-  }
-  function onAddCouponItem() {
-    const discount = document.querySelector('#discount');
-    const stampCount = document.querySelector('#dis_stamp_count');
-    const issueDate = document.querySelector('#dis_issue_date');
-
-    if (
-      !discount.value ||
-      !stampCount.value ||
-      !issueDate.value
-    ) return alert("누락된 값이 있습니다.");
-
-    let newItem = {
-      discount: Number(discount.value),
-      stampCount: Number(stampCount.value),
-      issueDate: issueDate.value,
-    };
-    couponItem = [newItem, ...couponItem];
-    discount.value = "";
-    stampCount.value = "";
-    issueDate.value = "";
-
-    renderItem();
+    $.post({
+      url: "{% host_url 'create_coupon' host 'owner' %}",
+      header: {
+        "Content-Type": "application/json"
+      },
+      data: parmas,
+      success: (result) => {
+        $('.couponadd_list').empty();
+        couponList.splice(0, couponList.length);
+        allHide();
+        coupon();
+      },
+      error: (result) => {
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        });
+      }
+    })
   }
 
+  // 추가한 쿠폰 array에 추가
+  function addCoupon() {
+    if (inputCheck()) {
+      couponList.push({
+        'coupon_content': $('#discount').val(),
+        'coupon_count': $('#dis_stamp_count').val(),
+        'coupon_start_dttm': $('#dis_issue_date').val(),
+      })
+    }
 
-  function renderItem() {
-    couponList.innerHTML = couponItem.map((value, index) => (
-      `
-      <li class="item">
-        <div class="order">
-          <span class="order_number">
-            ${index + 1}
-          </span>
-        </div>
-        <div class="text_box">
-          <p class="text">
-            ${value.discount.toLocaleString()}
-          </p>
-          <p class="text">
-            ${value.stampCount}
-          </p>
-          <p class="text">
-            ${value.issueDate}
-          </p>
-        </div>
-        <div class="button_wrap">
-          <button class="content_btn btn_fill" onclick="onDeleteCouponItem('${index}')">삭제</button>
-        </div>
-      </li>
-      `
-    )).join("")
+    console.log($('#discount').val());
+    console.log($('#dis_stamp_count').val());
+    console.log($('#dis_issue_date').val());
+
+    console.log(couponList);
+
+    viewAddCoupon(couponList);
   }
+
+  // 추가한 쿠폰 리스트에 추가
+  function viewAddCoupon(arr) {
+    $('.couponadd_list').empty();
+
+    arr.forEach((item, idx, arr) => {
+      $('.couponadd_list').append(`
+        <li class="item" data-index="${idx}">
+          <div class="order">
+            <span class="order_number">
+              ${idx + 1}
+            </span>
+          </div>
+          <div class="text_box">
+            <p class="text">
+              ${item.coupon_content}
+            </p>
+            <p class="text">
+              ${item.coupon_count}
+            </p>
+            <p class="text">
+              ${item.coupon_start_dttm}
+            </p>
+          </div>
+          <div class="button_wrap">
+            <button class="content_btn btn_fill" onclick="removeCoupon(${idx})">삭제</button>
+          </div>
+        </li>
+    `);
+    })
+  }
+
+  // 모달 쿠폰 목록 지우기
+  function removeCoupon(idx) {
+    couponList.splice(idx, 1);
+    $(`.couponadd_list .item[data-index='${idx}']`).remove();
+  }
+
+  function inputCheck() {
+    if ($('#discount').val() == '') { alert('할인금액을 입력해주세요.'); return false; }
+    else if ($('#dis_stamp_count').val() == '') { alert('스템프 갯수를 입력해주세요.'); return false; }
+    else if ($('#dis_issue_date').val() == '') { alert('발급일자를 입력해주세요.'); return false; }
+    else { return true; }
+  }
+
 
   ////////////////////////////////////////////////////////////
+
+  var couponInputAll = document.querySelectorAll(".couponadd_input");
   var couponInput = document.querySelector(".couponadd_input");
   var couponAddNumberPad = document.querySelectorAll(".number_pad button");
 

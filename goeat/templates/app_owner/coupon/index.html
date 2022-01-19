@@ -23,7 +23,7 @@
         </span>
         <input class="end_datepicker" readonly />
       </p>
-      <button class="btn_fill">
+      <button class="btn_fill" onclick="readCouponUse()">
         날짜변경
       </button>
     </div>
@@ -64,8 +64,12 @@
 
     <div class="coupon_table">
       <div class="table_wrap">
-        <p class="table_title">
+        <h2 class="table_title">
           현재 등록된 쿠폰
+        </h2>
+
+        <p class="table_title">
+          사이드 메뉴 쿠폰
         </p>
         <div class="table_hader table_layout">
           <div>사이드 메뉴</div>
@@ -112,8 +116,11 @@
         </ul>
       </div>
       <div class="table_wrap">
-        <p class="table_title">지난 등록된 쿠폰</p>
+        <h2 class="table_title">지난 등록된 쿠폰</h2>
 
+        <p class="table_title">
+          사이드 메뉴 쿠폰
+        </p>
         <div class="table_hader table_layout">
           <div>사이드 메뉴</div>
           <div>스탬프 갯수</div>
@@ -167,91 +174,28 @@
         날짜/시간
       </div>
       <div class="record_count">
-        적립 갯수
+        사용한 쿠폰
       </div>
       <div class="record_info">
         휴대폰 뒷4자리/아이디
       </div>
     </div>
     <ul class="record_list scroll_style">
+
       <li class="record_item record_layout">
         <p class="record_date">
           2021.07.28 AM 12:29
         </p>
         <p class="record_count">
-          99개 적립
+          감자튀김
         </p>
         <p class="record_info">
           1234 (#AABB)
         </p>
       </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          99개 적립
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
+
     </ul>
   </div>
 </div>
 {% include 'app_owner/base/date.html' %}
+{% include 'app_owner/coupon/js.html' %}
