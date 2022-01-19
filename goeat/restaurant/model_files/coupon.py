@@ -42,6 +42,8 @@ class ResCouponLog(models.Model):
 
     # 음식점
     res_coupon = models.ForeignKey('restaurant.ResCoupon',on_delete=models.CASCADE)
+    # 사용자
+    user = models.ForeignKey('accounts.User',on_delete=models.CASCADE)
     # 쿠폰 처리 시간
     log_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
