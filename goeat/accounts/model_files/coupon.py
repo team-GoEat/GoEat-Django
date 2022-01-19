@@ -33,6 +33,8 @@ class UserCoupon(models.Model):
     user = models.ForeignKey('accounts.User',on_delete=models.CASCADE)
     # 음식점
     restaurant = models.ForeignKey('restaurant.Restaurant',on_delete=models.CASCADE)
+    # 유저 쿠폰 키
+    user_coupon_key = models.CharField(unique=True, max_length=20)
     # 쿠폰 타입 - True : 사이드메뉴 , False : 할인쿠폰
     user_coupon_type = models.BooleanField(default=True)
     # 쿠폰 사용여부 - Ture : 사용완료 , False : 사용대기
@@ -56,7 +58,7 @@ class UserCouponApply(models.Model):
     # 쿠폰
     user_coupon = models.ForeignKey('accounts.UserCoupon',on_delete=models.CASCADE)
     # 스탬프 상태 True : 처리완료 , False : 처리대기
-    is_coupon = models.BooleanField(null=False, default=False)
+    is_coupon = models.BooleanField(default=False)
     # 요청시간
     coupon_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
