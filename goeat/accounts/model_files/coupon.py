@@ -36,13 +36,13 @@ class UserCoupon(models.Model):
     # 쿠폰 타입 - True : 사이드메뉴 , False : 할인쿠폰
     user_coupon_type = models.BooleanField(default=True)
     # 쿠폰 사용여부 - Ture : 사용완료 , False : 사용대기
-    user_coupon_count = models.BooleanField(default=False)
-    # 쿠퐁 항목 ( 감자튀김 , 치킨 등 ) or 할인금액
+    user_coupon_state = models.BooleanField(default=False)
+    # 쿠폰 항목 ( 감자튀김 , 치킨 등 ) or 할인금액
     user_coupon_content = models.CharField(max_length=30)
     # 쿠폰 만료 시작 날짜
-    user_coupon_start_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
-    # 쿠폰  만료 종료 날짜
-    user_coupon_end_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
+    user_coupon_start_dttm = models.DateTimeField(auto_now_add=False,auto_now=False)
+    # 쿠폰 만료 종료 날짜
+    user_coupon_end_dttm = models.DateTimeField(auto_now_add=False,auto_now=False)
     # 쿠폰 발행 날짜
     user_coupon_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
