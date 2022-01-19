@@ -23,7 +23,7 @@
         </span>
         <input class="end_datepicker" readonly />
       </p>
-      <button class="btn_fill" onclick="readCouponUse()">
+      <button class="btn_fill" id="read_coupon_log_btn">
         날짜변경
       </button>
     </div>
@@ -33,10 +33,10 @@
       </span>
       <div class="used_desc">
         <p class="used_date">
-          2021.10.10 ~ 2021.10.30
+          <span class="coupon_log_start_dttm"></span> ~ <span class="coupon_log_end_dttm"></span>
         </p>
         <p>
-          총 사용 갯수 : 1000개
+          총 사용 갯수 : <span class="coupon_log_count"></span>개
         </p>
       </div>
     </div>
@@ -180,19 +180,9 @@
         휴대폰 뒷4자리/아이디
       </div>
     </div>
-    <ul class="record_list scroll_style">
+    <ul class="record_list scroll_style" id="coupon_log_list">
 
-      <li class="record_item record_layout">
-        <p class="record_date">
-          2021.07.28 AM 12:29
-        </p>
-        <p class="record_count">
-          감자튀김
-        </p>
-        <p class="record_info">
-          1234 (#AABB)
-        </p>
-      </li>
+
 
     </ul>
   </div>

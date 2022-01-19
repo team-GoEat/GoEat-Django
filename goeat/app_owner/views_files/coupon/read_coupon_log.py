@@ -3,27 +3,20 @@ from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.urls import reverse
 
-from restaurant.model_files.coupon import ResCoupon
+from restaurant.model_files.coupon import ResCoupon, ResCouponLog
 
 import datetime
 
 class Views_Controls(View):
     def post(self, request):
 
-        # today
-        now = datetime.datetime.now()
+        start_dttm = datetime.datetime.strptime(request.POST['start_dttm'], '%Y.%m.%d')
+        end_dttm = (datetime.datetime.strptime(request.POST['end_dttm'], '%Y.%m.%d') + datetime.timedelta(days=1)) - datetime.timedelta(seconds=1)
 
-        # 해당 음식점의 쿠폰 전체 데이터
-        coupon_data = ResCoupon.objects.filter(restaurant_id=request.session['res_id'])
-
-        # 해당 음식점의 사용 가능한 쿠폰 데이터
-        usable_coupon = coupon_data.filter(coupon_end_dttm__gte = now)
-        # 해당 음식점의 사용 불가능한 쿠폰 데이터
-        unusable_coupon = coupon_data.filter(coupon_end_dttm__lte = now)
+        coupon_log = ResCouponLog.objects.filter(log_create_dttm__range=[start_dttm, end_dttm]).order_by('-id')
         
         context = {
-            'usable_coupon': usable_coupon,
-            'unusable_coupon': unusable_coupon,
+            'coupon_log': coupon_log
         }
 
-        return render(request, 'app_owner/coupon/index.html', context)
+        return render(request, 'app_owner/coupon/log/index.html', context)

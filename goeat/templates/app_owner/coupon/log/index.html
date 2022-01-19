@@ -1,0 +1,18 @@
+{% load hosts %}
+{% load static %}
+{% load slice %}
+
+{% for item in coupon_log %}
+<li class="record_item record_layout">
+    <p class="record_date">
+        {{ item.log_create_dttm|date:'Y.m.d H:i:s' }}
+        <!-- 2021.07.28 AM 12:29 -->
+    </p>
+    <p class="record_count">
+        {{ item.res_coupon.coupon_content }}
+    </p>
+    <p class="record_info">
+        {{ item.user.username|phone_slice }} (#{{ item.user.goeat_id }})
+    </p>
+</li>
+{% endfor %}

@@ -2,8 +2,44 @@
 {% load static %}
 
 <script>
-    function readCouponUse() {
-        console.log($('.coupon_box .start_datepicker').val());
-        console.log($('.coupon_box .end_datepicker').val());
+
+    readCouponUse((len, start_dttm, end_dttm) => {
+        $('.coupon_log_start_dttm').text(start_dttm);
+        $('.coupon_log_end_dttm').text(end_dttm);
+        $('.coupon_log_count').text(len);
+    });
+
+
+    $('#read_coupon_log_btn').click(() => {
+        readCouponUse((len, start_dttm, end_dttm) => {
+            $('.coupon_log_start_dttm').text(start_dttm);
+            $('.coupon_log_end_dttm').text(end_dttm);
+            $('.coupon_log_count').text(len);
+        });
+    })
+
+    function readCouponUse(callback) {
+        $.post({
+            url: "{% host_url 'read_coupon_log' host 'owner' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: {
+                'start_dttm': $('.coupon_box .start_datepicker').val(),
+                'end_dttm': $('.coupon_box .end_datepicker').val(),
+            },
+            success: (result) => {
+                $('#coupon_log_list').empty();
+                $('#coupon_log_list').html(result);
+
+                callback($('.record_item').length, $('.coupon_box .start_datepicker').val(), $('.coupon_box .end_datepicker').val());
+            },
+            error: (result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
+            }
+        })
     }
 </script>
