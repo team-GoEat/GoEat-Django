@@ -1,6 +1,7 @@
 {% load static %}
 {% load hosts %}
 {% load version %}
+{% load humanize %}
 
 <link rel="stylesheet" href="{% static 'app_owner/base/css/date.css' %}?version={{ 'version'|version }}">
 <link rel="stylesheet" href="{% static 'app_owner/base/css/record.css' %}?version={{ 'version'|version }}">
@@ -33,13 +34,13 @@
         </span>
         <div class="pay_desc">
           <p class="pay_month">
-            10월
+            {{month}}월
           </p>
           <p>
-            총 적립: 1000개
+            총 적립: {{month_count|intcomma}}개
           </p>
           <p>
-            100,000원 출금 예정
+            {{month_point|intcomma}}원 출금 예정
           </p>
         </div>
       </div>
@@ -52,10 +53,10 @@
             {{start_dttm}} ~ {{end_dttm}}
           </p>
           <p>
-            총 적립 : 1000개
+            총 적립 : {{days_count|intcomma}}개
           </p>
           <p>
-            100,000원 출금 예정
+            {{days_point|intcomma}}원 출금 예정
           </p>
         </div>
       </div>
@@ -67,7 +68,7 @@
           스탬프 적립
         </span>
         <span>
-          최소주문금액 : 100,000원
+          최소주문금액 : {{min_price|intcomma}}원
         </span>
       </p>
       <div class="button_wrap">
