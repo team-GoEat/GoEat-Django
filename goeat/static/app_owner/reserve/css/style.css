@@ -220,13 +220,21 @@
   flex-direction: column;
 }
 
+.reserve_list .layout_note .button_box .btn .limit_time {
+  height: 20px;
+}
+
 .reserve_list .layout_note .button_box .btn:first-child {
   margin-right: 12px;
 }
 .reserve_list .layout_note .button_box .btn span {
   font-size: 10px;
   text-align: center;
+  height: 20px;
+  display: flex;
+  align-items: center;
 }
+
 .reserve_list .layout_note .button_box .btn button {
   width: 90px;
   height: 25px;
