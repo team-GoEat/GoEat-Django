@@ -9,10 +9,10 @@
         <!-- 2021.07.28 AM 12:29 -->
     </p>
     <p class="record_count">
-        {{ item.res_coupon.coupon_content }}
+        {{ item.user_coupon.user_coupon_content }}
     </p>
     <p class="record_info">
-        {{ item.user.username|phone_slice }} (#{{ item.user.goeat_id }})
+        {{ item.user_coupon.user.username|phone_slice }} (#{{ item.user_coupon.user.goeat_id }})
     </p>
 </li>
 {% endfor %}

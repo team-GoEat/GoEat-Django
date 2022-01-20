@@ -1,4 +1,91 @@
+{% load hosts %}
+{% load static %}
+
 <script>
+  var selectInput = document.querySelector(".coupon_select_input");
+  var options = document.querySelector(".select_option");
+  var option = document.querySelectorAll(".select_option li");
+  var selectCoupon;
+
+  function selectCouponUse() {
+    $.post({
+      url: "{% host_url 'select_coupon_use' host 'owner' %}",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      data: {
+        'user_coupon_id': selectCoupon
+      },
+      success: (result) => {
+        Swal.fire({
+          icon: 'success',
+          text: '쿠폰이 성공적으로 사용되었습니다.',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        }).then((result) => {
+          if (result.value) {
+            modalClose();
+
+            readCouponUse((len, start_dttm, end_dttm) => {
+              $('.coupon_log_start_dttm').text(start_dttm);
+              $('.coupon_log_end_dttm').text(end_dttm);
+              $('.coupon_log_count').text(len);
+            });
+          }
+        });
+      },
+      error: (result) => {
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
+      }
+    })
+  }
+
+  function readPhone() {
+    $.post({
+      url: "{% host_url 'read_phone' host 'owner' %}",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      data: {
+        'phone': $('#coupon_phon').val()
+      },
+      success: (result) => {
+        if (result === 'fail') {
+          $('.search_result').removeClass('on');
+          $('.search_not').addClass('on');
+        } else {
+          selectCoupon = '';
+          $('.coupon_select_input').val('');
+
+          $('.search_not').removeClass('on');
+          $('.search_result').addClass('on');
+
+          $('.select_option').empty();
+          $('.select_option').html(result);
+
+          option = document.querySelectorAll(".select_option li");
+
+          option.forEach(el => {
+            el.addEventListener('click', e => {
+              selectCoupon = e.target.getAttribute('data-coupon-id');
+              selectInput.value = e.target.textContent.trim();
+              options.classList.remove("on");
+            })
+          })
+        }
+      },
+      error: (result) => {
+        Swal.fire({
+          icon: 'warning',
+          text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#ff0034'
+        })
+      }
+    })
+  }
+
   //휴대폰 번호 
   var couponPhoneNumber = "";
   var couponPhoneInput = document.querySelector('#coupon_phon');
@@ -21,18 +108,7 @@
     couponPhoneInput.value = inputPhoneNumber(couponPhoneNumber);
   }
 
-  var selectInput = document.querySelector(".coupon_select_input");
-  var options = document.querySelector(".select_option");
-  var option = document.querySelectorAll(".select_option li");
-
   function onClickSelectBox() {
     options.classList.toggle("on");
   }
-
-  option.forEach(el => {
-    el.addEventListener('click', e => {
-      selectInput.value = e.target.textContent.trim();
-      options.classList.remove("on");
-    })
-  })
 </script>

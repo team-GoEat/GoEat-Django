@@ -85,6 +85,11 @@
 
 .search_result {
   font-size: 20px;
+  display: none;
+}
+
+.search_result.on {
+  display: block;
 }
 
 .search_result .title {
@@ -97,6 +102,11 @@
 .search_not {
   font-size: 18px;
   color: #ff0034;
+  display: none;
+}
+
+.search_not.on {
+  display: block;
 }
 
 /* ///////////////////////////////// */

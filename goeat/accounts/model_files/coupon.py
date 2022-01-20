@@ -48,8 +48,8 @@ class UserCoupon(models.Model):
     # 쿠폰 발행 날짜
     user_coupon_create_dttm = models.DateTimeField(auto_now_add=True,auto_now=False)
 
-    def __str__(self):
-        return '{} {}'.format(self.restaurant, self.service_exp)
+    # def __str__(self):
+    #     return '{} {}'.format(self.restaurant, self.service_exp)
 
 # 쿠폰 사용신청
 class UserCouponApply(models.Model):

@@ -9,5 +9,4 @@ class Views_Controls(View):
         print('coupon')
         context = {}
 
-        return render(request, 'app_owner/coupon/modal/use/index.html',
-                      context)
+        return render(request, 'app_owner/coupon/modal/use/index.html', context)

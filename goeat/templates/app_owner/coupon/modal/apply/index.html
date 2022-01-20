@@ -10,30 +10,32 @@
   <li class="coupon_item">
     <div class="user">
       <p class="title">
-        010-2111-1111
+        {{ item.user.username }}
       </p>
       <p class="desc">
-        닉네임(#AAAA)
+        {{ item.user.name }}(#{{ item.user.goeat_id }})
       </p>
     </div>
     <div class="coupon_info">
       <p class="coupon_name">
-        1,000원 할인쿠폰
+        {{ item.user_coupon.user_coupon_content }}
       </p>
       <p class="coupon_code">
-        AASDFSOCNSKHD
+        {{ item.user_coupon.user_coupon_key }}
       </p>
       <p class="coupon_expiry">
-        유효기간: 21.10.26 ~ 22.04.26
+        유효기간: {{ item.user_coupon.user_coupon_start_dttm|date:'y.m.d' }} ~ {{ item.user_coupon.user_coupon_end_dttm|date:'y.m.d' }}
       </p>
     </div>
     <div class="other">
-      <span class="other_time">2021.10.21 AM 11:59</span>
+      <span class="other_time">{{ item.coupon_create_dttm|date:'Y.m.d H:i' }}</span>
       <div class="button_wrap">
-        <button class="btn_fill" onclick="couponUse()">적립하기</button>
-        <button class="btn_border">취소하기</button>
+        <button class="btn_fill" onclick="applyCouponConfirm('{{item.id}}')">확인하기</button>
+        <button class="btn_border" onclick="applyCouponCancel('{{item.id}}')">취소하기</button>
       </div>
     </div>
   </li>
   {% endfor %}
 </ul>
+
+{% include 'app_owner/coupon/modal/apply/js.html' %}

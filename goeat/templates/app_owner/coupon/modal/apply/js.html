@@ -1,0 +1,72 @@
+{% load hosts %}
+{% load static %}
+
+<script>
+    function applyCouponConfirm(apply_id) {
+        $.post({
+            url: "{% host_url 'coupon_apply_confirm' host 'owner' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: {
+                'apply_id': apply_id,
+            },
+            success: (result) => {
+                Swal.fire({
+                    icon: 'success',
+                    text: '쿠폰 사용이 완료되었습니다.',
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                }).then((result) => {
+                    if (result.value) {
+                        modalClose();
+                        couponApply();
+
+                        readCouponUse((len, start_dttm, end_dttm) => {
+                            $('.coupon_log_start_dttm').text(start_dttm);
+                            $('.coupon_log_end_dttm').text(end_dttm);
+                            $('.coupon_log_count').text(len);
+                        });
+                    }
+                });
+            },
+            error: (result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
+            }
+        })
+    }
+
+    function applyCouponCancel(apply_id) {
+        $.post({
+            url: "{% host_url 'coupon_apply_cancel' host 'owner' %}",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            data: {
+                'apply_id': apply_id,
+            },
+            success: (result) => {
+                Swal.fire({
+                    icon: 'success',
+                    text: '쿠폰 사용이 취소되었습니다.',
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                }).then((result) => {
+                    if (result.value) {
+                        modalClose();
+                        couponApply();
+                    }
+                });
+            },
+            error: (result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                    confirmButtonText: '확인',
+                    confirmButtonColor: '#ff0034'
+                })
+            }
+        })
+    }
+</script>

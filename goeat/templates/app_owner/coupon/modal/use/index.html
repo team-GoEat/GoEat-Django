@@ -24,33 +24,25 @@
               <img class="down_arrow" src="{% static 'app_owner/base/images/down_arrow.svg' %}" alt="">
             </div>
             <ul class="select_option">
-              <li>
-                1,000원 할인
-              </li>
-              <li>
-                2,000원 할인
-              </li>
-              <li>
-                3,000원 할인
-              </li>
-              <li>
-                감자튀김
-              </li>
+
+
+
             </ul>
           </div>
         </div>
       </div>
       <div class="number_desc">
-        <!-- <div class="search_result">
+        <div class="search_result">
           <p>
             <span class="title">이름 : </span>
-            <span class="value">이준석</span>
+            <span class="value" id="search_name"></span>
           </p>
           <p>
             <span class="title">아이디 : </span>
-            <span class="value">MFNJ</span>
+            <span class="value" id="search_id"></span>
           </p>
-        </div> -->
+        </div>
+
         <div class="search_not">
           <p>
             없는 이름 / 아이디 입니다.<br />
@@ -61,15 +53,15 @@
 
       </div>
       <div class="button_wrap">
-        <button class="btn_fill">
-          확인 하기
+        <button class="btn_fill" onclick="readPhone()">
+          확인하기
         </button>
         <div class="button_wrap">
           <button class="btn_fill" onclick="modalClose()">
-            취소 하기
+            취소하기
           </button>
-          <button class="btn_border">
-            적립 하기
+          <button class="btn_border" onclick="selectCouponUse()">
+            사용하기
           </button>
         </div>
       </div>

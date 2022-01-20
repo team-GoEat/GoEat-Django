@@ -1,0 +1,13 @@
+{% load hosts %}
+{% load static %}
+
+{% for item in coupon_list %}
+<li data-coupon-id="{{ item.id }}">
+    {{ item.user_coupon_content }}
+</li>
+{% endfor %}
+
+<script>
+    $('#search_name').text('{{user.name}}');
+    $('#search_id').text('{{user.goeat_id}}');
+</script>

@@ -135,7 +135,7 @@
   async function couponApply() {
     let result = await DomCallback("{% host_url 'coupon_apply' host 'owner' %}", {});
     if (result.result) {
-      modalShow('쿠폰 적립 신청 내역', result);
+      modalShow('쿠폰 사용 신청 내역', result);
     }
   }
 
