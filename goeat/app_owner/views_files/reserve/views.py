@@ -58,7 +58,7 @@ class Views_Controls(View):
             # 예약취소
             elif not item.is_active and item.is_accepted:
                 count_set['cancel_count'] += 1
-                
+
         ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).update(is_view=True)
 
         context = {

@@ -34,6 +34,8 @@ if os.environ.get('DJANGO_DEBUG', False):
 else:
     DEBUG = True
 
+DEBUG = True
+
 ALLOWED_HOSTS = ['*']
 
 # Application definition
