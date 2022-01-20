@@ -37,8 +37,6 @@ class Views_Controls(View):
             'cancel_count': 0, # 예약 취소 횟수
         }
 
-        print(reservation)
-
         for item in reservation:
             # 예약신청
             count_set['apply_count'] += 1
@@ -60,11 +58,7 @@ class Views_Controls(View):
             # 예약취소
             elif not item.is_active and item.is_accepted:
                 count_set['cancel_count'] += 1
-
-            
-
-        print(count_set)
-
+                
         ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).update(is_view=True)
 
         context = {

@@ -61,11 +61,10 @@
         </div>
     </div>
     <div class="layout_time">
-        <p class="date">{{ item.res_deadline_time|date:"Y.m.d" }}</p>
         <div class="time">
             <img class="time_icon" src="{% static 'app_owner/base/images/stopwatch.svg' %}" alt="">
             <span class="time_text">
-                {{ item.res_deadline_time|date:"H:i" }}
+                약 {{ item.additional_time }}분후
             </span>
         </div>
     </div>

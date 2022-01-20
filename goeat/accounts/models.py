@@ -393,6 +393,12 @@ class ResReservationRequest(models.Model):
         self.res_state = msg
         self.is_active = False
         self.is_accepted = False
+        self.res_expect_time = timezone.now()
+
+        if msg == '무응답':
+            self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time) + datetime.timedelta(minutes = 3)
+        else:
+            self.res_deadline_time = timezone.now()
         
         # 푸쉬 알림
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
