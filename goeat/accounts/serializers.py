@@ -188,8 +188,8 @@ class FavResSerializer(serializers.ModelSerializer):
 #############################################################################################
 """
 class AlarmSerializer(serializers.ModelSerializer):
-    sender_id = serializers.CharField(source='sender.name', allow_null=True)
-    receiver_id = serializers.CharField(source='receiver.name', allow_null=True)
+    sender_id = serializers.CharField(source='sender.name', allow_null=True) #없애도됨
+    receiver_id = serializers.CharField(source='receiver.name', allow_null=True) #없애도됨
     sender_name = serializers.CharField(source='sender.name', allow_null=True)
     receiver_name = serializers.CharField(source='receiver.name', allow_null=True)
     res_name = serializers.CharField(source='res_sender.res_name', allow_null=True)
@@ -197,7 +197,7 @@ class AlarmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Alarm
-        fields = ('id', 'sender_id', 'receiver_id', 'sender_name', 'receiver_name', 'res_name', 'message', 'is_read', 'sent_date')
+        fields = ('id', 'sender_id', 'receiver_id', 'sender_name', 'receiver_name', 'res_name', 'message', 'res_state', 'is_read', 'sent_date')
 
 
 """

@@ -406,7 +406,7 @@ class ResReservationRequest(models.Model):
             push_team_request(token.fcm_token, '예약이 거절되었어요! ({})'.format(msg), self.receiver.res_name)
         
         # 알림
-        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=5)
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=5, res_state=msg)
         
         self.save()
         
@@ -424,7 +424,7 @@ class ResReservationRequest(models.Model):
             push_team_request(token.fcm_token, '예약이 취소되었어요! ({})'.format(msg), self.receiver.res_name)
         
         # 알림
-        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=6)
+        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=6, res_state=msg)
         
         self.save()
 
@@ -459,8 +459,10 @@ class Alarm(models.Model):
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='alarm_receiver', blank=True, null=True)
     # 음식점
     res_sender = models.ForeignKey(Restaurant, on_delete=models.CASCADE, blank=True, null=True)
-    # 프론트에서 나올 메시지 (1=친구추가)
+    # 프론트에서 나올 메시지 ex) 1=친구추가
     message = models.IntegerField(default=0)
+    # 예약 알림 사유
+    res_state = models.CharField(max_length=30, default='')
     # 읽음 여부
     is_read = models.BooleanField(default=False)
     # 시간

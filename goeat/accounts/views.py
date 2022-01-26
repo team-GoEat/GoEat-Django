@@ -1648,7 +1648,7 @@ def get_user_recent_reserve(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     
     try:
-        resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)[0]
+        resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id).latest('res_start_time')
     # 예약을 단 한번도 하지 않았으면
     except:
         return Response({}, status=200)
