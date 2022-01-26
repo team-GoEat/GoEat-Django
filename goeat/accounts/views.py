@@ -1638,7 +1638,7 @@ def user_reserve_res(request, *args, **kwargs):
 def user_reserve_list(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     
-    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id)
+    resRes = ResReservationRequest.objects.filter(sender__goeat_id=user_id).order_by('-res_start_time')
     serializer = UserReservationSerializer(resRes, many=True)
     return Response(serializer.data, status=200)
 
