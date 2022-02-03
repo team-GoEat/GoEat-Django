@@ -1216,9 +1216,9 @@ def team_accept(request, *args, **kwargs):
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         if teamrequest.is_active:
             teamrequest.accept()
-            # Alarm.objects.create(sender=receiver, receiver=sender, message=2)
-            # for token in sender_tokens:
-            #     push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '확인해주세요!')
+            Alarm.objects.create(sender=receiver, receiver=sender, message=2)
+            for token in sender_tokens:
+                push_team_request(token.fcm_token, '친구 요청이 승인되었어요!', '{}님이 친구 신청을 수락하였습니다.'.format(sender.name))
             return JsonResponse({'msg': '팀원 요청을 승낙하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
         else:
             return JsonResponse({'msg': '팀원 요청이 이미 완료되었습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
@@ -1248,9 +1248,9 @@ def team_reject(request, *args, **kwargs):
     try:
         teamrequest = TeamRequest.objects.get(sender=sender, receiver=receiver)
         teamrequest.decline()
-        # Alarm.objects.create(sender=receiver, receiver=sender, message=3)
-        # for token in sender_tokens:
-        #     push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '확인해주세요!')
+        Alarm.objects.create(sender=receiver, receiver=sender, message=3)
+        for token in sender_tokens:
+            push_team_request(token.fcm_token, '친구 요청이 거절되었어요!', '{}님이 친구 신청을 거절하였습니다.'.format(sender.name))
         teamrequest.delete()
         return JsonResponse({'msg': '팀원 요청을 거절하였습니다.'}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii':True})
     except TeamRequest.DoesNotExist:
