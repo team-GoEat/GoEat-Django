@@ -78,8 +78,10 @@
             headers: { "X-CSRFToken": "{{ csrf_token }}" },
             data: { list_id: '' },
             success: (result) => {
-                $('.table_content').prepend(result);
-                closefrm.sound();
+                if (result != "") {
+                    $('.table_content').prepend(result);
+                    closefrm.sound();
+                }
             },
             error: (result) => {
                 Swal.fire({
