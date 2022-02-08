@@ -16,11 +16,6 @@
   var CouponStartDttm, CoupoEndDttm; // 쿠폰 날짜조회 Date
   var StampStartDttm, StampeEndDttm; // 스탬프 날짜조회 Date
 
-
-  var audio = new Audio("{% static 'goeat_reserve.mp3' %}");
-  audio.volume = 1;
-  audio.loop = false;
-
   // 포스기 꺼져 있는지 체크
   var posInterval = setInterval(() => {
     $.post({
@@ -398,8 +393,7 @@
     }).then((result) => {
       if (result.value) {
         onClickToggle($('.toggle'), false);
-        // closefrm.exit();
-        closefrm.sound();
+        closefrm.exit();
       }
     });
   }

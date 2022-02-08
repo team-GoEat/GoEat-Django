@@ -79,6 +79,7 @@
             data: { list_id: '' },
             success: (result) => {
                 $('.table_content').prepend(result);
+                closefrm.sound();
             },
             error: (result) => {
                 Swal.fire({
