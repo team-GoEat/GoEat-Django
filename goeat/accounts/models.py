@@ -417,7 +417,7 @@ class ResReservationRequest(models.Model):
         self.is_active = False
         if msg == '예약 취소(고객 노쇼)':
             self.is_noshow = True
-            
+        
         # 푸쉬 알림
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
         for token in receiver_tokens:
