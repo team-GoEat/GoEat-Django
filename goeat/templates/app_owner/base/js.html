@@ -16,6 +16,11 @@
   var CouponStartDttm, CoupoEndDttm; // 쿠폰 날짜조회 Date
   var StampStartDttm, StampeEndDttm; // 스탬프 날짜조회 Date
 
+
+  var audio = new Audio("{% static 'goeat_reserve.mp3' %}");
+  audio.volume = 1;
+  audio.loop = false;
+
   // 포스기 꺼져 있는지 체크
   var posInterval = setInterval(() => {
     $.post({
@@ -181,7 +186,7 @@
 
   /* ================= toggle function ================= */
 
-  function onClickToggle(el) {
+  function onClickToggle(el, state = true) {
 
     $(el).css('point-events', 'none');
 
@@ -195,7 +200,7 @@
     }
     else $(el).addClass('on');
 
-    is_reserve(is_toggle);
+    is_reserve(is_toggle, state);
 
     $(el).css('point-events', 'default');
   }
@@ -392,7 +397,9 @@
       confirmButtonColor: '#ff0034'
     }).then((result) => {
       if (result.value) {
-        closefrm.exit();
+        onClickToggle($('.toggle'), false);
+        // closefrm.exit();
+        closefrm.sound();
       }
     });
   }
@@ -428,7 +435,7 @@
   }
 
 
-  function is_reserve(reserve) {
+  function is_reserve(reserve, state) {
 
     var params = {
       'csrfmiddlewaretoken': '{{ csrf_token }}',
@@ -440,12 +447,15 @@
       type: "POST",
       data: params,
       success: function (result) {
-        Swal.fire({
-          icon: 'success',
-          text: '상태가 변경되었습니다.',
-          confirmButtonText: '확인',
-          confirmButtonColor: '#ff0034'
-        })
+        if (state) {
+          Swal.fire({
+            icon: 'success',
+            text: '상태가 변경되었습니다.',
+            confirmButtonText: '확인',
+            confirmButtonColor: '#ff0034'
+          })
+        }
+
       },
       error: function (result) {
         Swal.fire({
