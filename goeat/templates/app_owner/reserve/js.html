@@ -49,6 +49,8 @@
                         msg: '무응답'
                     });
 
+                    onClickToggle($('.toggle'), false);
+
                 }
 
             }
@@ -76,7 +78,10 @@
             headers: { "X-CSRFToken": "{{ csrf_token }}" },
             data: { list_id: '' },
             success: (result) => {
-                $('.table_content').prepend(result);
+                if (result != "") {
+                    $('.table_content').prepend(result);
+                    closefrm.sound();
+                }
             },
             error: (result) => {
                 Swal.fire({
@@ -91,20 +96,16 @@
 
 
     async function submit_reserveReject() {
-
         _reason = $("input[name='reject']:checked").val();
         modalClose();
         update(_elem, _list_id, 'reject', _reason);
     }
-
-
 
     async function submit_reserveCancel() {
         _reason = $("input[name='cancel']:checked").val();
         modalClose();
         update(_elem, _list_id, 'cancel', _reason);
     }
-
 
     function update(elem, list_id, type, msg = '') {
 
@@ -137,10 +138,12 @@
 
                         if (type == 'accept') {
                             if (index == 0) $('.table_content').prepend(result);
-                            else $(result).insertAfter($('.table_content li').eq(index - 1)[0]);
+                            else {
+                                $(result).insertAfter($($(".reserve_idx")[$(".reserve_idx").length - 1]).parents("li"));
+                            }
                         }
                         else {
-                            $('.table_content').append(result);
+                            $(result).insertAfter($($(".reserve_idx")[$(".reserve_idx").length - 1]).parents("li"));
                         }
                     },
                     error: (result) => {

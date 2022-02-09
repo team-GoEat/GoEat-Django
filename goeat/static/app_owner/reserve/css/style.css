@@ -61,7 +61,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
 }
 .reserve_table .layout > div {
   padding: 0 5px;
@@ -84,6 +83,12 @@
   width: 19%;
   text-align: center;
 }
+
+.layout_status_span {
+  display: block;
+  padding-left: 5%;
+}
+
 .reserve_table .layout .layout_note {
   width: 30%;
   padding-right: 10px;

@@ -27,7 +27,7 @@
             <span class="person_text">{{ item.additional_person }}명 방문완료</span>
         </div>
         <p class="grade">
-            <span>매너 등급</span>
+            <span>매너 등급 </span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>
@@ -40,14 +40,14 @@
         </p>
     </div>
     <div class="layout_status">
-        <span>
+        <span class="layout_status_span">
             {{ item.res_state }}
         </span>
     </div>
 
     <div class="layout_note">
         <span class="tel">
-            050-2923-1111
+            {{ item.sender.username }}
         </span>
     </div>
 </li>
@@ -88,8 +88,8 @@
         </p>
     </div>
     <div class="layout_status">
-        <span>
-            {{ item.res_state }}
+        <span class="layout_status_span">
+            {{ item.sender.username }}
         </span>
     </div>
 
@@ -146,7 +146,7 @@
         </p>
     </div>
     <div class="layout_status">
-        <span>
+        <span class="layout_status_span">
             {{ item.res_state }}
         </span>
     </div>
@@ -159,7 +159,7 @@
             </div>
             <div class="btn reject">
                 <span>
-                    {{ item.receiver.res_telenum }}
+                    {{ item.sender.username }}
                 </span>
                 <button onclick="reserveCancel(this,'{{ item.id }}')">예약 취소</button>
             </div>
@@ -204,14 +204,14 @@
         </p>
     </div>
     <div class="layout_status">
-        <span>
+        <span class="layout_status_span">
             {{ item.res_state }}
         </span>
     </div>
 
     <div class="layout_note">
         <span class="tel">
-            050-2923-1111
+            {{ item.sender.username }}
         </span>
     </div>
 </li>
@@ -253,14 +253,14 @@
         </p>
     </div>
     <div class="layout_status">
-        <span>
+        <span class="layout_status_span">
             {{ item.res_state }}
         </span>
     </div>
 
     <div class="layout_note">
         <span class="tel">
-            050-2923-1111
+            {{ item.sender.username }}
         </span>
     </div>
 </li>
