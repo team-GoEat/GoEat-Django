@@ -186,3 +186,19 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.id, self.res_name)
+    
+    
+"""
+#############################################################################################
+
+                                            지역                                        
+
+#############################################################################################
+"""
+#지역
+class Region(models.Model):
+    # 지역 이름
+    region_name = models.CharField(max_length=30)
+    # 음식점들
+    region_res = models.ManyToManyField(Restaurant, blank=True, null=True)
+    

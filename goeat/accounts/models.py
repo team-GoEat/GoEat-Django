@@ -8,7 +8,7 @@ from accounts.model_files.stamp import *
 from accounts.model_files.coupon import *
 from restaurant.models import (
     Restaurant, MenuCannotEat, MenuSecondClass, MenuFeature,
-    MenuIngredient, MenuType
+    MenuIngredient, MenuType, Region
 )
 from accounts.push_fcm import push_team_request
 
@@ -126,6 +126,9 @@ class User(AbstractUser):
     is_cold_1_points = models.IntegerField(default=0)
     # 뜨거운거 점수
     is_cold_0_points = models.IntegerField(default=0)
+    
+    # 선택한 지역
+    user_region = models.ForeignKey(Region, null=True, on_delete=models.CASCADE)
 
     # 유저 쿠폰 QR코드 URL
     @property
