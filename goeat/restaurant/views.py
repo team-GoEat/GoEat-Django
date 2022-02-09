@@ -6,7 +6,7 @@ import random
 from accounts.models import User
 from restaurant.models import (
     Restaurant, Menu, MenuSecondClass,
-    MenuType, 
+    MenuType, Region
 )
 from restaurant.serializers import (
     SimpleRestaurantSerializer, AutoResSerializer,
@@ -899,5 +899,61 @@ def res_change_reserve(request, *args, **kwargs):
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     restaurant.change_reserve()
+    
+    return Response(status=200)
+
+
+"""
+#############################################################################################
+
+                                        지역 관련
+
+#############################################################################################
+"""
+# 지역 팝업 가져오기
+@api_view(['GET'])
+def get_region_list(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    data = []
+    
+    regions = Region.objects.all()
+    for region in regions:
+        temp = {
+            'region_id': region.id,
+            'region_name': region.region_name,
+            'is_region': False
+        }
+        
+        if user.user_region == region:
+            temp['is_region'] = True
+        
+        data.append(temp)
+    
+    return Response(data, status=200)
+    
+# 사용자 지역 저장
+@api_view(['POST'])
+def save_user_region(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    region_id = request.POST.get('region_id')
+    
+    try:
+        user = User.objects.get(goeat_id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+
+    try:
+        region = Region.objects.get(pk=region_id)
+    except Region.DoesNotExist:
+        return JsonResponse({'msg': '지역이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+    
+    user.user_region = region
+    user.save()
     
     return Response(status=200)

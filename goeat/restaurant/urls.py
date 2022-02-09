@@ -46,6 +46,11 @@ urlpatterns = [
     path('reserve/type/<int:menu_type_id>/', views.get_resreservation_by_menutype_notlogin, name='get_resreservation_by_menutype_notlogin'),
     # 식당 예약 여부 바꾸기
     path('reserve/change/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
+    
+    # 지역 팝업 보여주기
+    path('region/list/<str:user_id>/', views.get_region_list, name='get_region_list'),
+    # 사용자 지역 저장하기
+    path('region/save/<str:user_id>/', views.save_user_region, name='save_user_region'),
 
     # 22가지 랜덤 메뉴
     path('tastemenu/', views.taste_menu, name='taste_menu'),

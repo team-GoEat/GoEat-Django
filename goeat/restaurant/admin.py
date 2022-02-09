@@ -2,11 +2,26 @@ from django.contrib import admin
 from restaurant.models import (
     Restaurant, Menu, MenuIngredient, MenuType,
     MenuCannotEat, MenuFirstClass, MenuSecondClass,
-    MenuFeature,
+    MenuFeature, Region
 )
 from restaurant.model_files.notice import (
     ResNotice, 
 )
+
+"""
+#############################################################################################
+
+                                        지역 어드민
+
+#############################################################################################
+"""
+#지역 어드민
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'region_name']
+    search_fields = ['id', 'region_name']
+
+    class Meta:
+        model = Region
 
 """
 #############################################################################################
@@ -111,6 +126,7 @@ class ResNoticeAdmin(admin.ModelAdmin):
         model = ResNotice
 
 
+admin.site.register(Region, RegionAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(MenuIngredient, MenuIngredientAdmin)

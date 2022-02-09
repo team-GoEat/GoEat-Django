@@ -202,3 +202,5 @@ class Region(models.Model):
     # 음식점들
     region_res = models.ManyToManyField(Restaurant, blank=True, null=True)
     
+    def __str__(self):
+        return '{} {}'.format(self.id, self.region_name)
