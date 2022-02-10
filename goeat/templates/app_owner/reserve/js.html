@@ -48,11 +48,7 @@
                         type: 'reject',
                         msg: '무응답'
                     });
-
-                    onClickToggle($('.toggle'), false);
-
                 }
-
             }
             else {
 
@@ -145,6 +141,9 @@
                         else {
                             $(result).insertAfter($($(".reserve_idx")[$(".reserve_idx").length - 1]).parents("li"));
                         }
+
+                        if (type == "reject" || type == "cancel") onClickToggle($('.toggle'), false);
+
                     },
                     error: (result) => {
                         Swal.fire({
