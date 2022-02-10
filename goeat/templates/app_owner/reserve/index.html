@@ -107,6 +107,12 @@
 
       {% endfor %}
 
+      {% for item in reservation_not_active %}
+
+      {{ request|reserve_set:item|safe }}
+
+      {% endfor %}
+
     </ul>
   </div>
 </div>

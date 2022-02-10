@@ -251,7 +251,7 @@ USE_L10N = True
 USE_TZ = False
 
 # owner static version
-VERSION = 1.0
+VERSION = 2.0
 
 # owner Json Result
 RESULT = {

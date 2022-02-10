@@ -25,8 +25,15 @@ class Views_Controls(View):
 
         reservation = ResReservationRequest.objects.filter(
             receiver_id=request.session['res_id'],
-            res_start_time__range = [start_dttm, end_dttm]
-        ).order_by('-is_active')
+            res_start_time__range = [start_dttm, end_dttm],
+            is_active=True
+        ).order_by('-id')
+
+        reservation_not_active = ResReservationRequest.objects.filter(
+            receiver_id=request.session['res_id'],
+            res_start_time__range = [start_dttm, end_dttm],
+            is_active=False
+        ).order_by('-id')
 
         count_set = {
             'apply_count': 0, # 예약신청 횟수
@@ -63,6 +70,7 @@ class Views_Controls(View):
 
         context = {
             'reservation': reservation,
+            'reservation_not_active':reservation_not_active,
             'start_dttm': datetime.datetime.strftime(start_dttm, '%Y-%m-%d').replace('-', '.'),
             'end_dttm': datetime.datetime.strftime(end_dttm, '%Y-%m-%d').replace('-', '.'),
             'count_set': count_set
