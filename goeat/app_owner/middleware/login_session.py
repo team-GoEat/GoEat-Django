@@ -14,7 +14,7 @@ class session_check(object):
         if hosts == "owner":
             try:
                 if request.session.get('res_id',None) is None:
-                    if 'login' not in request.path and 'signup' not in request.path:
+                    if 'login' not in request.path and 'signup' not in request.path and 'api' not in request.path:
                         return redirect(reverse('login',host='owner'))
 
             except KeyError:
