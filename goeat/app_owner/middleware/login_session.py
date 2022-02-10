@@ -4,6 +4,7 @@ from django_hosts.resolvers import reverse
 from django.http import Http404
 
 class session_check(object):
+    
     def __init__(self, get_response):
         self.get_response = get_response
 

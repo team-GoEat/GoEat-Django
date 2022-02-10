@@ -404,9 +404,9 @@ class ResReservationRequest(models.Model):
             self.res_deadline_time = timezone.now()
         
         # 푸쉬 알림
-        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
-        for token in receiver_tokens:
-            push_team_request(token.fcm_token, '예약이 거절되었어요! ({})'.format(msg), self.receiver.res_name)
+        # receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        # for token in receiver_tokens:
+        #     push_team_request(token.fcm_token, '예약이 거절되었어요! ({})'.format(msg), self.receiver.res_name)
             
         self.save()
 

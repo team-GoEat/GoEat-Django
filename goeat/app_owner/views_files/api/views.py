@@ -22,7 +22,20 @@ class Views_Controls(APIView):
         start_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S')
         end_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S')
 
-        reservation = ResReservationRequest.objects.filter(
+        # 3분이상 지난 예약 무응답으로 전환
+        reserve = ResReservationRequest.objects.filter(
+            receiver__res_pos_id=request.GET['res_id'],
+            receiver__res_pos_pw=request.GET['res_pw'],
+            res_start_time__range = [start_dttm, end_dttm],
+            res_start_time__lt = datetime.datetime.now() + timedelta(minutes=3),
+            is_active=True,
+            is_accepted=False
+        )
+
+        for item in reserve:
+            item.reject('무응답')
+
+        reserve = ResReservationRequest.objects.filter(
             receiver__res_pos_id=request.GET['res_id'],
             receiver__res_pos_pw=request.GET['res_pw'],
             res_start_time__range = [start_dttm, end_dttm],
@@ -30,6 +43,8 @@ class Views_Controls(APIView):
             is_accepted=False
         )
 
-
-
-        return HttpResponse(len(reservation))
+        return JsonResponse({
+            'reserve':len(reserve),
+            'coupon':0,
+            'stamp':0
+        })
