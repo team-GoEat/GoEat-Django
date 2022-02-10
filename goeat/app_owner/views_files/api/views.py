@@ -27,7 +27,7 @@ class Views_Controls(APIView):
             receiver__res_pos_id=request.GET['res_id'],
             receiver__res_pos_pw=request.GET['res_pw'],
             res_start_time__range = [start_dttm, end_dttm],
-            res_start_time__lt = datetime.datetime.now() + timedelta(minutes=3),
+            res_start_time__lt = datetime.datetime.now() + timedelta(minutes=-3),
             is_active=True,
             is_accepted=False
         )
