@@ -48,6 +48,8 @@ urlpatterns = [
     path('reserve/change/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
     
     # 지역 팝업 보여주기
+    path('region/list/', views.get_region_list, name='get_region_list'),
+    # 지역 팝업 보여주기
     path('region/list/<str:user_id>/', views.get_region_list, name='get_region_list'),
     # 사용자 지역 저장하기
     path('region/save/<str:user_id>/', views.save_user_region, name='save_user_region'),

@@ -912,13 +912,25 @@ def res_change_reserve(request, *args, **kwargs):
 """
 # 지역 팝업 가져오기
 @api_view(['GET'])
-def get_region_list(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
+def get_region_list(request, user_id=None):
+    # user_id = kwargs.get('user_id')
     
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
+        data = []
+    
+        regions = Region.objects.all()
+        for region in regions:
+            temp = {
+                'region_id': region.id,
+                'region_name': region.region_name,
+                'is_region': False
+            }
+            if temp['region_id'] == 1:
+                temp['is_region'] = True
+            data.append(temp)
+        return Response(data, status=200)
     
     data = []
     
