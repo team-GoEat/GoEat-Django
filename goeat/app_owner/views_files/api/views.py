@@ -23,7 +23,8 @@ class Views_Controls(APIView):
         end_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S')
 
         reservation = ResReservationRequest.objects.filter(
-            receiver_id=request.GET['res_id'],
+            receiver__res_pos_id=request.GET['res_id'],
+            receiver__res_pos_pw=request.GET['res_pw'],
             res_start_time__range = [start_dttm, end_dttm],
             is_active=True,
             is_accepted=False
