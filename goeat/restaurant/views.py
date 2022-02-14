@@ -25,9 +25,10 @@ def res_test(request, *args, **kwargs):
     # print(cnt)
     
     all_res = Restaurant.objects.all()
+    region = Region.objects.get(pk=1)
     
     for res in all_res:
-        pass
+        region.region_res.add(res)
     
     return Response(status=200)
 
