@@ -10,38 +10,45 @@ from rest_framework import status
 import datetime
 from datetime import timedelta
 
-from accounts.models import ResReservationRequest
+from accounts.models import ResReservationRequest,Restaurant
 from app_owner.views_files.reserve.callback import make_reserve
 
 class Views_Controls(APIView):
 
     def get(self, request):
 
-        today = datetime.datetime.now()
+        res = Restaurant.objects.get(res_pos_id=request.GET['res_id'],res_pos_pw=request.GET['res_pw'])
 
-        start_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S')
-        end_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S')
+        reserve = {}
+        
+        if res.is_reservable_r:
+            res.is_reservable_r = reserve
 
-        # 3분이상 지난 예약 무응답으로 전환
-        reserve = ResReservationRequest.objects.filter(
-            receiver__res_pos_id=request.GET['res_id'],
-            receiver__res_pos_pw=request.GET['res_pw'],
-            res_start_time__range = [start_dttm, end_dttm],
-            res_start_time__lt = datetime.datetime.now() + timedelta(minutes=-3),
-            is_active=True,
-            is_accepted=False
-        )
+            today = datetime.datetime.now()
 
-        for item in reserve:
-            item.reject_push('무응답')
+            start_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S')
+            end_dttm = datetime.datetime.strptime(today.strftime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S')
 
-        reserve = ResReservationRequest.objects.filter(
-            receiver__res_pos_id=request.GET['res_id'],
-            receiver__res_pos_pw=request.GET['res_pw'],
-            res_start_time__range = [start_dttm, end_dttm],
-            is_active=True,
-            is_accepted=False
-        )
+            # 3분이상 지난 예약 무응답으로 전환
+            reserve = ResReservationRequest.objects.filter(
+                receiver__res_pos_id=request.GET['res_id'],
+                receiver__res_pos_pw=request.GET['res_pw'],
+                res_start_time__range = [start_dttm, end_dttm],
+                res_start_time__lt = datetime.datetime.now() + timedelta(minutes=-3),
+                is_active=True,
+                is_accepted=False
+            )
+
+            for item in reserve:
+                item.reject_push('무응답')
+
+            reserve = ResReservationRequest.objects.filter(
+                receiver__res_pos_id=request.GET['res_id'],
+                receiver__res_pos_pw=request.GET['res_pw'],
+                res_start_time__range = [start_dttm, end_dttm],
+                is_active=True,
+                is_accepted=False
+            )
 
         return JsonResponse({
             'reserve':len(reserve),

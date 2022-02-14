@@ -66,6 +66,28 @@ class Views_Controls(View):
             elif not item.is_active and item.is_accepted:
                 count_set['cancel_count'] += 1
 
+        for item in reservation_not_active:
+            # 예약신청
+            count_set['apply_count'] += 1
+            
+            # 예약승인
+            if item.is_accepted:
+                count_set['confirm_count'] += 1
+            elif not item.is_active and not item.is_accepted:
+                # 예약무응답
+                if item.res_state == '무응답':
+                    count_set['noresponse_count'] += 1
+                # 예약거절
+                else:
+                    count_set['decline_count'] += 1
+
+            # 손님도착
+            if not item.is_active and item.is_arrived and item.is_accepted:
+                count_set['arrived_count'] += 1
+            # 예약취소
+            elif not item.is_active and item.is_accepted:
+                count_set['cancel_count'] += 1
+
         ResReservationRequest.objects.filter(receiver_id=request.session['res_id']).update(is_view=True)
 
         context = {
