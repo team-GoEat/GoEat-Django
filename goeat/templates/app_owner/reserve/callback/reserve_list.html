@@ -3,9 +3,10 @@
 {% load version %}
 {% load date %}
 
-<!-- 방문완료 -->
+
 {% if not item.is_active and item.is_arrived and item.is_accepted %}
-<li class="reserve_list layout end" id="list_{{item.id}}">
+<!-- 방문완료 -->
+<li class="reserve_list layout end" id="list_{{item.id}}" data-key="{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
             <span>O</span>
@@ -27,7 +28,7 @@
             <span class="person_text">{{ item.additional_person }}명 방문완료</span>
         </div>
         <p class="grade">
-            <span>매너 등급 </span>
+            <span>매너 등급 - {{ item.id }}</span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>
@@ -52,9 +53,10 @@
     </div>
 </li>
 
-<!-- 승인대기 -->
+
 {% elif item.is_active and not item.is_accepted %}
-<li class="reserve_list layout" id="list_{{item.id}}">
+<!-- 승인대기 -->
+<li class="reserve_list layout" id="list_{{item.id}}" data-key="{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
             <span class="reserve_idx"></span>
@@ -75,7 +77,7 @@
             <span class="person_text">{{ item.additional_person }}명 승인대기</span>
         </div>
         <p class="grade">
-            <span>매너 등급</span>
+            <span>매너 등급 - {{ item.id }}</span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>
@@ -109,9 +111,10 @@
     </div>
 </li>
 
-<!-- 예약확정 -->
+
 {% elif item.is_active and item.is_accepted %}
-<li class="reserve_list layout" id="list_{{item.id}}">
+<!-- 예약확정 -->
+<li class="reserve_list layout" id="list_{{item.id}}" data-key="{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
             <span class="reserve_idx"></span>
@@ -133,7 +136,7 @@
             <span class="person_text">{{ item.additional_person }}명 예약확정</span>
         </div>
         <p class="grade">
-            <span>매너 등급</span>
+            <span>매너 등급 - {{ item.id }}</span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>
@@ -167,9 +170,10 @@
     </div>
 </li>
 
-<!-- 예약거절 -->
+
 {% elif not item.is_active and not item.is_accepted %}
-<li class="reserve_list layout end" id="list_{{item.id}}">
+<!-- 예약거절 -->
+<li class="reserve_list layout end" id="list_{{item.id}}" data-key="{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
             <span>X</span>
@@ -191,7 +195,7 @@
             <span class="person_text disable">{{ item.additional_person }}명 예약거절</span>
         </div>
         <p class="grade">
-            <span>매너 등급</span>
+            <span>매너 등급 - {{ item.id }}</span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>
@@ -216,9 +220,10 @@
     </div>
 </li>
 
-<!-- 예약취소-->
+
 {% elif not item.is_active and item.is_accepted %}
-<li class="reserve_list layout end" id="list_{{item.id}}">
+<!-- 예약취소-->
+<li class="reserve_list layout end" id="list_{{item.id}}" data-key="{{item.id}}">
     <div class="layout_order">
         <div class="order_wrap">
             <span>X</span>
@@ -240,7 +245,7 @@
             <span class="person_text disable">{{ item.additional_person }}명 예약취소</span>
         </div>
         <p class="grade">
-            <span>매너 등급</span>
+            <span>매너 등급 - {{ item.id }}</span>
 
             {% if item.sender.manner_rank == 0 %}
             <span class="grade_text">보통</span>

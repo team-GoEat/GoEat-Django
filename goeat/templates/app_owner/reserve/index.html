@@ -99,21 +99,26 @@
 
       </div>
     </div>
-    <ul class="table_content scroll_style">
+    <ul class="table_content scroll_style" id="section1">
 
-      {% for item in reservation %}
+      <div id="li_section1">
+        {% for item in reservation %}
 
-      {{ request|reserve_set:item|safe }}
+        {{ request|reserve_set:item|safe }}
 
-      {% endfor %}
+        {% endfor %}
+      </div>
 
-      {% for item in reservation_not_active %}
+      <div id="li_section2">
+        {% for item in reservation_not_active %}
 
-      {{ request|reserve_set:item|safe }}
+        {{ request|reserve_set:item|safe }}
 
-      {% endfor %}
+        {% endfor %}
+      </div>
 
     </ul>
+
   </div>
 </div>
 

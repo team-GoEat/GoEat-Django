@@ -33,7 +33,7 @@ class Views_Controls(APIView):
         )
 
         for item in reserve:
-            item.reject('무응답')
+            item.reject_push('무응답')
 
         reserve = ResReservationRequest.objects.filter(
             receiver__res_pos_id=request.GET['res_id'],

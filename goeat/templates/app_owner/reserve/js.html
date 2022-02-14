@@ -4,80 +4,21 @@
 {% load date %}
 
 <script>
-
-    clearInterval(interval1);
-    clearInterval(interval2);
-
-    setTime();
-
     $('.start_datepicker').val('{{start_dttm}}');
     $('.end_datepicker').val('{{end_dttm}}');
 
+    clearInterval(interval1);
+    clearInterval(interval2);
+    clearInterval(interval3);
+
+    // 새로운 예약 확인
     var interval1 = setInterval(() => {
-        setTime();
-    }, 1000)
-
-    eventify(_reject_array, function (result) {
-        update(result.item, result.list_id, result.type, result.msg);
-    });
-
-    function sleep(t) {
-        return new Promise(resolve => setTimeout(resolve, t));
-    }
-
-    function setTime() {
-
-        $(".limit_time[data-state='False']").each((idx, item) => {
-
-            let now = new Date();
-            let limit_time = new Date($(item).attr('data-limit-time'));
-            let result = limit_time.getTime() - now.getTime();
-            let result2 = new Date(result);
-
-            if (result < 0) {
-
-                $(item).text(`무응답 처리예정`);
-
-                if (_complete_arrary.indexOf($(item).parents('li').attr('id').split('_')[1]) <= 0) {
-
-                    _complete_arrary.push($(item).parents('li').attr('id').split('_')[1]);
-
-                    _reject_array.push({
-                        elem: item,
-                        list_id: $(item).parents('li').attr('id').split('_')[1],
-                        type: 'reject',
-                        msg: '무응답'
-                    });
-                }
-            }
-            else {
-
-                let min = result2.getMinutes() > 9 ? result2.getMinutes() : `0${result2.getMinutes()}`;
-                let sec = result2.getSeconds() > 9 ? result2.getSeconds() : `0${result2.getSeconds()}`;
-
-                $(item).text(`남은시간 ${min}:${sec}`);
-            }
-        })
-
-        $(".reserve_idx").each((idx, item) => {
-            $(item).text(idx + 1);
-        })
-    }
-
-    var interval2 = setInterval(() => {
-        new_reserve();
-    }, 5000)
-
-    function new_reserve() {
         $.post({
             url: "{% host_url 'get_reserve' host 'owner' %}",
             headers: { "X-CSRFToken": "{{ csrf_token }}" },
             data: { list_id: '' },
             success: (result) => {
-                if (result != "") {
-                    $('.table_content').prepend(result);
-                    closefrm.sound();
-                }
+                if (result != "") $('#li_section1').prepend(result);
             },
             error: (result) => {
                 Swal.fire({
@@ -85,11 +26,76 @@
                     text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
                     confirmButtonText: '확인',
                     confirmButtonColor: '#ff0034'
-                })
+                });
             }
         })
-    }
 
+        list_sort();
+
+        //넘버링 재정렬
+        $(".reserve_idx").each((idx, item) => {
+            $(item).text(idx + 1);
+        });
+
+
+    }, 1000);
+
+    // 타이머 처리
+    var interval2 = setInterval(() => {
+        $(".limit_time[data-state='False']").each((idx, item) => {
+            let now = new Date();
+            let limit_time = new Date($(item).attr('data-limit-time'));
+            let result = limit_time.getTime() - now.getTime();
+            let result2 = new Date(result);
+
+            let min = result2.getMinutes() > 9 ? result2.getMinutes() : `0${result2.getMinutes()}`;
+            let sec = result2.getSeconds() > 9 ? result2.getSeconds() : `0${result2.getSeconds()}`;
+
+            if (result < 0) $(item).text(`무응답 처리예정`);
+            else $(item).text(`남은시간 ${min}:${sec}`);
+        })
+    }, 500);
+
+    // 데이터 확인
+    var interval3 = setInterval(() => {
+        init_list();
+    }, 5000);
+
+    function init_list() {
+        $("#li_section1 li").each((idx, item) => {
+            $.post({
+                url: "{% host_url 'get_reserve' host 'owner' %}",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                data: { list_id: `${$(item).data('key')}` },
+                success: (result) => {
+
+                    var number = $(item).find(".reserve_idx").html();
+                    var timer = $(item).find(".limit_time[data-state='False']").html();
+
+                    var dom = $(result.dom);
+                    dom = $(dom)[2]
+
+                    $(dom).find(".reserve_idx").html(number);
+                    $(dom).find(".limit_time[data-state='False']").html(timer);
+
+                    if (result.result) $(item).html(dom.innerHTML)
+                    else {
+                        $(item).remove();
+                        $('#li_section2').prepend($(dom));
+                    }
+
+                },
+                error: (result) => {
+                    Swal.fire({
+                        icon: 'warning',
+                        text: `서버와의 연결이 원활하지 않습니다.[ERROR:${result.status}]`,
+                        confirmButtonText: '확인',
+                        confirmButtonColor: '#ff0034'
+                    });
+                }
+            })
+        });
+    }
 
     async function submit_reserveReject() {
         _reason = $("input[name='reject']:checked").val();
@@ -116,34 +122,20 @@
                 msg: msg
             },
             success: (result) => {
-
-                var child_id = $(elem).parents('li').attr('id')
-                var index = 0;
-
-                $(".table_content li").each((idx, item) => {
-                    if (child_id == $(item).attr('id')) index = idx;
-                });
-
                 $.post({
                     url: "{% host_url 'get_reserve' host 'owner' %}",
                     headers: { "X-CSRFToken": "{{ csrf_token }}" },
                     data: { list_id: list_id },
                     success: (result) => {
 
-                        $('.table_content li').eq(index).remove();
-
-                        if (type == 'accept') {
-                            if (index == 0) $('.table_content').prepend(result);
-                            else {
-                                $(result).insertAfter($($(".reserve_idx")[$(".reserve_idx").length - 1]).parents("li"));
-                            }
-                        }
-                        else {
-                            $(result).insertAfter($($(".reserve_idx")[$(".reserve_idx").length - 1]).parents("li"));
-                        }
+                        Swal.fire({
+                            icon: 'success',
+                            text: `상태가 변경되었습니다.`,
+                            confirmButtonText: '확인',
+                            confirmButtonColor: '#ff0034'
+                        })
 
                         if (type == "reject" || type == "cancel") onClickToggle($('.toggle'), false);
-
                     },
                     error: (result) => {
                         Swal.fire({
@@ -167,10 +159,39 @@
         })
     }
 
+    function list_sort() {
+
+        var elems = $('#li_section1').children('li').get();
+
+        elems.sort(function (a, b) {
+            var val1 = $(a).data('key');
+            var val2 = $(b).data('key');
+            return (val1 < val2) ? 1 : (val1 > val2) ? -1 : 0;
+        });
+
+        $.each(elems, function (index, row) {
+            $('#li_section1').append(row);
+        });
+
+        var elems2 = $('#li_section2').children('li').get();
+
+        elems2.sort(function (a, b) {
+            var val1 = $(a).data('key');
+            var val2 = $(b).data('key');
+            return (val1 < val2) ? 1 : (val1 > val2) ? -1 : 0;
+        });
+
+        $.each(elems2, function (index, row) {
+            $('#li_section2').append(row);
+        });
+    }
+
+    // 날짜변경
     function readReserve() {
         startDttm = $('.start_datepicker').val();
         endDttm = $('.end_datepicker').val();
-
         reserve();
     }
+
+
 </script>

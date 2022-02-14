@@ -402,6 +402,21 @@ class ResReservationRequest(models.Model):
             self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time) + datetime.timedelta(minutes = 3)
         else:
             self.res_deadline_time = timezone.now()
+
+        self.save()
+
+    # 예약 요청 거절
+    # msg = 예약 거절(테이블 만석), (재료 소진), (기타 사정), (매너 등급), (무응답)
+    def reject_push(self, msg):
+        self.res_state = msg
+        self.is_active = False
+        self.is_accepted = False
+        self.res_expect_time = timezone.now()
+
+        if msg == '무응답':
+            self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time) + datetime.timedelta(minutes = 3)
+        else:
+            self.res_deadline_time = timezone.now()
         
         # 푸쉬 알림
         receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)

@@ -88,14 +88,41 @@ class Views_Controls2(View):
 
         if list_id != '':
 
+            # True = section1 , False = section2
+            result = {
+                'result' : False,
+                'dom' : ''
+            }
+
             reservation = ResReservationRequest.objects.get(pk=list_id)
 
-            result += make_reserve(request,reservation).content.decode('UTF-8')
+            # 방문완료
+            if not reservation.is_active and reservation.is_arrived and reservation.is_accepted:
+                result['result'] = False
+
+            # 승인대기
+            elif reservation.is_active and not reservation.is_accepted:
+                result['result'] = True
+
+            # 예약확정
+            elif reservation.is_active and reservation.is_accepted:
+                result['result'] = True
+
+            # 예약거절
+            elif not reservation.is_active and not reservation.is_accepted:
+                result['result'] = False
+
+            # 예약취소
+            elif not reservation.is_active and reservation.is_accepted:
+                result['result'] = False
+
+            result['dom'] = make_reserve(request,reservation).content.decode('UTF-8')
+
             reservation.is_view = True
             reservation.save()
-                
+            
 
-            return HttpResponse(result)
+            return JsonResponse(result)
 
         else:
 
