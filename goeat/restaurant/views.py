@@ -16,19 +16,6 @@ from restaurant.serializers import (
 
 @api_view(['GET'])
 def res_test(request, *args, **kwargs):
-    # cnt = 0
-    
-    # all_menus = MenuSecondClass.objects.all()
-    # for menu in all_menus:
-    #     if len(menu.menu.all()) == 1:
-    #         cnt += 1
-    # print(cnt)
-    
-    all_res = Restaurant.objects.all()
-    region = Region.objects.get(pk=1)
-    
-    for res in all_res:
-        region.region_res.add(res)
     
     return Response(status=200)
 
