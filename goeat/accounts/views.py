@@ -185,18 +185,7 @@ def alarm_read(request, *args, **kwargs):
 """
 @api_view(['POST'])
 def test_push_alarm(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
-    
-    try:
-        user = User.objects.get(goeat_id=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-    
-    receiver_tokens = UserFcmClientToken.objects.filter(user=user, is_active=True)
-    for token in receiver_tokens:
-        push_team_request(token.fcm_token, '테스트!', user.name)
-    
-    return Response(status=200)
+    pass
 
 @api_view(['POST'])
 def save_fcm_token(request, *args, **kwargs):

@@ -14,6 +14,23 @@ from restaurant.serializers import (
 )
 
 
+@api_view(['GET'])
+def res_test(request, *args, **kwargs):
+    # cnt = 0
+    
+    # all_menus = MenuSecondClass.objects.all()
+    # for menu in all_menus:
+    #     if len(menu.menu.all()) == 1:
+    #         cnt += 1
+    # print(cnt)
+    
+    all_res = Restaurant.objects.all()
+    
+    for res in all_res:
+        pass
+    
+    return Response(status=200)
+
 """
 #############################################################################################
 
@@ -968,4 +985,4 @@ def save_user_region(request, *args, **kwargs):
     user.user_region = region
     user.save()
     
-    return Response(status=200)
+    return Response({'msg': '지역 저장에 성공했습니다.'}, status=200)

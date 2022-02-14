@@ -10,6 +10,8 @@ router.register('menu/namelist', views.AutoSecondMenuView)
 urlpatterns = [
     # 음식점 정보
     path('', include(router.urls)),
+    
+    path('test/', views.res_test, name='res_test'),
 
     # POST 음식점 상세 정보 (홈에서)
     path('mlist/<int:res_id>/<str:user_id>/', views.get_restaurant_from_home, name='get_restaurant_from_home'),
