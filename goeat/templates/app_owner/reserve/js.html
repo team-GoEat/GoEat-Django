@@ -135,7 +135,7 @@
                             confirmButtonColor: '#ff0034'
                         })
 
-                        if (type == "reject" || type == "cancel") onClickToggle($('.toggle'), false);
+                        if (type == "reject") onClickToggle($('.toggle'), false);
                     },
                     error: (result) => {
                         Swal.fire({

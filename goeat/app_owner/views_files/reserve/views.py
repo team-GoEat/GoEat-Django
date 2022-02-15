@@ -170,7 +170,7 @@ class Views_Controls3(View):
         elif type == 'arrived':
             reservation.arrived()
         elif type == 'reject':
-            reservation.reject(request.POST.get('msg',''))
+            reservation.reject_push(request.POST.get('msg',''))
         elif type == 'cancel':
             reservation.cancel(request.POST.get('msg',''))
 
