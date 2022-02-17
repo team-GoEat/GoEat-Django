@@ -300,13 +300,27 @@ def get_restaurant_from_cat(request, *args, **kwargs):
             "is_rep": False
         }
         
-        for second_name in menu.menu_second_name.all():
-            if second_name.second_class_name == '추천안함':
+        # 가맹점이라면 (대표메뉴 설정)
+        if res.is_affiliate == True:
+            res_rep_menu = res.res_rep_menu.all()
+            
+            for second_name in menu.menu_second_name.all():
+                if second_name.second_class_name == '추천안함':
+                    m_temp['menu_second_name'].append(second_name.id)
+                    continue
                 m_temp['menu_second_name'].append(second_name.id)
-                continue
-            m_temp['menu_second_name'].append(second_name.id)
-            if second_name.menu_type.id == int(type_id):
-                m_temp['is_rep'] = True
+                if second_name.menu_type.id == int(type_id):
+                    m_temp['is_rep'] = True
+
+        # 가맹점이 아니라면 (대표메뉴 설정 불필요)
+        else:
+            for second_name in menu.menu_second_name.all():
+                if second_name.second_class_name == '추천안함':
+                    m_temp['menu_second_name'].append(second_name.id)
+                    continue
+                m_temp['menu_second_name'].append(second_name.id)
+                if second_name.menu_type.id == int(type_id):
+                    m_temp['is_rep'] = True
                 
         # 할인가 있는지 체크
         if menu.discount != 0:

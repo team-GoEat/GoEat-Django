@@ -100,6 +100,8 @@ class Menu(models.Model):
     menu_price = models.IntegerField(default=0)
     # 할인
     discount = models.IntegerField(default=0)
+    # 대표메뉴인지
+    is_rep = models.BooleanField(default=False)
 
     def __str__(self):
         return '{}'.format(self.menu_name)
