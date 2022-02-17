@@ -142,7 +142,7 @@ class Restaurant(models.Model):
     # 식당 메뉴
     res_menu = models.ManyToManyField(Menu, blank=True, related_name='restaurant')
     # 가맹점 대표 메뉴
-    res_rep_menu = models.ManyToManyField(Menu, blank=True, related_name='restaurant_rep')
+    # res_rep_menu = models.ManyToManyField(Menu, blank=True, related_name='restaurant_rep')
     
     # 식당 영업시간
     res_time = models.CharField(max_length=100, blank=True)
