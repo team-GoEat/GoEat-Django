@@ -416,16 +416,13 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
     try:
         # 사용자가 저장한 지역
         region = Region.objects.get(pk=user.user_region.pk)
-    except Region.DoesNotExist:
+    except:
         # 강남역 지역
         region = Region.objects.get(pk=1)
     
-    res = region.region_res.all()
-    print(res.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct())
-    
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
-    except Restaurant.DoesNotExist:
+        restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+    except:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     data = []
@@ -451,10 +448,11 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
 @api_view(['GET'])
 def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
-
+    region = Region.objects.get(pk=1)
+    
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
-    except Restaurant.DoesNotExist:
+        restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+    except:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     data = []
@@ -815,8 +813,15 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).prefetch_related('res_menu').distinct()
-    except Restaurant.DoesNotExist:
+        # 사용자가 저장한 지역
+        region = Region.objects.get(pk=user.user_region.pk)
+    except:
+        # 강남역 지역
+        region = Region.objects.get(pk=1)
+    
+    try:
+        restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).prefetch_related('res_menu').distinct()
+    except:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     fav_res = user.fav_res.all()
@@ -863,10 +868,11 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
 @api_view(['GET'])
 def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
-
+    region = Region.objects.get(pk=1)
+    
     try:
-        restaurants = Restaurant.objects.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).prefetch_related('res_menu').distinct()
-    except Restaurant.DoesNotExist:
+        restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
+    except:
         return JsonResponse({'msg': '식당이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
     
     discount_menus = Menu.objects.filter(menu_second_name__menu_type__pk=menu_type_id, 
