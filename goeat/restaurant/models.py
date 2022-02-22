@@ -206,7 +206,7 @@ class Region(models.Model):
     # 지역 이름
     region_name = models.CharField(max_length=30)
     # 음식점들
-    region_res = models.ManyToManyField(Restaurant, blank=True, null=True)
+    region_res = models.ManyToManyField(Restaurant, blank=True, null=True, related_name='region_res')
     
     def __str__(self):
         return '{} {}'.format(self.id, self.region_name)
