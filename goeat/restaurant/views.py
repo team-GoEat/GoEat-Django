@@ -703,9 +703,16 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    try:
+        # 사용자가 저장한 지역
+        region = Region.objects.get(pk=user.user_region.pk)
+    except:
+        # 강남역 지역
+        region = Region.objects.get(pk=1)
+    
     fav_res = user.fav_res.all()
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
-    resRes = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    resRes = region.region_res.filter(is_reservable_r=True).prefetch_related('res_menu')
     discount_menus = Menu.objects.filter(discount__gt=0)
     res_id_list = []
     
@@ -715,7 +722,7 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
     }
 
     for m in menu:
-        res = Restaurant.objects.filter(res_menu=m)
+        res = region.region_res.filter(res_menu=m)
         for r in res:
             if r.id in res_id_list:
                 continue
@@ -756,9 +763,10 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
 @api_view(['GET'])
 def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
-
+    region = Region.objects.get(pk=1)
+    
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
-    resRes = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    resRes = region.region_res.filter(is_reservable_r=True).prefetch_related('res_menu')
     discount_menus = Menu.objects.filter(discount__gt=0)
     res_id_list = []
 
@@ -768,7 +776,7 @@ def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     }
 
     for m in menu:
-        res = Restaurant.objects.filter(res_menu=m)
+        res = region.region_res.filter(res_menu=m)
         
         for r in res:
             if r.id in res_id_list:
