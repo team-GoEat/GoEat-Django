@@ -25,6 +25,8 @@ urlpatterns = [
     path('menu/type/<int:menu_type_id>/<str:user_id>/', views.get_restaurant_by_menu_type, name='get_restaurant_by_menu_type'),
     # GET (비회원) 카테고리로 음식점 리스트 받기
     path('menu/type/<int:menu_type_id>/', views.get_restaurant_by_menu_type_notlogin, name='get_restaurant_by_menu_type_notlogin'),
+    # GET (비회원) 카테고리로 음식점 리스트 받기
+    path('menu/type/reg/<int:menu_type_id>/<int:region_id>/', views.get_restaurant_by_menu_type_notlogin, name='get_restaurant_by_menu_type_notlogin'),
     # GET 메뉴ID로 음식점 리스트 받기
     path('menu/<int:menu_id>/<str:user_id>/', views.get_restaurant_by_menuid, name='get_restaurant_by_menuid'),
     # GET (비회원) 메뉴ID로 음식점 리스트 받기
@@ -42,10 +44,14 @@ urlpatterns = [
     path('reserve/menu/<int:menu_id>/<str:user_id>/', views.get_resreservation_by_menuid, name='get_resreservation_by_menuid'),
     # (비회원) 메뉴ID로 음식점 실시간 예약 리스트 받기
     path('reserve/menu/<int:menu_id>/', views.get_resreservation_by_menuid_notlogin, name='get_resreservation_by_menuid_notlogin'),
+    # (비회원) 메뉴ID로 음식점 실시간 예약 리스트 받기
+    path('reserve/menu/reg/<int:menu_id>/<int:region_id>/', views.get_resreservation_by_menuid_notlogin, name='get_resreservation_by_menuid_notlogin'),
     # 카테고리ID로 음식점 실시간 예약 리스트 받기
     path('reserve/type/<int:menu_type_id>/<str:user_id>/', views.get_resreservation_by_menutype, name='get_resreservation_by_menutype'),
     # (비회원) 카테고리ID로 음식점 실시간 예약 리스트 받기
     path('reserve/type/<int:menu_type_id>/', views.get_resreservation_by_menutype_notlogin, name='get_resreservation_by_menutype_notlogin'),
+    # (비회원) 카테고리ID로 음식점 실시간 예약 리스트 받기
+    path('reserve/type/reg/<int:menu_type_id>/<int:region_id>/', views.get_resreservation_by_menutype_notlogin, name='get_resreservation_by_menutype_notlogin'),
     # 식당 예약 여부 바꾸기
     path('reserve/change/<int:res_id>/', views.res_change_reserve, name='res_change_reserve'),
     

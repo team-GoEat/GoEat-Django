@@ -407,7 +407,7 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
 def get_restaurant_by_menu_type(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
     user_id = kwargs.get('user_id')
-
+    
     try:
         user = User.objects.get(goeat_id=user_id)
     except User.DoesNotExist:
@@ -448,7 +448,12 @@ def get_restaurant_by_menu_type(request, *args, **kwargs):
 @api_view(['GET'])
 def get_restaurant_by_menu_type_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
-    region = Region.objects.get(pk=1)
+    region_id = kwargs.get('region_id')
+
+    if region_id:
+        region = Region.objects.get(pk=region_id)
+    else:
+        region = Region.objects.get(pk=1)
     
     try:
         restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
@@ -763,7 +768,12 @@ def get_resreservation_by_menuid(request, *args, **kwargs):
 @api_view(['GET'])
 def get_resreservation_by_menuid_notlogin(request, *args, **kwargs):
     menu_id = kwargs.get('menu_id')
-    region = Region.objects.get(pk=1)
+    region_id = kwargs.get('region_id')
+
+    if region_id:
+        region = Region.objects.get(pk=region_id)
+    else:
+        region = Region.objects.get(pk=1)
     
     menu = Menu.objects.filter(menu_second_name__pk = menu_id).order_by("?")
     resRes = region.region_res.filter(is_reservable_r=True).prefetch_related('res_menu')
@@ -876,7 +886,12 @@ def get_resreservation_by_menutype(request, *args, **kwargs):
 @api_view(['GET'])
 def get_resreservation_by_menutype_notlogin(request, *args, **kwargs):
     menu_type_id = kwargs.get('menu_type_id')
-    region = Region.objects.get(pk=1)
+    region_id = kwargs.get('region_id')
+
+    if region_id:
+        region = Region.objects.get(pk=region_id)
+    else:
+        region = Region.objects.get(pk=1)
     
     try:
         restaurants = region.region_res.filter(res_menu__menu_second_name__menu_type__pk=menu_type_id).distinct()
