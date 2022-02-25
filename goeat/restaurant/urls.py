@@ -40,6 +40,8 @@ urlpatterns = [
     path('reserve/list/<str:user_id>/', views.get_all_resreservation_list, name='get_all_resreservation_list'),
     # (비회원) 전체 실시간 예약 리스트 보기
     path('reserve/list/', views.get_all_resreservation_list_notlogin, name='get_all_resreservation_list_notlogin'),
+    # (비회원) 전체 실시간 예약 리스트 보기
+    path('reserve/list/reg/<int:region_id>/', views.get_all_resreservation_list_notlogin, name='get_all_resreservation_list_notlogin'),
     # 메뉴ID로 음식점 실시간 예약 리스트 받기
     path('reserve/menu/<int:menu_id>/<str:user_id>/', views.get_resreservation_by_menuid, name='get_resreservation_by_menuid'),
     # (비회원) 메뉴ID로 음식점 실시간 예약 리스트 받기

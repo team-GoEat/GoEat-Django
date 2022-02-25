@@ -341,7 +341,7 @@ def get_restaurant_from_cat_notlogin(request, *args, **kwargs):
         res = Restaurant.objects.get(id=res_id)
     except Restaurant.DoesNotExist:
         return JsonResponse({'msg': '음식점이 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
-
+    
     data = {
         'res_name': res.res_name,
         'res_type': [],
@@ -643,9 +643,16 @@ def get_all_resreservation_list(request, *args, **kwargs):
     except User.DoesNotExist:
         return JsonResponse({'msg': '사용자가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST, json_dumps_params={'ensure_ascii':True})
 
+    try:
+        # 사용자가 저장한 지역
+        region = Region.objects.get(pk=user.user_region.pk)
+    except:
+        # 강남역 지역
+        region = Region.objects.get(pk=1)
+    
     data = []
 
-    all_res = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    all_res = region.region_res.filter(is_reservable_r=True).prefetch_related('res_menu')
     discount_menus = Menu.objects.filter(discount__gt=0)
     
     for r in all_res:
@@ -673,10 +680,16 @@ def get_all_resreservation_list(request, *args, **kwargs):
 # (비회원) 전체 실시간 예약 리스트 보기
 @api_view(['GET'])
 def get_all_resreservation_list_notlogin(request, *args, **kwargs):
+    region_id = kwargs.get('region_id')
 
+    if region_id:
+        region = Region.objects.get(pk=region_id)
+    else:
+        region = Region.objects.get(pk=1)
+    
     data = []
 
-    all_res = Restaurant.objects.filter(is_reservable_r=True).prefetch_related('res_menu')
+    all_res = region.region_res.filter(is_reservable_r=True).prefetch_related('res_menu')
     discount_menus = Menu.objects.filter(discount__gt=0)
     
     for r in all_res:
