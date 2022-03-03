@@ -987,32 +987,49 @@ def get_region_list(request, user_id=None):
     except User.DoesNotExist:
         data = []
     
-        regions = Region.objects.all()
-        for region in regions:
-            temp = {
-                'region_id': region.id,
-                'region_name': region.region_name,
-                'is_region': False
-            }
-            if temp['region_id'] == 1:
-                temp['is_region'] = True
-            data.append(temp)
-        return Response(data, status=200)
-    
-    data = []
-    
-    regions = Region.objects.all()
-    for region in regions:
+        # regions = Region.objects.all()
+        # for region in regions:
+        #     temp = {
+        #         'region_id': region.id,
+        #         'region_name': region.region_name,
+        #         'is_region': False
+        #     }
+        #     if temp['region_id'] == 1:
+        #         temp['is_region'] = True
+        #     data.append(temp)
+        
+        region = Region.objects.first()
         temp = {
             'region_id': region.id,
             'region_name': region.region_name,
             'is_region': False
         }
-        
-        if user.user_region == region:
-            temp['is_region'] = True
-        
         data.append(temp)
+        
+        return Response(data, status=200)
+    
+    data = []
+    
+    # regions = Region.objects.all()
+    # for region in regions:
+    #     temp = {
+    #         'region_id': region.id,
+    #         'region_name': region.region_name,
+    #         'is_region': False
+    #     }
+        
+    #     if user.user_region == region:
+    #         temp['is_region'] = True
+        
+    #     data.append(temp)
+    
+    region = Region.objects.first()
+    temp = {
+        'region_id': region.id,
+        'region_name': region.region_name,
+        'is_region': False
+    }
+    data.append(temp)
     
     return Response(data, status=200)
     
