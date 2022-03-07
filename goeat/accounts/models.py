@@ -380,13 +380,13 @@ class ResReservationRequest(models.Model):
         self.res_expect_time = timezone.now()
         self.res_deadline_time = self.res_expect_time + datetime.timedelta(minutes = self.additional_time)
         
-        # 푸쉬 알림
-        receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
-        for token in receiver_tokens:
-            push_team_request(token.fcm_token, '예약이 승인되었어요!', self.receiver.res_name)
+        # # 푸쉬 알림
+        # receiver_tokens = UserFcmClientToken.objects.filter(user=self.sender, is_active=True)
+        # for token in receiver_tokens:
+        #     push_team_request(token.fcm_token, '예약이 승인되었어요!', self.receiver.res_name)
         
-        # 알림
-        Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=4)
+        # # 알림
+        # Alarm.objects.create(res_sender=self.receiver, receiver=self.sender, message=4)
         
         self.save()
 
