@@ -149,7 +149,7 @@ class Views_Controls2(View):
         else:
 
             reservation = ResReservationRequest.objects.filter(receiver_id=request.session['res_id'],is_view=False)
-
+            print(reservation)
             for item in reservation:
                 result += make_reserve(request,item).content.decode('UTF-8')
                 item.is_view = True
